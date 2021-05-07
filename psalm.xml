@@ -12,7 +12,7 @@
         <directory name="vendor/icariccu/metafad-sdk/src" />
     </projectFiles>
     <extraFiles>
-        <directory name="vendor/icariccu/pinax/src/pinax" />
-        <directory name="vendor/icariccu/pinax/src/pinaxcms" />
+        <directory name="vendor/icariccu/pinax-2/src/pinax" />
+        <directory name="vendor/icariccu/pinax-2/src/pinaxcms" />
     </extraFiles>
 </psalm>
