@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+  xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+  xmlns:cms="pinaxcms.views.components.*"
+  xmlns:mvc="pinax.mvc.components.*"
+  xmlns:c="metafad.iccd.views.components.*"
+  defaultEditableRegion="content"
+  templateType="php"
+  templateFileName="Popup.php">
+
+<pnx:Import src="_common.xml"/>
+
+<mvc:State name="edit">
+    <c:FormEdit id="editForm" newCode="true" controllerName="metafad.mag.controllers.media.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="metafad.mag.models.Doc"/>
+
+        <pnx:Input id="sequence_number" label="{i18n:Sequence number}" type="number"/>
+        <pnx:Input id="nomenclature" label="{i18n:Nomenclature}"/>
+        <pnx:Fieldset id="usage" label="{i18n:Usage}" data="type=repeat;collapsable=false;repeatMin=0">
+          <pnx:List id="usage_value" label="{i18n:Usage}" emptyValue="">
+              <pnx:ListItem key="a" value="a (no copyright)"/>
+              <pnx:ListItem key="b" value="b (ha copyright)"/>
+          </pnx:List>
+        </pnx:Fieldset>
+        <pnx:Input id="file" label="{i18n:File}" required="true"/>
+        <pnx:Input id="md5" label="{i18n:MD5}" required="true"/>
+        <pnx:Input id="filesize" label="{i18n:Filesize}"/>
+        <pnx:Fieldset id="format" label="{i18n:Format}" required="true" emptyValue="">
+          <pnx:Input id="name" label="{i18n:Name}"/>
+          <pnx:List id="mime" label="{i18n:Mime}" required="true" emptyValue="">
+              <pnx:ListItem key="text/plain" value="text/plain"/>
+              <pnx:ListItem key="text/xml" value="text/xml"/>
+              <pnx:ListItem key="text/html" value="text/html"/>
+              <pnx:ListItem key="text/rtf" value="text/rtf"/>
+              <pnx:ListItem key="application/msword" value="application/msword"/>
+              <pnx:ListItem key="application/pdf" value="application/pdf"/>
+          </pnx:List>
+          <pnx:List id="compression" label="{i18n:Compression}" emptyValue="">
+              <pnx:ListItem key="Uncompressed" value="Uncompressed"/>
+              <pnx:ListItem key="ZIP" value="ZIP"/>
+              <pnx:ListItem key="RAR" value="RAR"/>
+              <pnx:ListItem key="GZ" value="GZ"/>
+          </pnx:List>
+        </pnx:Fieldset>
+        <pnx:Input id="datetimecreated" type="datetime" label="{i18n:DateTime Created}"/>
+        <pnx:Input id="note" label="{i18n:Note}"/>
+
+        <cms:FormButtonsPanel id="formButtons">
+          <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-primary js-pinaxcms-save"
+                          data="action=save" acl="*,edit" />
+        </cms:FormButtonsPanel>
+    </c:FormEdit>
+    </mvc:State>
+</mvc:Page>

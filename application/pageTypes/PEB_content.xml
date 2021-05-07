@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="pinax.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="PagePeb.php">
+
+    <pnx:Import src="_common.xml" />
+    <pnx:Modifier target="pageTitle" attribute="enabled" value="false" />
+    <pnx:EmptyComponent skin="peb_content.html" editableRegion="content"/>
+
+</mvc:Page>

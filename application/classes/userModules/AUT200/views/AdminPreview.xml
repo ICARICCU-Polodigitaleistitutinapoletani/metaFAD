@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:include
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:print="metafad.print.views.components.*"
+    src="metafad.common.views.templates.TemplateModuleAdminPreview">
+
+    <pnx:template name="model" value="AUT200.models.Model"/>
+    <pnx:template name="form_fields">
+        
+<pnx:Fieldset id="CD" label="{i18n:CD}" required="true">
+  <print:Input id="TSK" label="{i18n:TSK}" required="true" maxLength="5" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT200##}"/>
+  <print:Input id="NCU" label="{i18n:NCU}" maxLength="8"/>
+  <print:Input id="ESC" label="{i18n:ESC}" required="true" maxLength="25"/>
+  <print:Input id="ECP" label="{i18n:ECP}" maxLength="25"/>
+</pnx:Fieldset>
+<pnx:Fieldset id="AU" label="{i18n:AU}" required="true">
+  <pnx:Fieldset id="AUT" label="{i18n:AUT}" required="true">
+    <print:Input id="AUTN" label="{i18n:AUTN}" required="true" maxLength="100"/>
+    <print:Input id="AUTA" label="{i18n:AUTA}" required="true" maxLength="70"/>
+    <print:Input id="AUTC" label="{i18n:AUTC}" maxLength="70"/>
+    <print:Input id="AUTO" label="{i18n:AUTO}" maxLength="70"/>
+    <print:Input id="AUTP" label="{i18n:AUTP}" maxLength="70"/>
+    <print:Input id="AUTE" label="{i18n:AUTE}" maxLength="70"/>
+    <print:Input id="AUTF" label="{i18n:AUTF}" maxLength="70"/>
+    <print:Input id="AUTV" label="{i18n:AUTV}" maxLength="350"/>
+    <print:Input id="AUTZ" label="{i18n:AUTZ}" maxLength="1" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT200##}"/>
+    <print:Input id="AUTL" label="{i18n:AUTL}" maxLength="50"/>
+    <print:Input id="AUTD" label="{i18n:AUTD}" maxLength="25"/>
+    <print:Input id="AUTX" label="{i18n:AUTX}" maxLength="50"/>
+    <print:Input id="AUTT" label="{i18n:AUTT}" maxLength="25"/>
+    <print:Input id="AUTG" label="{i18n:AUTG}" maxLength="250"/>
+    <print:Input id="AUTU" label="{i18n:AUTU}" required="true" maxLength="350" data="type=FormEditSelectMandatory;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT200##,##code##:##VA_AUTU_AUT##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+    <print:Input id="AUTQ" label="{i18n:AUTQ}" required="true" maxLength="100" data="type=FormEditSelectMandatory;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT200##,##code##:##VA_AUTQ_AUT##,##level##:##*##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+    <print:Input id="AUTH" label="{i18n:AUTH}" required="true" maxLength="8"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+
+
+    </pnx:template>
+</pnx:include>

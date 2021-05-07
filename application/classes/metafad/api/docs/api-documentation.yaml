@@ -1,0 +1,201 @@
+swagger: "2.0"
+info:
+  description: "Documentazione ricerche Metafad"
+  version: "1.0.0"
+  title: "Documentazione ricerche Metafad"
+  termsOfService: "http://swagger.io/terms/"
+host: "metafad"
+basePath: "/rest"
+tags:
+- name: "Ricerca"
+  description: "Servizi di ricerca verso indici"
+- name: "Dettaglio"
+  description: "Servizi per il dettaglio"
+schemes:
+- "https"
+- "http"
+paths:
+  "/search/{type}":
+    post:
+      tags:
+        - "Ricerca"
+      summary: Servizio di ricerca
+      operationId: ricerca
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters: 
+        - in: path
+          type: string
+          name: type
+          description: Tipo di indice
+          enum:
+            - iccd
+            - iccdaut
+            - archive
+            - archiveaut
+            - metaindice
+            - metaindiceaut
+            - metaindiceBE
+          required: true
+        - in: body
+          name: search
+          description: "I dati per la query di ricerca"
+          schema:
+            $ref: '#/definitions/searchQuery'
+      responses:
+        '200':
+          description: Il risultato della ricerca
+          schema: 
+            $ref: '#/definitions/searchResponse'
+        '500':
+          description: Ci sono stati errori nell'inserimento dei dati
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+  "/search/{type}/{id}":
+    get:
+      tags:
+        - "Dettaglio"
+      summary: Servizio di dettaglio
+      operationId: dettaglio
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          type: string
+          name: type
+          description: Tipo di indice
+          enum:
+            - iccd
+            - iccdaut
+            - archive
+            - archiveaut
+            - metaindice
+            - metaindiceaut
+            - metaindiceBE
+          required: true
+        - in: path
+          name: id
+          description: "Id del record di cui si vuole la scheda di dettaglio"
+          type: string
+          required: true
+      responses:
+        '200':
+          description: La scheda di dettaglio
+          schema: 
+            type: object
+            properties:
+              doc:
+                $ref: '#/definitions/doc'
+        '500':
+          description: L'id è errato o non è stato inviato
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+definitions:
+  searchQuery:
+    type: object
+    description: Oggetto per la query di ricerca da eseguire. Nessun campo è obbligatorio, infatti chiamando il servizio senza parametri si avrà semplicemente la lista di tutti i record nell'indice.
+    properties:
+      search:
+        type: string
+        description: Valore per ricerca fulltext
+        default: '*'
+      filters:
+        type: object
+        description: Oggetto con chiave il nome di un campo e valore la ricerca che si vuole fare su tale campo. Utile per ricerche avanzate ed a faccette
+        example: {"nome_campo_1" : "valore", "nome_campo_2": "valore"}
+      facets:
+        type: array
+        description: Array di campi per i quali si vogliono i valori delle faccette
+        items:
+          type: string
+        example: ["nome_campo_1", "nome_campo_2"]
+      page:
+        type: integer
+        description: Numero di pagina dei risultati che si vuole visualizzare
+        default: 1
+      limit:
+        type: integer
+        description: Numero di risultati da mostrare per pagina
+        default: 10
+      sort:
+        type: array
+        items:
+          $ref: '#/definitions/sortItem'
+      fields:
+        type: array
+        description: Lista di campi che si vogliono avere per i documenti nei risultati di ricerca
+        items:
+          type: string
+  sortItem:
+    type: object
+    properties:
+      field: 
+        type: string
+        description: Nome del campo su cui ordinare
+      direction:
+        type: string
+        enum: ["asc","desc"]
+        description: Direzione dell'ordinamento
+  searchResponse:
+    type: object
+    properties:
+      numFound:
+        type: integer
+        description: Numero di risultati
+      docs:
+        type: array
+        description: Risultati della ricerca (paginati in base ai parametri page e limit)
+        items:
+          $ref: '#/definitions/doc'
+      facets:
+        type: object
+        description: Faccette
+        properties:
+          count: 
+            type: integer
+            description: Numero di record
+          nome_campo:
+            $ref: '#/definitions/facetBuckets'
+  doc:
+    type: object
+    description: "Documento estratto dall'indice. I campi variano in base all'indice. Quelli indicati sono i campi che si trovano in ogni caso."
+    properties:
+      id:
+        type: string
+        description: Identificativo del record
+        example: "record_1"
+      timestamp:
+        type: string
+        description: Data e ora di inserimento nell'indice
+        example: "2021-02-23T15:30:24.17Z"
+  facetBuckets:
+    type: object
+    description: Valori delle faccette
+    properties:
+      buckets:
+        type: array
+        items:
+          $ref: '#/definitions/facetBucket'
+  facetBucket:
+    type: object
+    properties:
+      val:
+        type: string
+        description: Valore faccetta
+      count:
+        type: integer
+        description: Occorrenze faccetta

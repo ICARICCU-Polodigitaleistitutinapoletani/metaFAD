@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:include
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    src="metafad.common.views.templates.TemplateModuleAdminExport">
+
+    <pnx:template name="model" value="AUT300.models.Model"/>
+    <pnx:template name="autocompleteController" value="metafad.common.controllers.ajax.AutoComplete"/>
+    <pnx:template name="grid_fields">
+		<pnx:DataGridColumn columnName="AUTN_s" headerText="{i18n:AUTN}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="AUTH_s" headerText="{i18n:AUTH}" renderCell="metafad.common.views.renderer.ShortField"/>
+    </pnx:template>
+</pnx:include>

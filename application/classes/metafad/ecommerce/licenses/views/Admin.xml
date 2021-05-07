@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:iccd="metafad.thesaurus.views.components.*"
+          xmlns:cmp="metafad.ecommerce.licenses.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          xmlns:c="metafad.iccd.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State name="index">
+      <com:DataGridAjax query="filterInstitute" id="dataGridForms" recordClassName="metafad.ecommerce.licenses.models.Model"
+                        cssClass="table table-bordered table-striped"
+                        fullTextSearch="true">
+        <pnx:DataGridColumn columnName="license_title" headerText="{i18n:Titolo}"/>
+        <pnx:DataGridColumn columnName="license_type" headerText="{i18n:Tipologia}"/>
+        <pnx:DataGridColumn columnName="license_price" headerText="{i18n:Prezzo}"/>
+        <pnx:DataGridColumn columnName="license_id" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.CellEditDeleteLicenses" />
+      </com:DataGridAjax>
+      <iccd:AddButton buttonId="dataGridAddButton" acl="*,new" label="" routeUrl="actionsMVCAdd" editableRegion="actions" add="Aggiungi licenza" recordClassName="metafad.ecommerce.licenses.models.Model" cssClass="dataGridAddButton" dataGridAjaxId="dataGridForms"/>
+    </mvc:State>
+
+    <mvc:State name="edit">
+      <c:FormEdit id="editForm" newCode="true" controllerName="metafad.ecommerce.controllers.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="metafad.ecommerce.licenses.models.Model"/>
+
+        <pnx:Input id="license_title" label="{i18n:Titolo}" required="true"/>
+        <pnx:List id="license_type" label="{i18n:Tipologia}" required="true">
+          <pnx:ListItem key="generale" value="Generale" selected="true"/>
+          <pnx:ListItem key="particolare" value="Particolare"/>
+        </pnx:List>
+        <pnx:Input id="license_stream" label="{i18n:Stream associato}" data="type=selectfrom;multiple=true;return_object=false;add_new_values=false;proxy=metafad.ecommerce.licenses.models.proxy.StreamProxy;" />
+        <pnx:Input id="license_price" label="{i18n:Prezzo}" required="true"/>
+        <pnx:Input id="license_description" label="{i18n:Descrizione}" required="true" type="multiline" wrap="on" rows="10"/>
+
+        <cms:FormButtonsPanel>
+          <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=save" />
+          <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save" data="action=saveClose" />
+          <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel" />
+        </cms:FormButtonsPanel>
+      </c:FormEdit>
+
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.ecommerce.controllers.*" />
+    </mvc:State>
+</mvc:Page>

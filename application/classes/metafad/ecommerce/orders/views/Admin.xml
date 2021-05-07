@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.ecommerce.orders.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          xmlns:c="metafad.iccd.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php"
+          controllerName="metafad.ecommerce.orders.controllers.*">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State name="index">
+      <com:DataGridAjax id="dataGridForms" recordClassName="metafad.ecommerce.orders.models.Model"
+                        cssClass="table table-bordered table-striped"
+                        fullTextSearch="true">
+        <pnx:DataGridColumn columnName="order_date" headerText="{i18n:Data}"/>
+        <pnx:DataGridColumn columnName="order_user_name" headerText="{i18n:Utente}"/>
+        <pnx:DataGridColumn columnName="order_id" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.CellShow" />
+      </com:DataGridAjax>
+    </mvc:State>
+
+    <mvc:State name="edit">
+      <c:FormEdit id="editForm" newCode="true" controllerName="metafad.ecommerce.controllers.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="metafad.ecommerce.orders.models.Model"/>
+
+        <pnx:Fieldset id="user" label="Dati dell'utente" cssClass="ecommerce-fieldset">
+          <pnx:Input id="userName" label="{i18n:Nome}" readOnly="true"/>
+          <pnx:Input id="userLastname" label="{i18n:Cognome}" readOnly="true"/>
+          <pnx:Input id="userEmail" label="{i18n:Email}" readOnly="true"/>
+          <pnx:Input id="userAddress" label="{i18n:Indirizzo}" readOnly="true"/>
+          <pnx:Input id="userCity" label="{i18n:Citt&#224;}" readOnly="true"/>
+          <pnx:Input id="userProvince" label="{i18n:Provincia}" readOnly="true"/>
+          <pnx:Input id="userZipcode" label="{i18n:CAP}" readOnly="true"/>
+          <pnx:Input id="userState" label="{i18n:Nazione}" readOnly="true"/>
+          <pnx:Input id="userVat" label="{i18n:Partita IVA}" readOnly="true"/>
+          <pnx:Input id="userCode" label="{i18n:Codice fiscale}" readOnly="true"/>
+        </pnx:Fieldset>
+
+        <pnx:Fieldset id="transaction" label="Dati della transazione" cssClass="ecommerce-fieldset">
+          <pnx:Input id="transactionCode" label="{i18n:Codice della transazione}" readOnly="true"/>
+          <pnx:Input id="transactionNumber" label="{i18n:Numero della transazione}" readOnly="true"/>
+          <pnx:Input id="document_creationDate" label="{i18n:Data}" readOnly="true"/>
+        </pnx:Fieldset>
+
+        <pnx:Fieldset id="objects" label="Oggetti acquistati" cssClass="ecommerce-fieldset">
+          <cmp:OrderObjects id="orderObjects" />
+        </pnx:Fieldset>
+
+        <cms:FormButtonsPanel>
+          <pnx:HtmlButton label="{i18n:Indietro}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel" />
+          <pnx:HtmlButton label="{i18n:Stampa}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-print" data="action=print" />
+        </cms:FormButtonsPanel>
+      </c:FormEdit>
+
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.ecommerce.controllers.*" />
+    </mvc:State>
+</mvc:Page>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+  xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+  xmlns:cms="pinaxcms.views.components.*"
+  xmlns:mvc="pinax.mvc.components.*"
+  xmlns:c="metafad.iccd.views.components.*"
+  defaultEditableRegion="content"
+  templateType="php"
+  templateFileName="Popup.php">
+
+<pnx:Import src="_common.xml"/>
+
+<mvc:State name="edit">
+    <c:FormEdit id="editForm" newCode="true" controllerName="metafad.mag.controllers.media.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="metafad.mag.models.Video"/>
+
+        <pnx:Input id="sequence_number" label="{i18n:Sequence number}" type="number"/>
+        <pnx:Input id="nomenclature" label="{i18n:Nomenclature}"/>
+
+        <pnx:Fieldset id="proxies" label="{i18n:Proxies}" required="true" data="type=repeat;collapsable=false;repeatMin=1">
+          <pnx:Input id="videogroupID" label="{i18n:Video Group ID}"/>
+          <pnx:Fieldset id="usage" label="{i18n:Usage}" data="type=repeat;collapsable=false;repeatMin=0">
+            <pnx:List id="usage_value" label="{i18n:Usage}" emptyValue="">
+                <pnx:ListItem key="1" value="1 (master)"/>
+                <pnx:ListItem key="2" value="2 (alta risoluzione)"/>
+                <pnx:ListItem key="3" value="3 (bassa risoluzione)"/>
+                <pnx:ListItem key="4" value="4 (preview)"/>
+                <pnx:ListItem key="a" value="a (no copyright)"/>
+                <pnx:ListItem key="b" value="b (ha copyright)"/>
+            </pnx:List>
+          </pnx:Fieldset>
+          <pnx:Input id="file" label="{i18n:File}" required="true"/>
+          <pnx:Input id="md5" label="{i18n:MD5}" required="true"/>
+          <pnx:Input id="filesize" label="{i18n:Filesize}"/>
+          <pnx:Fieldset id="video_dimensions" label="{i18n:Video Dimensions}" >
+            <pnx:Input id="duration" label="{i18n:Duration}" type="time" required="true"/>
+          </pnx:Fieldset>
+          <pnx:Fieldset id="video_metrics" label="{i18n:Audio Metrics}" >
+            <pnx:List id="videosize" label="{i18n:Video Size}" emptyValue="">
+                <pnx:ListItem key="160x120" value="160x120"/>
+                <pnx:ListItem key="176x144" value="176x144"/>
+                <pnx:ListItem key="192x144" value="192x144"/>
+                <pnx:ListItem key="280x180" value="280x180"/>
+                <pnx:ListItem key="320x240" value="320x240"/>
+                <pnx:ListItem key="352x288" value="352x288"/>
+                <pnx:ListItem key="360x288" value="360x288"/>
+                <pnx:ListItem key="384x288" value="384x288"/>
+                <pnx:ListItem key="480x576" value="480x576"/>
+                <pnx:ListItem key="720x576" value="720x576"/>
+            </pnx:List>
+            <pnx:List id="aspectratio" label="{i18n:Aspect Ratio}" emptyValue="">
+                <pnx:ListItem key="1:1" value="1:1"/>
+                <pnx:ListItem key="4:3" value="4:3"/>
+                <pnx:ListItem key="16:9" value="16:9"/>
+                <pnx:ListItem key="2.11:1" value="2.11:1"/>
+            </pnx:List>
+            <pnx:List id="framerate" label="{i18n:Frame Rate}" emptyValue="">
+                <pnx:ListItem key="23.976" value="23.976"/>
+                <pnx:ListItem key="24" value="24"/>
+                <pnx:ListItem key="25" value="25"/>
+                <pnx:ListItem key="29.97" value="29.97"/>
+                <pnx:ListItem key="30" value="30"/>
+                <pnx:ListItem key="50" value="50"/>
+                <pnx:ListItem key="59.94" value="59.94"/>
+                <pnx:ListItem key="60" value="60"/>
+            </pnx:List>
+          </pnx:Fieldset>
+          <pnx:Fieldset id="format" label="{i18n:Format}" required="true" emptyValue="">
+            <pnx:Input id="name" label="{i18n:Name}"/>
+            <pnx:List id="mime" label="{i18n:Mime}" required="true" emptyValue="">
+                <pnx:ListItem key="video/x-ms-asf" value="video/x-ms-asf"/>
+                <pnx:ListItem key="video/avi" value="video/avi"/>
+                <pnx:ListItem key="video/mpeg" value="video/mpeg"/>
+                <pnx:ListItem key="video/vnd.rn-realvideo" value="video/vnd.rn-realvideo"/>
+                <pnx:ListItem key="video/wmv" value="video/wmv"/>
+            </pnx:List>
+            <pnx:List id="videoformat" label="{i18n:Video Format}" required="true" emptyValue="">
+                <pnx:ListItem key="Component" value="Component"/>
+                <pnx:ListItem key="NTSC" value="NTSC"/>
+                <pnx:ListItem key="PAL" value="PAL"/>
+                <pnx:ListItem key="SECAM" value="SECAM"/>
+                <pnx:ListItem key="Unspecified" value="Unspecified"/>
+            </pnx:List>
+            <pnx:List id="encode" label="{i18n:Encode}" required="true" emptyValue="">
+                <pnx:ListItem key="interlaced" value="interlaced"/>
+                <pnx:ListItem key="non-interlaced" value="non-interlaced"/>
+            </pnx:List>
+            <pnx:List id="streamtype" label="{i18n:Stream Type}" emptyValue="">
+                <pnx:ListItem key="Uncompressed" value="Uncompressed"/>
+                <pnx:ListItem key="MPEG-1" value="MPEG-1"/>
+                <pnx:ListItem key="MPEG-2" value="MPEG-2"/>
+                <pnx:ListItem key="MPEG-4" value="MPEG-4"/>
+            </pnx:List>
+            <pnx:Input id="codec" label="{i18n:Codec}"/>
+          </pnx:Fieldset>
+          <pnx:Fieldset id="digitisation" label="{i18n:Digitisation}" emptyValue="">
+            <pnx:Input id="sourcetype" label="{i18n:Source Type}"/>
+            <pnx:Input id="transcriptionagency" label="{i18n:Transcription Agency}"/>
+            <pnx:Input id="devicesource" label="{i18n:Device Source}"/>
+            <pnx:Fieldset id="transcriptionchain" label="{i18n:Transcription Chain}"  data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+              <pnx:Fieldset id="device_description" required="true" label="{i18n:Device Description}">
+                <pnx:Input id="device_description_type" required="true" label="{i18n:Type}"/>
+                <pnx:Input id="device_description_unique_identifier" label="{i18n:Unique identifier}"/>
+                <pnx:Input id="device_description_comments" label="{i18n:Comments}"/>
+              </pnx:Fieldset>
+              <pnx:Input id="device_manufacturer" required="true" label="{i18n:Device Manufacturer}"/>
+              <pnx:Fieldset id="device_model" required="true" label="{i18n:Device Model}">
+                <pnx:Input id="device_model_model" required="true" label="{i18n:Model}"/>
+                <pnx:Input id="device_model_serial_number" label="{i18n:Serial number}"/>
+              </pnx:Fieldset>
+              <pnx:Input id="capture_software" label="{i18n:Capture Software}"/>
+              <pnx:Input id="device_settings" label="{i18n:Device Device settings}"/>
+            </pnx:Fieldset>
+            <pnx:Fieldset id="transcriptionsummary" label="{i18n:Transcription Summary}"  data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+              <pnx:Input id="grouping" required="true" label="{i18n:Grouping}"/>
+              <pnx:Input id="data_description" required="true" label="{i18n:Data description}"/>
+              <pnx:Input id="data_unit" label="{i18n:Data unit}"/>
+              <pnx:Input id="data_value" label="{i18n:Data value}"/>
+            </pnx:Fieldset>
+            <pnx:Fieldset id="transcriptiondata" label="{i18n:Transcription Data}"  data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+              <pnx:Input id="grouping" required="true" label="{i18n:Grouping}"/>
+              <pnx:Input id="data_description" required="true" label="{i18n:Data description}"/>
+              <pnx:Input id="data_unit" label="{i18n:Data unit}"/>
+              <pnx:Fieldset id="interval" label="{i18n:Interval}">
+                <pnx:Input id="interval_start" required="true" label="{i18n:Start}"/>
+                <pnx:Input id="interval_stop" required="true" label="{i18n:Stop}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="data_value" label="{i18n:Data value}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="data_value-element" label="{i18n:Data value}"/>
+              </pnx:Fieldset>
+            </pnx:Fieldset>
+          </pnx:Fieldset>
+          <pnx:Input id="datetimecreated" type="datetime" label="{i18n:DateTime Created}"/>
+        </pnx:Fieldset>
+        <pnx:Input id="note" label="{i18n:Note}"/>
+
+        <cms:FormButtonsPanel id="formButtons">
+          <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-primary js-pinaxcms-save"
+                          data="action=save" acl="*,edit" />
+        </cms:FormButtonsPanel>
+    </c:FormEdit>
+    </mvc:State>
+</mvc:Page>

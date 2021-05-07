@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.ecommerce.requests.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          xmlns:c="metafad.iccd.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State name="index">
+      <com:DataGridAjax id="dataGridForms" recordClassName="metafad.ecommerce.requests.models.Model"
+                        cssClass="table table-bordered table-striped"
+                        fullTextSearch="true"
+                        query="filterInstitute">
+        <pnx:DataGridColumn columnName="request_date" headerText="{i18n:Data}"/>
+        <pnx:DataGridColumn width="30" columnName="request_title" headerText="{i18n:Richiesta}"/>
+        <pnx:DataGridColumn columnName="request_operator" headerText="{i18n:Assegnata}"/>
+        <pnx:DataGridColumn columnName="request_type" headerText="{i18n:Tipologia}" renderCell="metafad.ecommerce.requests.views.renderers.RenderTranslate"/>
+        <pnx:DataGridColumn columnName="request_state" headerText="{i18n:Stato}" renderCell="metafad.ecommerce.requests.views.renderers.RenderTranslate"/>
+        <pnx:DataGridColumn columnName="request_id" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.CellEditDeleteRequest" />
+      </com:DataGridAjax>
+    </mvc:State>
+
+    <mvc:State name="edit" controllerName="metafad.ecommerce.requests.controllers.*">
+      <c:FormEdit id="editForm" newCode="true" controllerName="metafad.ecommerce.controllers.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="metafad.ecommerce.requests.models.Model"/>
+
+        <pnx:Fieldset id="user" label="Dati dell'utente" cssClass="ecommerce-fieldset">
+          <pnx:Input id="request_title" label="{i18n:Titolo}" readOnly="true"/>
+          <pnx:Input id="request_text" label="{i18n:Messaggio}" readOnly="true" wrap="true" type="multiline" rows="5"/>
+          <pnx:Input id="request_user_firstName" label="{i18n:Nome}" readOnly="true"/>
+          <pnx:Input id="request_user_lastName" label="{i18n:Cognome}" readOnly="true"/>
+          <pnx:Input id="userEmail" label="{i18n:Email}" readOnly="true"/>
+          <pnx:Input id="userPhone" label="{i18n:Telefono}" readOnly="true"/>
+        </pnx:Fieldset>
+
+        <pnx:Fieldset id="user" label="Stato della richiesta" cssClass="ecommerce-fieldset">
+          <cmp:ManageState id="manageState" />
+          <pnx:List id="request_notify" label="{i18n:Notifica all'utente}" emptyValue="Nessuna notifica">
+            <pnx:ListItem key="notifyBuy" value="Notifica per email all'utente solo quando il prodotto &#232; acquistabile/fruibile" />
+            <pnx:ListItem key="notifyState" value="Notifica per email all'utente ogni cambio di stato"/>
+          </pnx:List>
+          <pnx:Input
+                  data="type=selectfrom;add_new_values=false;proxy=metafad.usersAndPermissions.users.models.proxy.UsersProxy;return_object=true"
+                  id="request_operator" label="{i18n:Assegna ad operatore}" />
+        </pnx:Fieldset>
+
+        <pnx:Fieldset id="user" label="Oggetti della richiesta" cssClass="ecommerce-fieldset">
+          <cmp:RequestObjects id="requestObjects" />
+        </pnx:Fieldset>
+
+        <pnx:JSscript folder="metafad/ecommerce/requests/js"/>
+
+        <cms:FormButtonsPanel>
+          <pnx:HtmlButton label="{i18n:Indietro}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel" />
+          <pnx:HtmlButton label="{i18n:Stampa}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-print" data="action=print" />
+        </cms:FormButtonsPanel>
+      </c:FormEdit>
+
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.ecommerce.controllers.*" />
+    </mvc:State>
+</mvc:Page>

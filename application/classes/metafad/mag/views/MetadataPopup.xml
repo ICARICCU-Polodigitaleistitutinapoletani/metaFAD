@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+  xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+  xmlns:cms="pinaxcms.views.components.*"
+  xmlns:mvc="pinax.mvc.components.*"
+  xmlns:cmp="metafad.mag.views.components.*"
+  defaultEditableRegion="content"
+  templateType="php"
+  templateFileName="Popup.php">
+
+<pnx:Import src="_common.xml"/>
+
+  <mvc:State name="index">
+    <pnx:JSscript folder="metafad/mag/js/metadata" />
+    <cmp:SelectMetadata id="selectMetadata"/>
+  </mvc:State>
+</mvc:Page>

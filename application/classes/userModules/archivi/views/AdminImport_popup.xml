@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page" 
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/" 
+    xmlns:cms="pinaxcms.views.components.*" 
+    xmlns:mvc="pinax.mvc.components.*" 
+    xmlns:cmp="metafad.importer.views.components.*" controllerName="metafad.importer.controllers.*" defaultEditableRegion="content" templateType="php" templateFileName="Popup.php">
+
+    <pnx:Import src="_common.xml" />
+    <mvc:StateTabNavigation id="tab" cssClass="nav nav-tabs" cssClassCurrent="active" visible="false" addQueryString="true"/>
+
+    <mvc:State name="index" label="Importa da file">
+        <pnx:Modifier target="tab" attribute="visible" value="true" />
+        <cms:FormEdit id="editForm" enctype="multipart/form-data">
+            <pnx:Hidden id="recordId" value="{php:__Request::get('recordId')}" />
+            <pnx:Hidden id="module" value="gestione-dati/authority/archivi" />
+            <pnx:Input id="fileuploader" label="{i18n:Pacchetto zip}" data="type=file;fieldsetid=medias;maxfiles=1;acceptedfiles=.zip;maxfilesize=2048;maxlabel=2048 MB;" />
+            <pnx:Fieldset id="medias" label="File caricato su server" data="type=repeat;collapsable=false;noAddRowButton=true">
+                <pnx:Hidden id="__uploadFilename" />
+                <pnx:Hidden id="__originalFileName" />
+            </pnx:Fieldset>
+            <pnx:List id="format" label="{i18n:Formato}" size="90">
+                <pnx:ListItem key="ead3" value="EAD3" />
+            </pnx:List>
+            <pnx:Checkbox id="overwriteScheda" label="Sovrascrivi schede se già presenti" />
+            <pnx:Checkbox id="partialValidation" label="Verifica integrità referenziale" />
+            <pnx:Checkbox id="onlyValidation" label="Valida soltanto" />
+            <pnx:Checkbox id="onlyRecord" label="Non importare le immagini"/>
+            <pnx:Checkbox id="onlyMedia" label="Importa solo le immagini"/>
+            <pnx:Checkbox id="publishFE" label="Pubblica in FE"/>
+            <cms:FormButtonsPanel id="formButtons">
+                <pnx:HtmlButton label="{i18n:Import}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=import" />
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+    </mvc:State>
+
+    <mvc:State id="addFromServer" name="addFromServer" label="Importa da server">
+        <pnx:Modifier target="tab" attribute="visible" value="true" />
+        <cms:FormEdit id="editForm" enctype="multipart/form-data">
+        <pnx:Hidden id="recordId" value="{php:__Request::get('recordId')}" />
+        <pnx:Hidden id="module" value="gestione-dati/authority/archivi" />
+            <cmp:FilePicker id="fileFromServer" customPath="{config:metafad.importer.storageFolder}" label="{i18n:File}" required="true" filter="zip" />
+            <pnx:List id="format" label="{i18n:Formato}" size="90">
+                <pnx:ListItem key="ead3" value="EAD3" />
+            </pnx:List>
+            <pnx:Checkbox id="overwriteScheda" label="Sovrascrivi schede se già presenti" />
+            <pnx:Checkbox id="partialValidation" label="Verifica integrità referenziale" />
+            <pnx:Checkbox id="onlyValidation" label="Valida soltanto" />
+            <pnx:Checkbox id="onlyRecord" label="Non importare le immagini"/>
+            <pnx:Checkbox id="onlyMedia" label="Importa solo le immagini"/>
+            <pnx:Checkbox id="publishFE" label="Pubblica in FE"/>
+            <cms:FormButtonsPanel id="formButtons">
+                <pnx:HtmlButton label="{i18n:Import}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=import"/>
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="importOAI" label="Importa da SIAS/SIUSA">
+        <pnx:Modifier target="tab" attribute="visible" value="true" />
+        <cms:FormEdit id="editForm" controllerName="archivi.controllers.*">
+            <pnx:Hidden id="recordId" value="{php:__Request::get('recordId')}" />
+            <pnx:Hidden id="module" value="gestione-dati/authority/archivi" />
+            <pnx:Hidden id="recordType" value="ca"/>
+            <pnx:Input id="oaiIdentifier" label="Identificativo OAI" required="true"/>
+            <cms:FormButtonsPanel id="formButtons">
+                <pnx:HtmlButton label="{i18n:Import}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=OaiPmhImport" acl="*,edit" />
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+    </mvc:State>
+    <pnx:JSscript><![CDATA[
+        $( document ).ready( function(){
+            $('.js-pinaxcms-save').click(function (e) {
+                if ($('#fileUpload-1').hasClass('dz-success') || $('#fileFromServer').val()) {
+                    window.top.location.href = Glizy.baseUrl + "/metafad.jobsReport";
+                }
+            });
+            $('input[data-action="OaiPmhImport"]').click(function (e) {
+                if ($('#oaiIdentifier').val()) {
+                    window.top.location.href = Glizy.baseUrl + "/metafad.jobsReport";
+                }
+            });
+        });
+        ]]></pnx:JSscript>
+</mvc:Page>

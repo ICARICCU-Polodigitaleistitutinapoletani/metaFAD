@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+  xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+  xmlns:cms="pinaxcms.views.components.*"
+  xmlns:mvc="pinax.mvc.components.*"
+  xmlns:r="pinaxcms.roleManager.views.*"
+  xmlns:c="metafad.iccd.views.components.*"
+  xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+  defaultEditableRegion="content"
+  templateType="php"
+  templateFileName="Popup.php">
+
+<pnx:Import src="_common.xml"/>
+
+<mvc:State name="index">
+    <c:FormEdit id="editForm" newCode="true" controllerName="metafad.gestioneDati.boards.controllers.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="BIB200.models.Model"/>
+
+        <pnx:JSTabGroup id="innerTabs" showNav="true">
+<pnx:JSTab dropdown="true" id="CD-tab" label="{i18n:CD}">
+<pnx:Fieldset id="CD" label="{i18n:CD}" required="true">
+  <pnx:Input id="TSK" label="{i18n:TSK}" required="true" maxLength="5" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##BIB200##}"/>
+  <pnx:Input id="NCU" label="{i18n:NCU}" maxLength="8"/>
+  <pnx:Input id="ESC" label="{i18n:ESC}" required="true" maxLength="25"/>
+  <pnx:Input id="ECP" label="{i18n:ECP}" maxLength="25"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="BI-tab" label="{i18n:BI}">
+<pnx:Fieldset id="BI" label="{i18n:BI}" required="true">
+  <pnx:Fieldset id="BIB" label="{i18n:BIB}" required="true">
+    <pnx:Input id="BIBA" label="{i18n:BIBA}" required="true" maxLength="100"/>
+    <pnx:Input id="BIBC" label="{i18n:BIBC}" maxLength="70"/>
+    <pnx:Input id="BIBF" label="{i18n:BIBF}" required="true" maxLength="25" data="type=FormEditSelectMandatory;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##BIB200##,##code##:##VA_BIBF_BIB##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+    <pnx:Input id="BIBG" label="{i18n:BIBG}" required="true" maxLength="250"/>
+    <pnx:Input id="BIBT" label="{i18n:BIBT}" maxLength="250"/>
+    <pnx:Input id="BIBL" label="{i18n:BIBL}" maxLength="50"/>
+    <pnx:Input id="BIBZ" label="{i18n:BIBZ}" maxLength="50"/>
+    <pnx:Input id="BIBD" label="{i18n:BIBD}" required="true" maxLength="10"/>
+    <pnx:Input id="BIBE" label="{i18n:BIBE}" maxLength="70"/>
+    <pnx:Input id="BIBS" label="{i18n:BIBS}" maxLength="25"/>
+    <pnx:Input id="BIBV" label="{i18n:BIBV}" maxLength="25"/>
+    <pnx:Input id="BIBP" label="{i18n:BIBP}" maxLength="25"/>
+    <pnx:Input id="BIBH" label="{i18n:BIBH}" required="true" maxLength="8"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab id="historyTab" label="{i18n:Storico}" routeUrl="linkHistory" cssClassTab="pull-right"/></pnx:JSTabGroup>
+
+        <pnx:Panel cssClass="formButtons">
+            <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-primary js-pinaxcms-save"
+                            data="action=save" acl="*,edit"/>
+            <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link"
+                            cssClass="btn js-pinaxcms-cancel button-margin" data="action=close"/>
+        </pnx:Panel>
+    </c:FormEdit>
+    <pnx:JSscript><![CDATA[
+    $( document ).ready( function(){
+        $('.js-pinaxcms-save').data('trigger',function (e, data) {
+
+            var msg = {
+                type: 'save',
+                id: $('#__id').val(),
+                text: $('#BIBA').val() + ' - ' + $('#BIBC').val() + ' - ' + $('#BIBG').val() + ' - ' + $('#BIBH').val() + ' - ' + $('#BIBT').val(),
+                values: data
+            }
+
+            Pinax.events.broadcast("pinax.FormEdit.modalPage.message", msg);
+        });
+
+        $('.js-pinaxcms-cancel').click(function (e) {
+            parent.postMessage('{"type":"cancel"}', parent.location.origin);
+        });
+    });
+    ]]></pnx:JSscript>
+    </mvc:State>
+</mvc:Page>

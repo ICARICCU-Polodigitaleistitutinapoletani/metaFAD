@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page" xmlns:pnx="http://www.pinax.org/dtd/1.0/" xmlns:cms="pinaxcms.views.components.*" xmlns:mvc="pinax.mvc.components.*" xmlns:cmp="archivi.views.components.*" xmlns:com="metafad.common.views.components.*" xmlns:boards="metafad.gestioneDati.boards.views.components.*" defaultEditableRegion="content" templateType="php" templateFileName="Page.php">
+
+  <pnx:Import src="_common.xml" />
+
+  <com:ModalConfirm label="Attenzione" message="Sicuro di voler proseguire?" />
+  <com:ModalAlert label="Attenzione" message="Operazione non corretta" />
+
+  <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active" addQueryString="true" visible="false" />
+
+  <mvc:State id="stateIndex" name="index" label="{i18n:Unità archivistica}" url="archivi-UnitaArchivistica">
+    <cmp:DataGridSolr id="dataGrid" enableSorting="true" filterByInstitute="true" recordClassName="archivi.models.UnitaArchivistica" cssClass="table table-bordered table-striped" controllerName="archivi.controllers.*" fullTextSearch="true" JQueryUI="true" autocompleteController="archivi.controllers.ajax.AutoComplete">
+      <pnx:DataGridColumn columnName="identificativo_s" headerText="{i18n:Identificativo per l'Unità archivistica}" />
+      <pnx:DataGridColumn columnName="livelloDiDescrizione_s" headerText="{i18n:Livello di descrizione}" renderCell="archivi.views.renderer.CellLivelloDiDescrizione" />
+      <pnx:DataGridColumn columnName="denominazione_s" headerText="{i18n:Titolo originale}" renderCell="archivi.views.renderer.CellDenominazione" />
+      <pnx:DataGridColumn columnName="cronologia_s" headerText="{i18n:Estremo cronologico testuale}" />
+
+      <pnx:DataGridColumn columnName="id" sortable="false" searchable="false" cssClass="actions" renderCell="archivi.views.renderer.CellSelectEditDraftDelete" />
+    </cmp:DataGridSolr>
+    <cmp:DataGridFilter id="filter" dataGridAjaxId="dataGrid" fieldNumber="1" />
+    <cmp:AddButton label="Unità archivistica" acl="*,new" type="UnitaArchivistica" routeUrl="archiviMVCAdd" editableRegion="actions" recordClassName="archivi.models.UnitaArchivistica" dataGridAjaxId="dataGrid" />
+  </mvc:State>
+
+  <mvc:State id="stateListDetail" name="listDetail" label="{i18n:Lista Fondo}" url="archivi#listFondo">
+    <cmp:PageTitle value="" tag="h3" id="fondoTitle" cssClass="titleFondo" />
+    <cmp:FormEditWithAjaxSteps id="myForm" controllerName="archivi.controllers.*" />
+    <cmp:DataGridSolr id="dataGridDetail" enableSorting="true" filterByInstitute="true" recordClassName="archivi.models.UnitaArchivistica" cssClass="table table-bordered table-striped" ignoreTypeFilter="true" controllerName="archivi.controllers.*" fullTextSearch="true" JQueryUI="true" parent="{php:__Request::get('id')}" autocompleteController="archivi.controllers.ajax.AutoComplete">
+      <pnx:DataGridColumn columnName="identificativo_s" headerText="{i18n:Identificativo per l'Unità archivistica}" />
+      <pnx:DataGridColumn columnName="livelloDiDescrizione_s" headerText="{i18n:Livello di descrizione}" renderCell="archivi.views.renderer.CellLivelloDiDescrizione" />
+      <pnx:DataGridColumn columnName="denominazione_s" headerText="{i18n:Titolo originale}" renderCell="archivi.views.renderer.CellDenominazione" />
+      <pnx:DataGridColumn columnName="estremoRemoto_s" headerText="{i18n:Estremo remoto}" />
+      <pnx:DataGridColumn columnName="ordinamentoProvvisorio_i" headerText="{i18n:NOP}" renderCell="archivi.views.renderer.CellNOP" />
+      <pnx:DataGridColumn columnName="segnaturaAttuale_s" headerText="{i18n:Segnature attuale}" />
+      <pnx:DataGridColumn columnName="segnaturaPrecedente_s" headerText="{i18n:Segnatura precedente}" />
+      <pnx:DataGridColumn columnName="codiceDiClassificazione_s" headerText="{i18n:Codice di classificazione}" />
+
+      <pnx:DataGridColumn columnName="id" sortable="false" searchable="false" cssClass="actions" renderCell="archivi.views.renderer.CellSelectEditDraftDelete" />
+    </cmp:DataGridSolr>
+    <cmp:DataGridFilter id="filter" dataGridAjaxId="dataGridDetail" fieldNumber="1" parent="{php:__Request::get('id')}" />
+    <cmp:SortButton id="reorderButton" label="Riordina" dataGridAjaxId="dataGridDetail" editableRegion="actions" />
+  </mvc:State>
+
+  <mvc:State id="hierarchy" name="hierarchy" label="{i18n:Gerarchia}" url="archivi-UnitaArchivistica/hierarchy">
+    <pnx:Panel cssClass="col-md-12 gerarchia no-padding allHierarchy">
+      <cmp:Tree id="treeview" startId="0" title="" controllerName="archivi.controllers.Gerarchia" />
+    </pnx:Panel>
+    <pnx:JSscript folder="userModules/archivi/js/tree" editableRegion="tail" />
+  </mvc:State>
+
+  <mvc:State id="stateEdit" name="edit,editDraft" label="{i18n:Scheda}" draw="false" cssClass="editState">
+    <cmp:LinkedImages id="linkedImages" model="archivi.models.UnitaArchivistica" />
+    <pnx:JSscript folder="metafad/gestioneDati/showImages/js" />
+    <pnx:Link id="link-show-images" icon="fa fa-picture-o" label="Mostra immagini" editableRegion="actions" cssClass="link showImages archive-showImages" />
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active" addQueryString="true" visible="false" />
+
+    <pnx:JSscript folder="userModules/archivi/js" editableRegion="tail" />
+    <pnx:JSscript folder="userModules/archivi/js/tree" editableRegion="tail" />
+    <pnx:JSscript folder="userModules/archivi/js/OtherMediaButton" editableRegion="tail" />
+    <pnx:JSscript folder="userModules/archivi/js/oai" editableRegion="tail" />
+
+    <com:FormEdit id="editForm" newCode="true" controllerName="archivi.controllers.*">
+      <pnx:Hidden id="__id" />
+      <pnx:Hidden id="__model" value="archivi.models.UnitaArchivistica" />
+      <pnx:Hidden id="instituteKey" />
+      <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}" />
+      <pnx:Input id="external_id" label="{i18n:ID}" size="90" disabled="true" visible="false" />
+
+      <pnx:Hidden id="readOnly" readOnly="true" value="false" label="Scheda import OAI" />
+
+      <pnx:Hidden id="isTemplate" />
+      <pnx:Input id="templateTitle" label="{i18n:Titolo template}" />
+      <pnx:Link cssClass="tree openTree fa fa-list" enabled="true" />
+      <pnx:JSTabGroup id="UnitaArchivistica" showNav="true" cssClass="nav nav-tabs js-tab-section">
+
+
+        <pnx:Panel cssClass="col-md-4 gerarchia no-padding" text="Gerarchia: " enabled="true">
+          <cmp:Tree id="treeview" startId="0" title="" controllerName="archivi.controllers.Gerarchia" />
+        </pnx:Panel>
+
+
+        <pnx:JSTab id="tabIdentificazione" label="Identificazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="codici" label="Codici">
+              <pnx:Input id="acronimoSistema" readOnly="true" label="Acronimo di sistema" required="true" />
+              <pnx:Input id="identificativo" readOnly="true" label="Identificativo per l'Unità archivistica" />
+              <pnx:Input id="codiceIdentificativoSistema" readOnly="true" label="Codice identificativo di sistema" />
+              <pnx:Fieldset id="altriCodiciIdentificativi" label="Altri codici identificativi" data="type=repeat;noEmptyMessage=true">
+                <pnx:Input id="altriCodici_codice" label="Codice" />
+                <pnx:Input id="altriCodici_qualifica" label="Qualifica" />
+              </pnx:Fieldset>
+              <pnx:Fieldset id="codiceIdentificativoPrecedente" label="Codice identificativo precedente" data="type=repeat;noEmptyMessage=true">
+                <pnx:Input id="codiciPrecedenti_codice" label="Codice" />
+              </pnx:Fieldset>
+              <pnx:List id="livelloDiDescrizione" label="Livello di descrizione" required="1" emptyValue=" - ">
+                <pnx:ListItem value="Unità archivistica" key="unita" />
+                <pnx:ListItem value="Sottounità" key="sottounita" />
+                <pnx:ListItem value="Sottosottounità" key="sottosottounita" />
+              </pnx:List>
+              <pnx:Hidden id="externalID" readOnly="true" label="ID importazione" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="collegamenti" label="Collegamenti">
+              <pnx:Input id="parent" label="Livello superiore" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.Model;return_object=true;textfield=_denominazione" required="true" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="numerazioneDescrizione" label="Numerazione della descrizione">
+              <pnx:Input id="ordinamentoProvvisorio" label="Numero di ordinamento provvisorio" readOnly="true" type="number" />
+              <pnx:Input id="ordinamentoGlobale" label="Numero di ordinamento definitivo" readOnly="true" type="number" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="segnature" label="Segnature">
+              <pnx:Input id="segnaturaAttuale" label="Segnatura attuale" />
+              <pnx:Fieldset id="segnaturaPrecedente" label="Segnatura precedente" data="type=repeat;noEmptyMessage=true">
+                <pnx:Input id="segnatura" label="Segnatura precedente" />
+                <pnx:Input id="qualifica" label="Qualifica" />
+              </pnx:Fieldset>
+              <pnx:Fieldset id="codiceDiClassificazione" label="Codice di classificazione">
+                <pnx:Input id="codiceDiClassificazione" label="Codice" />
+                <pnx:Input id="qualificaClassificazione" label="Qualifica" />
+              </pnx:Fieldset>
+            </pnx:Fieldset>
+            <pnx:Fieldset id="denominazioneUnita" label="Denominazione">
+              <pnx:Input id="denominazione" data="type=FormEditMandatory" cssClass="form-control denominazioneUnita-onlyOne-mandatory" label="Titolo originale" />
+              <pnx:Input id="integrazioneTitolo" label="Integrazione al titolo" />
+              <pnx:Input id="titoloAttribuito" data="type=FormEditMandatory" cssClass="form-control denominazioneUnita-onlyOne-mandatory" label="Titolo attribuito" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="cronologia" label="Estremi cronologici" data="type=repeatQualifica;repeatMax=2;noEmptyMessage=true">
+              <pnx:Input id="estremoCronologicoTestuale" readOnly="true" cssClass="js-archive-cronologia-concatText form-control" label="Estremo cronologico testuale" />
+              <pnx:List id="tipoData" label="Tipologia data" cssClass="js-archive-cronologia-dateType form-control">
+                <pnx:ListItem value="Intervallo di date" key="data-intervallo" />
+                <pnx:ListItem value="Data singola" key="data-singola" />
+                <pnx:ListItem value="Data aperta" key="data-aperta" />
+                <pnx:ListItem value="Data non rilevabile/non rilevata" key="data-non-rilevabile" />
+              </pnx:List>
+              <pnx:FieldSet id="estremoRemoto" cssClass="js-archive-cronologia-remotoRoot js-archive-cronologia-estremo" label="Estremo cronologico remoto">
+                <pnx:Input id="estremoRemoto_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data" />
+                <pnx:Input id="estremoRemoto_secolo" cssClass="js-archive-cronologia-century form-control" label="Secolo" data="type=conditionalSelectFrom;proxy=archivi.models.proxy.ThesaurusSecoliProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_SECOLO##};dictId=VC_ARCHIVE_SECOLO;target=*`--&gt;estremoRemoto_specifica" />
+                <pnx:Input id="estremoRemoto_specifica" cssClass="js-archive-cronologia-specifica form-control" label="Specifica" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_SPEC_SECOLO##};dictId=VC_ARCHIVE_SPEC_SECOLO" />
+                <pnx:Input id="estremoRemoto_validita" cssClass="js-archive-cronologia-valid-data form-control" label="Validità" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_VALIDITA_DATA##};dictId=VC_ARCHIVE_VALIDITA_DATA" />
+                <pnx:Input id="estremoRemoto_codificaData" label="Codifica della data" readOnly="true" cssClass="js-archive-cronologia-codificaText form-control" />
+                <pnx:Input id="estremoRemoto_noteData" cssClass="js-archive-cronologia-note-data form-control" label="Note alla data" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              </pnx:FieldSet>
+              <pnx:FieldSet id="estremoRecente" cssClass="js-archive-cronologia-recenteRoot js-archive-cronologia-estremo" label="Estremo cronologico recente">
+                <pnx:Input id="estremoRecente_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data" />
+                <pnx:Input id="estremoRecente_secolo" cssClass="js-archive-cronologia-century form-control" label="Secolo" data="type=conditionalSelectFrom;proxy=archivi.models.proxy.ThesaurusSecoliProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_SECOLO##};dictId=VC_ARCHIVE_SECOLO;target=*`--&gt;estremoRecente_specifica" />
+                <pnx:Input id="estremoRecente_specifica" cssClass="js-archive-cronologia-specifica form-control" label="Specifica" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_SPEC_SECOLO##};dictId=VC_ARCHIVE_SPEC_SECOLO" />
+                <pnx:Input id="estremoRecente_validita" cssClass="js-archive-cronologia-valid-data form-control select2-container" label="Validità" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_VALIDITA_DATA##};dictId=VC_ARCHIVE_VALIDITA_DATA" />
+                <pnx:Input id="estremoRecente_codificaData" label="Codifica della data" readOnly="true" cssClass="js-archive-cronologia-codificaText form-control" />
+                <pnx:Input id="estremoRecente_noteData" cssClass="js-archive-cronologia-note-data form-control" label="Note alla data" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              </pnx:FieldSet>
+              <pnx:Input id="qualificaData" cssClass="form-control" label="Qualifica della data" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_UA_QUALIFICA_DATA##};dictId=VC_ARCHIVE_UA_QUALIFICA_DATA" />
+              <pnx:Input id="notaDatazione" label="Nota alla datazione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="descrizioneFisica" label="Descrizione fisica">
+              <pnx:Input id="descrizioneFisica_tipologia" label="Tipologia" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VA_ARCHIVE_DESC_FISICA_TIPOLOGIA" />
+              <pnx:Input id="descrizioneFisica_supporto" label="Supporto" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_SUPPORTO##};dictId=VC_ARCHIVE_SUPPORTO" />
+              <pnx:Fieldset id="descrizioneFisica_consistenza" label="Consistenza" data="type=repeat;noEmptyMessage=true">
+                <pnx:Input id="consistenza_tipologia" label="Tipologia" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_DESC_FISICA_TIPO_SUPPORTO##};dictId=VC_ARCHIVE_DESC_FISICA_TIPO_SUPPORTO" />
+                <pnx:Input id="consistenza_quantita" label="Quantità" />
+              </pnx:Fieldset>
+              <pnx:Input id="integrazioneDescrizione" label="Integrazione alla descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input id="visualizzazioneConsistenza" label="Visualizzazione della consistenza" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabContestoProvenienza" label="Contesto, contenuto e struttura" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input id="descrizioneContenuto" label="Descrizione del contentuto" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            <pnx:Input id="criteriOrdinamento" label="Criteri di ordinamento" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            <pnx:Fieldset id="bloccoScrittura" label="Lingua e scrittura" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="linguaScrittura" label="Lingua della scrittura" data="type=selectTipoScrittura;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_LINGUA_SCRITTURA##};dictId=VC_ARCHIVE_LINGUA_SCRITTURA" />
+              <pnx:Input id="tipoDiScrittura" label="Tipo di scrittura" cssClass="form-control" data="type=dynamicselectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##2##,##parentKey##:##null##, ##code##:##VC_ARCHIVE_LINGUA_SCRITTURA##};dictId=VC_ARCHIVE_LINGUA_SCRITTURA" />
+              <pnx:Input id="descrizioneScrittura" label="Descrizione tipo scrittura" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="relazioneStrumento" label="Relazione con strumento di ricerca" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="relStrumento" label="Relazione con strumento" data="type=dynamicselectfrom;proxy=archivi.models.proxy.StrumentiDiRicercaProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.SchedaStrumentoRicerca;proxy_params={##type##:##UA##};return_object=true;textfield=_denominazione" />
+              <pnx:Input id="qualificaRelStrumento" label="Qualifica della relazione con lo strumento" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="presenzaMateriale" label="Presenza di allegati">
+              <pnx:Input id="presenzaMateriale" label="Presenza di allegati, fra cui materiale audio, video, o supporti di memorizzazione, fotografie o mappe" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabStatoDiConservazione" label="Stato di conservazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input id="statoConservazione" label="Stato di conservazione" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_STATO_CONSERVAZIONE##};dictId=VC_ARCHIVE_STATO_CONSERVAZIONE" />
+            <pnx:Input id="condizioniMateriale" label="Condizioni del materiale" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            <pnx:Input id="restauro" label="Restauro o altri interventi" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabCondizioniAccessoRiproduzione" label="Condizioni di accesso e di riproduzione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input id="condizioniAccessoRiproduzione" label="Condizioni di accesso e riproduzione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabVociIndice" label="Voci di indice" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="antroponimi" label="Antroponimi" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="intestazione" label="Intestazione" data="type=modalPage;pageId=archivi-Antroponimi_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Antroponimi" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="enti" label="Enti" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="intestazione" label="Intestazione" data="type=modalPage;pageId=archivi-Enti_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Enti" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="toponimi" label="Toponimi" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="intestazione" label="Intestazione" data="type=modalPage;pageId=archivi-Toponimi_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Toponimi" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="descrittori" label="Descrittori" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="voce" label="Voce" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##code##:##VA_ARCHIVE_VOCI_INDICE_DESCRITTORI##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_VOCI_INDICE_DESCRITTORI" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="antenati" label="Antenati">
+              <pnx:Fieldset id="toponimiAntenati" label="Toponimi" data="type=repeat;noEmptyMessage=true">
+                <pnx:Input id="toponimiAnt" label="Voce" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.ToponimiAntenati;return_object=true;textfield=_denominazione" />
+              </pnx:Fieldset>
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabDocumentazioneCollegataComplementare" label="Documentazione collegata e complementare" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="documentazioneArchivioCollegata" label="Documentazione d'archivio collegata" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="doc_denominazione" label="Denominazione" />
+              <pnx:Input id="doc_descrizione" label="Descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input id="doc_localizzazioneSegnatura" label="Localizzazione segnatura" />
+              <pnx:Input id="doc_url" label="URL" data="type=url" />
+              <pnx:Input id="doc_dataInserimento" cssClass="js-archive-dateTextBox form-control" label="Data inserimento" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabRiferimentiFonti" label="Riferimenti e fonti" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="riferimentiBibliografici" label="Riferimenti bibliografici" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="linkRiferimentiBibliografici" label="Riferimenti bibliografici" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.SchedaBibliografica;return_object=true;textfield=_denominazione" />
+              <pnx:Input id="indicazioniSpecifiche" label="Indicazioni specifiche" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="fontiArchivistiche" label="Fonti archivistiche" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="linkFontiArchivistiche" label="Fonti archivistiche" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.FonteArchivistica;return_object=true;textfield=_denominazione" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="riferimentiWeb" label="Riferimenti web" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="rif_denominazioneSitoWeb" label="Denominazione sito o pagina web" />
+              <pnx:Input id="rif_descrizione" label="Descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input id="rif_dataInserimento" cssClass="js-archive-dateTextBox form-control" label="Data di inserimento" />
+              <pnx:Input id="rif_url" label="URL" data="type=url" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabCompilazione" label="Compilazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input id="linguaDescrizioneRecord" label="Lingua di descrizione del record" data="type=selectfrom;return_object=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;return_object=true;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_ISO_639_3##};dictId=VC_ARCHIVE_ISO_639_3" />
+            <pnx:Fieldset id="compilazione" label="Compilazione" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="tipologiaRedattore" value="Persona" label="Tipologia redattore" />
+              <pnx:Input id="redattore" label="Redattore" />
+              <pnx:Input id="azione" label="Azione" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_COMPILAZIONE_AZIONE##};dictId=VC_ARCHIVE_COMPILAZIONE_AZIONE" />
+              <pnx:Input id="noteRedazionali" label="Note redazionali" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input id="data" cssClass="js-archive-dateTextBox form-control js-archive-dateCompilazione" label="Data" />
+            </pnx:Fieldset>
+            <pnx:Input id="osservazioni" label="Osservazioni" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabMediaCollegati" label="Media collegati ed ecommerce" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="ecommerceVisibilita" label="Opzioni ecommerce e visibilità">
+              <pnx:Input id="ecommerceLicenses" data="type=selectfrom;multiple=true;add_new_values=false;proxy=metafad.ecommerce.licenses.models.proxy.LicensesProxy;return_object=true" label="Opzioni ecommerce" />
+              <pnx:List id="visibility" label="Visibilità FE">
+                <pnx:ListItem value="Completa (RDV)" key="rdv" />
+                <pnx:ListItem value="Visibile in ricerca e dettaglio, no viewer (RD)" key="rd" />
+                <pnx:ListItem value="Visibile in ricerca, no dettaglio e viewer (R)" key="r" />
+                <pnx:ListItem value="Non visibile" key="0" />
+              </pnx:List>
+            </pnx:Fieldset>
+            <pnx:Fieldset id="tematismo" label="Tematismo" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="tematismoField" label="Tematismo" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_TEMATISMO" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="metadatiMediaCollegati" label="Metadati/oggetti digitali collegati">
+              <pnx:Input id="linkedStruMag" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.strumag.models.proxy.StruMagProxy;return_object=true" label="Metadato strutturale collegato" />
+              <pnx:Input id="mediaCollegati" label="Immagini collegate" data="type=mediapicker;preview=true" />
+              <pnx:Input id="linkedMediaEcommerce" data="type=selectfrom;multiple=true;add_new_values=false;proxy=metafad.ecommerce.licenses.models.proxy.LicensesProxy;return_object=true" cssClassLabel="col-sm-12 control-label" cssClass="js-ecommerce" label="Ecommerce" />
+              <pnx:Input id="mediaCollegatiNoImg" label="Altri media collegati" data="type=mediapicker;preview=false;mediatype=PDF" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+
+
+        <pnx:JSTab id="history" label="{i18n:Storico}" cssClassTab="pull-right" routeUrl="archivihistory" />
+        <pnx:JSTab id="edit" label="{i18n:Scheda}" cssClassTab="fake-active pull-right" />
+      </pnx:JSTabGroup>
+
+      <cms:FormButtonsPanel>
+        <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=save" acl="*,edit" />
+        <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save" data="action=saveClose" acl="*,edit" />
+        <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft" />
+        <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft" />
+        <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel" />
+
+      </cms:FormButtonsPanel>
+    </com:FormEdit>
+  </mvc:State>
+
+  <mvc:State name="show,showDraft" label="{i18n:Show}" draw="false">
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active" addQueryString="true" visible="false" />
+
+    <pnx:JSscript folder="userModules/archivi/js" editableRegion="tail" />
+
+    <com:FormEdit id="editForm" newCode="true" controllerName="archivi.controllers.*">
+      <pnx:Hidden id="__id" />
+      <pnx:Hidden id="__model" value="archivi.models.UnitaArchivistica" />
+      <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}" />
+
+      <pnx:JSTabGroup id="UnitaArchivistica" showNav="true" cssClass="nav nav-tabs js-tab-section">
+
+        <pnx:JSTab id="tabIdentificazione" label="Identificazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="codici" label="Codici">
+              <pnx:Input readOnly="true" id="acronimoSistema" label="Acronimo di sistema" required="true" />
+              <pnx:Input readOnly="true" id="identificativo" label="Identificativo per l'Unità archivistica" />
+              <pnx:Input readOnly="true" id="codiceIdentificativoSistema" label="Codice identificativo di sistema" />
+              <pnx:Fieldset id="altriCodiciIdentificativi" label="Altri codici identificativi" data="readOnly=true;type=repeat;noEmptyMessage=true">
+                <pnx:Input readOnly="true" id="altriCodici_codice" label="Codice" />
+                <pnx:Input readOnly="true" id="altriCodici_qualifica" label="Qualifica" />
+              </pnx:Fieldset>
+              <pnx:Fieldset id="codiceIdentificativoPrecedente" label="Codice identificativo precedente" data="readOnly=true;type=repeat;noEmptyMessage=true">
+                <pnx:Input readOnly="true" id="codiciPrecedenti_codice" label="Codice" />
+              </pnx:Fieldset>
+              <pnx:List id="livelloDiDescrizione" label="Livello di descrizione" required="1" emptyValue=" - ">
+                <pnx:ListItem value="Unità archivistica" key="unita" />
+                <pnx:ListItem value="Sottounità" key="sottounita" />
+                <pnx:ListItem value="Sottosottounità" key="sottosottounita" />
+              </pnx:List>
+              <pnx:Hidden id="externalID" readOnly="true" label="ID importazione" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="collegamenti" label="Collegamenti">
+              <pnx:Input readOnly="true" id="parent" label="Livello superiore" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.Model;return_object=true;textfield=_denominazione" required="true" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="numerazioneDescrizione" label="Numerazione della descrizione">
+              <pnx:Input readOnly="true" id="ordinamentoProvvisorio" label="Numero di ordinamento provvisorio" type="number" />
+              <pnx:Input readOnly="true" id="ordinamentoGlobale" label="Numero di ordinamento definitivo" type="number" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="segnature" label="Segnature">
+              <pnx:Input readOnly="true" id="segnaturaAttuale" label="Segnatura attuale" />
+              <pnx:Fieldset id="segnaturaPrecedente" label="Segnatura precedente" data="readOnly=true;type=repeat;noEmptyMessage=true">
+                <pnx:Input readOnly="true" id="segnatura" label="Segnatura precedente" />
+                <pnx:Input readOnly="true" id="qualifica" label="Qualifica" />
+              </pnx:Fieldset>
+              <pnx:Fieldset id="codiceDiClassificazione" label="Codice di classificazione">
+                <pnx:Input readOnly="true" id="codiceDiClassificazione" label="Codice" />
+                <pnx:Input readOnly="true" id="qualificaClassificazione" label="Qualifica" />
+              </pnx:Fieldset>
+            </pnx:Fieldset>
+            <pnx:Fieldset id="denominazioneUnita" label="Denominazione">
+              <pnx:Input readOnly="true" id="denominazione" data="type=FormEditMandatory" cssClass="form-control denominazioneUnita-onlyOne-mandatory" label="Titolo originale" />
+              <pnx:Input readOnly="true" id="integrazioneTitolo" label="Integrazione al titolo" />
+              <pnx:Input readOnly="true" id="titoloAttribuito" data="type=FormEditMandatory" cssClass="form-control denominazioneUnita-onlyOne-mandatory" label="Titolo attribuito" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="cronologia" label="Estremi cronologici" data="readOnly=true;type=repeatQualifica;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="estremoCronologicoTestuale" cssClass="js-archive-cronologia-concatText form-control" label="Estremo cronologico testuale" />
+              <pnx:List id="tipoData" label="Tipologia data" cssClass="js-archive-cronologia-dateType form-control">
+                <pnx:ListItem value="Intervallo di date" key="data-intervallo" />
+                <pnx:ListItem value="Data singola" key="data-singola" />
+                <pnx:ListItem value="Data aperta" key="data-aperta" />
+                <pnx:ListItem value="Data non rilevabile/non rilevata" key="data-non-rilevabile" />
+              </pnx:List>
+              <pnx:FieldSet id="estremoRemoto" cssClass="js-archive-cronologia-remotoRoot js-archive-cronologia-estremo" label="Estremo cronologico remoto">
+                <pnx:Input readOnly="true" id="estremoRemoto_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data" />
+                <pnx:Input readOnly="true" id="estremoRemoto_secolo" cssClass="js-archive-cronologia-century form-control" label="Secolo" data="type=conditionalSelectFrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_SECOLO;target=*`--&gt;estremoRemoto_specifica" />
+                <pnx:Input readOnly="true" id="estremoRemoto_specifica" cssClass="js-archive-cronologia-specifica form-control" label="Specifica" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_SPEC_SECOLO" />
+                <pnx:Input readOnly="true" id="estremoRemoto_validita" cssClass="js-archive-cronologia-valid-data form-control" label="Validità" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_VALIDITA_DATA" />
+                <pnx:Input readOnly="true" id="estremoRemoto_codificaData" label="Codifica della data" cssClass="js-archive-cronologia-codificaText form-control" />
+                <pnx:Input readOnly="true" id="estremoRemoto_noteData" cssClass="js-archive-cronologia-note-data form-control" label="Note alla data" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              </pnx:FieldSet>
+              <pnx:FieldSet id="estremoRecente" cssClass="js-archive-cronologia-recenteRoot js-archive-cronologia-estremo" label="Estremo cronologico recente">
+                <pnx:Input readOnly="true" id="estremoRecente_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data" />
+                <pnx:Input readOnly="true" id="estremoRecente_secolo" cssClass="js-archive-cronologia-century form-control" label="Secolo" data="type=conditionalSelectFrom;proxy=archivi.models.proxy.ThesaurusSecoliProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_SECOLO;target=*`--&gt;estremoRecente_specifica" />
+                <pnx:Input readOnly="true" id="estremoRecente_specifica" cssClass="js-archive-cronologia-specifica form-control" label="Specifica" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_SPEC_SECOLO" />
+                <pnx:Input readOnly="true" id="estremoRecente_validita" cssClass="js-archive-cronologia-valid-data form-control select2-container" label="Validità" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_VALIDITA_DATA" />
+                <pnx:Input readOnly="true" id="estremoRecente_codificaData" label="Codifica della data" cssClass="js-archive-cronologia-codificaText form-control" />
+                <pnx:Input readOnly="true" id="estremoRecente_noteData" cssClass="js-archive-cronologia-note-data form-control" label="Note alla data" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              </pnx:FieldSet>
+              <pnx:Input readOnly="true" id="qualificaData" cssClass="js-archive-cronologia-qualifica-data form-control" label="Qualifica della data" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_QUALIFICA_DATA" />
+              <pnx:Input readOnly="true" id="qualificaDataAggiunta" cssClass="js-archive-cronologia-qualifica-data form-control" label="Qualifica della data" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_QUALIFICA_DATA_AGGIUNTA" />
+              <pnx:Input readOnly="true" id="notaDatazione" label="Nota alla datazione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="descrizioneFisica" label="Descrizione fisica">
+              <pnx:Input readOnly="true" id="descrizioneFisica_tipologia" label="Tipologia" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VA_ARCHIVE_DESC_FISICA_TIPOLOGIA" />
+              <pnx:Input readOnly="true" id="descrizioneFisica_supporto" label="Supporto" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_SUPPORTO" />
+              <pnx:Fieldset id="descrizioneFisica_consistenza" label="Consistenza" data="readOnly=true;type=repeat;noEmptyMessage=true">
+                <pnx:Input readOnly="true" id="consistenza_tipologia" label="Tipologia" ata="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_DESC_FISICA_TIPO_SUPPORTO" />
+                <pnx:Input readOnly="true" id="consistenza_quantita" label="Quantità" />
+              </pnx:Fieldset>
+              <pnx:Input readOnly="true" id="integrazioneDescrizione" label="Integrazione alla descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input readOnly="true" id="visualizzazioneConsistenza" label="Visualizzazione della consistenza" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabContestoProvenienza" label="Contesto, contenuto e struttura" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input readOnly="true" id="descrizioneContenuto" label="Descrizione del contentuto" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            <pnx:Input readOnly="true" id="criteriOrdinamento" label="Criteri di ordinamento" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            <pnx:Fieldset id="bloccoScrittura" label="Lingua e scrittura" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="linguaScrittura" label="Lingua della scrittura" data="type=selectTipoScrittura;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_LINGUA_SCRITTURA" />
+              <pnx:Input readOnly="true" id="tipoDiScrittura" label="Tipo di scrittura" />
+              <pnx:Input readOnly="true" id="descrizioneScrittura" label="Descrizione tipo scrittura" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="relazioneStrumento" label="Relazione con strumento di ricerca" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="relStrumento" label="Relazione con strumento" data="type=dynamicselectfrom;proxy=archivi.models.proxy.StrumentiDiRicercaProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.SchedaStrumentoRicerca;return_object=true;textfield=_denominazione" />
+              <pnx:Input readOnly="true" id="qualificaRelStrumento" label="Qualifica della relazione con lo strumento" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="presenzaMateriale" label="Presenza di allegati">
+              <pnx:Input readOnly="true" id="presenzaMateriale" label="Presenza di allegati, fra cui materiale audio, video, o supporti di memorizzazione, fotografie o mappe" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabStatoDiConservazione" label="Stato di conservazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input readOnly="true" id="statoConservazione" label="Stato di conservazione" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_STATO_CONSERVAZIONE" />
+            <pnx:Input readOnly="true" id="condizioniMateriale" label="Condizioni del materiale" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            <pnx:Input readOnly="true" id="restauro" label="Restauro o altri interventi" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabCondizioniAccessoRiproduzione" label="Condizioni di accesso e di riproduzione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input readOnly="true" id="condizioniAccessoRiproduzione" label="Condizioni di accesso e riproduzione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabVociIndice" label="Voci di indice" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="antroponimi" label="Antroponimi" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="intestazione" label="Intestazione" data="type=modalPage;pageId=archivi-Antroponimi_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Antroponimi" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="enti" label="Enti" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="intestazione" label="Intestazione" data="type=modalPage;pageId=archivi-Enti_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Enti" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="toponimi" label="Toponimi" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="intestazione" label="Intestazione" data="type=modalPage;pageId=archivi-Toponimi_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Toponimi" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="descrittori" label="Descrittori" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="voce" label="Voce" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##code##:##VA_ARCHIVE_VOCI_INDICE_DESCRITTORI##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_VOCI_INDICE_DESCRITTORI" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="antenati" label="Antenati">
+              <pnx:Fieldset id="toponimiAntenati" label="Toponimi" data="readOnly=true;type=repeat;noEmptyMessage=true">
+                <pnx:Input readOnly="true" id="toponimiAnt" label="Voce" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.ToponimiAntenati;return_object=true;textfield=_denominazione" />
+              </pnx:Fieldset>
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabDocumentazioneCollegataComplementare" label="Documentazione collegata e complementare" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="documentazioneArchivioCollegata" label="Documentazione d'archivio collegata" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="doc_denominazione" label="Denominazione" />
+              <pnx:Input readOnly="true" id="doc_descrizione" label="Descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input readOnly="true" id="doc_localizzazioneSegnatura" label="Localizzazione segnatura" />
+              <pnx:Input readOnly="true" id="doc_url" label="URL" data="type=url" />
+              <pnx:Input readOnly="true" id="doc_dataInserimento" cssClass="js-archive-dateTextBox form-control" label="Data inserimento" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabRiferimentiFonti" label="Riferimenti e fonti" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="riferimentiBibliografici" label="Riferimenti bibliografici" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="linkRiferimentiBibliografici" label="Riferimenti bibliografici" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.SchedaBibliografica;return_object=true;textfield=_denominazione" />
+              <pnx:Input readOnly="true" id="indicazioniSpecifiche" label="Indicazioni specifiche" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="fontiArchivistiche" label="Fonti archivistiche" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="linkFontiArchivistiche" label="Fonti archivistiche" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.FonteArchivistica;return_object=true;textfield=_denominazione" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="riferimentiWeb" label="Riferimenti web" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="rif_denominazioneSitoWeb" label="Denominazione sito o pagina web" />
+              <pnx:Input readOnly="true" id="rif_descrizione" label="Descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input readOnly="true" id="rif_dataInserimento" cssClass="js-archive-dateTextBox form-control" label="Data di inserimento" />
+              <pnx:Input readOnly="true" id="rif_url" label="URL" data="type=url" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabCompilazione" label="Compilazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input readOnly="true" id="linguaDescrizioneRecord" label="Lingua di descrizione del record" data="type=selectfrom;return_object=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;return_object=true;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_ISO_639_3" />
+            <pnx:Fieldset id="compilazione" label="Compilazione" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="tipologiaRedattore" value="Persona" label="Tipologia redattore" />
+              <pnx:Input readOnly="true" id="redattore" label="Redattore" />
+              <pnx:Input readOnly="true" id="azione" label="Azione" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_COMPILAZIONE_AZIONE" />
+              <pnx:Input readOnly="true" id="noteRedazionali" label="Note redazionali" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input readOnly="true" id="data" cssClass="js-archive-dateTextBox form-control js-archive-dateCompilazione" label="Data" />
+            </pnx:Fieldset>
+            <pnx:Input readOnly="true" id="osservazioni" label="Osservazioni" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabMediaCollegati" label="Media collegati ed ecommerce" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="ecommerceVisibilita" label="Opzioni ecommerce e visibilità">
+              <pnx:Input readOnly="true" id="ecommerceLicenses" data="type=selectfrom;multiple=true;add_new_values=false;proxy=metafad.ecommerce.licenses.models.proxy.LicensesProxy;return_object=true" label="Opzioni ecommerce" />
+              <pnx:List id="visibility" label="Visibilità FE">
+                <pnx:ListItem value="Completa (RDV)" key="rdv" />
+                <pnx:ListItem value="Visibile in ricerca e dettaglio, no viewer (RD)" key="rd" />
+                <pnx:ListItem value="Visibile in ricerca, no dettaglio e viewer (R)" key="r" />
+                <pnx:ListItem value="Non visibile" key="0" />
+              </pnx:List>
+            </pnx:Fieldset>
+            <pnx:Fieldset id="tematismo" label="Tematismo" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="tematismoField" label="Tematismo" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-unitaarchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_TEMATISMO" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="metadatiMediaCollegati" label="Metadati/oggetti digitali collegati">
+              <pnx:Input readOnly="true" id="linkedStruMag" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.strumag.models.proxy.StruMagProxy;return_object=true" label="Metadato strutturale collegato" />
+              <pnx:Input readOnly="true" id="mediaCollegati" label="Immagini collegati" data="type=mediapicker;preview=true" />
+              <pnx:Input readOnly="true" id="linkedMediaEcommerce" data="type=selectfrom;multiple=true;add_new_values=false;proxy=metafad.ecommerce.licenses.models.proxy.LicensesProxy;return_object=true" cssClassLabel="col-sm-12 control-label" cssClass="js-ecommerce" label="Ecommerce" />
+              <pnx:Input readOnly="true" id="mediaCollegatiNoImg" label="Altri media collegati" data="type=mediapicker;preview=false;mediatype=PDF" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+
+
+      </pnx:JSTabGroup>
+
+      <cms:FormButtonsPanel>
+        <pnx:HtmlButton label="{i18n:Indietro}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" />
+      </cms:FormButtonsPanel>
+    </com:FormEdit>
+  </mvc:State>
+
+  <mvc:State name="delete">
+    <pnx:Hidden controllerName="archivi.controllers.*" />
+  </mvc:State>
+
+  <mvc:State name="toggleFEVisibility">
+    <pnx:Hidden controllerName="archivi.controllers.ToggleFEVisibility" />
+  </mvc:State>
+
+  <mvc:State id="stateHistory" name="history" label="{i18n:Storico}" url="linkHistory">
+    <pnx:JSTabGroup id="innerTabs">
+      <pnx:JSTab id="historyTab" label="{i18n:Storico}" cssClassTab="pull-right">
+        <cms:FormEdit addValidationJs="false" controllerName="archivi.controllers.*">
+          <boards:ShowHistory id="history" model="archivi.models.UnitaArchivistica" />
+          <cms:FormButtonsPanel>
+            <pnx:HtmlButton label="{i18n:Confronta}" type="button" cssClass="btn btn-primary js-pinaxcms-history" data="action=add" />
+          </cms:FormButtonsPanel>
+        </cms:FormEdit>
+      </pnx:JSTab>
+      <pnx:JSTab id="editTab" label="{i18n:Scheda}" routeUrl="linkEdit" cssClassTab="pull-right" />
+    </pnx:JSTabGroup>
+  </mvc:State>
+</mvc:Page>

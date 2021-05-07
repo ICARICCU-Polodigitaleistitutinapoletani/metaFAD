@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model:Model
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:model="pinax.models.*/"
+    model:tableName="BIB200"
+    model:usePrefix="true"
+    model:type="document"
+    model:baseClass="metafad.common.models.ActiveRecordDocumentIccdAUT">
+
+    <model:Script parent="model">
+    <![CDATA[
+    public function getTitle()
+    {
+        return $this->BIBA ? $this->BIBA : null;
+    }
+
+    public function getSolrDocument()
+    {
+        $solrModel = array(
+            '__id' => 'id',
+            'BIB200.models.Model' => 'document_type_t',
+            'updateDateTime' => 'update_at_s',
+            'document' => 'doc_store',
+            'isValid' => 'isValid_i',
+			'BIBA' => 'BIBA_s,BIBA_t',
+			'BIBC' => 'BIBC_s,BIBC_t',
+			'BIBG' => 'BIBG_s,BIBG_t',
+			'BIBH' => 'BIBH_s,BIBH_t',
+			'BIBT' => 'BIBT_s,BIBT_t',
+
+        );
+
+        $solrModel = array_merge(parent::getSolrDocument(), $solrModel);
+
+        return $solrModel;
+    }
+
+    public function getFESolrDocument()
+    {
+        $solrModel = array(
+            '__id' => 'id',
+            'BIB200.models.Model' => 'document_type_t',
+            'updateDateTime' => 'update_at_s',
+            'document' => 'doc_store',
+            'isValid' => 'isValid_i',
+            'feMapping' => ''
+        );
+
+        return $solrModel;
+    }
+
+    public function getBeMappingAdvancedSearch()
+    {
+        $solrModel = array(
+            '__id' => 'id',
+            'BIB200.models.Model' => 'document_type_t',
+            'updateDateTime' => 'update_at_s',
+            'document' => 'doc_store',
+            'isValid' => 'isValid_i',
+            'beMapping' => '{"BIBG":["BIBG"],"BIBT":["BIBT"],"BIBA":["BIBA"],"BIBC":["BIBC"],"BIBD":["BIBD"],"BIBH":["BIBH"],"NCU":["NCU"]}'
+        );
+
+        return $solrModel;
+    }
+
+    public function getBeAdvancedSearchFields()
+    {
+        $searchFields = array(
+			'BIBG' => 'bibg_txt',
+			'BIBT' => 'bibt_txt',
+			'BIBA' => 'biba_txt',
+			'BIBC' => 'bibc_txt',
+			'BIBD' => 'bibd_txt',
+			'BIBH' => 'bibh_txt',
+			'NCU' => 'ncu_txt',
+
+        );
+
+        return $searchFields;
+    }
+
+    public function getFindTermFields()
+    {
+        return array("BIBA","BIBH");
+    }
+
+    ]]>
+    </model:Script>
+
+    <model:Define>
+<model:Field name="TSK" validator="notempty" type="string" length="5"/>
+<model:Field name="NCU" type="string" length="8"/>
+<model:Field name="ESC" validator="notempty" type="string" length="25"/>
+<model:Field name="ECP" type="string" length="25"/>
+<model:Field name="BIBA" validator="notempty" index="true" type="string" length="100"/>
+<model:Field name="BIBC" type="string" length="70"/>
+<model:Field name="BIBF" validator="notempty" type="string" length="25"/>
+<model:Field name="BIBG" validator="notempty" index="true" type="string" length="250"/>
+<model:Field name="BIBT" type="string" length="250"/>
+<model:Field name="BIBL" type="string" length="50"/>
+<model:Field name="BIBZ" type="string" length="50"/>
+<model:Field name="BIBD" validator="notempty" type="string" length="10"/>
+<model:Field name="BIBE" type="string" length="70"/>
+<model:Field name="BIBS" type="string" length="25"/>
+<model:Field name="BIBV" type="string" length="25"/>
+<model:Field name="BIBP" type="string" length="25"/>
+<model:Field name="BIBH" validator="notempty" index="true" type="string" length="8"/>
+
+    </model:Define>
+</model:Model>

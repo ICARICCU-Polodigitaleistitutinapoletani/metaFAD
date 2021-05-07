@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:c="SchedaOA200.views.components.*"
+    xmlns:cms="pinaxcms.views.components.*"
+    templateType="php"
+    templateFileName="page.php"
+    defaultEditableRegion="content"
+    adm:editComponents="text">
+    <pnx:Import src="Common.xml" />
+    <pnx:DataProvider id="ModuleDP" recordClassName="SchedaOA200.models.Model" order="OGTD" />
+    <pnx:StateSwitch defaultState="list" rememberState="false">
+        <pnx:State name="list">
+            <pnx:LongText id="text" label="{i18n:MW_PARAGRAPH_TEXT}" forceP="true" adm:rows="20" adm:cols="75" adm:htmlEditor="true" />
+            <pnx:SearchFilters id="filters" cssClass="search">
+                <pnx:Input id="filterTitle" label="{i18n:Definizione}" bindTo="OGTD" value="{filters}" />
+                <pnx:Panel cssClass="formButtons">
+                    <pnx:HtmlButton label="{i18n:MW_SEARCH}" value="SEARCH" target="{filters}" cssClass="submitButton" />
+                    <pnx:HtmlButton label="{i18n:MW_NEW_SEARCH}" value="RESET" target="{filters}" cssClass="submitButton" />
+                </pnx:Panel>
+            </pnx:SearchFilters>
+
+            <pnx:RecordSetList id="list" dataProvider="{ModuleDP}" routeUrl="SchedaOA200" title="{i18n:MW_SEARCH_RESULT}" filters="{filters}" paginate="{paginate}" skin="metafad_SchedaOA200_list.html" />
+            <pnx:PaginateResult id="paginate" cssClass="pagination" />
+        </pnx:State>
+        <pnx:State name="show">
+            <pnx:Modifier target="pagetitle" attribute="visible" value="false" />
+            <pnx:RecordDetail id="entry" dataProvider="{ModuleDP}" idName="document_id" skin="metafad_SchedaOA200_entry.html">
+
+<pnx:Text id="TSK"/>
+<pnx:Text id="LIR"/>
+<pnx:Text id="NCTR"/>
+<pnx:Text id="NCTN"/>
+<pnx:Text id="NCTS"/>
+<pnx:Text id="ESC"/>
+<pnx:Text id="ECP"/>
+<pnx:Text id="EPR"/>
+<pnx:Text id="RVEL"/>
+<pnx:Text id="RVER"/>
+<pnx:Text id="RVES"/>
+<pnx:Repeater id="ROZ">
+  <pnx:Text id="ROZ-element"/>
+</pnx:Repeater>
+<pnx:Text id="PVCS"/>
+<pnx:Text id="PVCP"/>
+<pnx:Text id="PVCC"/>
+<pnx:Text id="PVCF"/>
+<pnx:Text id="PVCL"/>
+<pnx:Text id="PVL"/>
+<pnx:Text id="LDCT"/>
+<pnx:Text id="LDCQ"/>
+<pnx:Text id="LDCN"/>
+<pnx:Text id="LDCC"/>
+<pnx:Text id="LDCU"/>
+<pnx:Text id="LDCM"/>
+<pnx:Text id="LDCS"/>
+<pnx:Text id="UBO"/>
+<pnx:Repeater id="INV">
+  <pnx:Text id="INVN"/>
+  <pnx:Text id="INVD"/>
+  <pnx:Text id="INVS"/>
+  <pnx:Text id="INVC"/>
+</pnx:Repeater>
+<pnx:Repeater id="LA">
+  <pnx:Text id="TCL"/>
+  <pnx:Text id="PRVS"/>
+<pnx:Text id="PRVP"/>
+<pnx:Text id="PRVC"/>
+<pnx:Text id="PRVF"/>
+<pnx:Text id="PRVL"/>
+  <pnx:Text id="PRL"/>
+  <pnx:Text id="PRCT"/>
+<pnx:Text id="PRCQ"/>
+<pnx:Text id="PRCD"/>
+<pnx:Text id="PRCC"/>
+<pnx:Text id="PRCM"/>
+<pnx:Text id="PRCS"/>
+  <pnx:Text id="PRDI"/>
+<pnx:Text id="PRDU"/>
+</pnx:Repeater>
+<pnx:Text id="OGTD"/>
+<pnx:Text id="OGTT"/>
+<pnx:Text id="OGTV"/>
+<pnx:Text id="OGTN"/>
+<pnx:Text id="OGTP"/>
+<pnx:Text id="QNTN"/>
+<pnx:Text id="QNTS"/>
+<pnx:Text id="SGTI"/>
+<pnx:Text id="SGTT"/>
+<pnx:Text id="ROFF"/>
+<pnx:Text id="ROFO"/>
+<pnx:Text id="ROFS"/>
+<pnx:Text id="ROFA"/>
+<pnx:Text id="ROFD"/>
+<pnx:Text id="ROFC"/>
+<pnx:Repeater id="REI">
+  <pnx:Text id="REIP"/>
+  <pnx:Text id="REIT"/>
+  <pnx:Text id="REID"/>
+</pnx:Repeater>
+<pnx:Repeater id="DT">
+  <pnx:Text id="DTZG"/>
+<pnx:Text id="DTZS"/>
+  <pnx:Text id="DTSI"/>
+<pnx:Text id="DTSV"/>
+<pnx:Text id="DTSF"/>
+<pnx:Text id="DTSL"/>
+  <pnx:Repeater id="DTM">
+  <pnx:Text id="DTM-element"/>
+</pnx:Repeater>
+  <pnx:Repeater id="ADT">
+  <pnx:Text id="ADT-element"/>
+</pnx:Repeater>
+</pnx:Repeater>
+<pnx:Repeater id="AUT">
+  <pnx:Text id="AUTN"/>
+  <pnx:Text id="AUTA"/>
+  <pnx:Text id="AUTS"/>
+  <pnx:Text id="AUTR"/>
+  <pnx:Repeater id="AUTM">
+  <pnx:Text id="AUTM-element"/>
+</pnx:Repeater>
+  <pnx:Text id="AUTH"/>
+</pnx:Repeater>
+<pnx:Repeater id="ATB">
+  <pnx:Text id="ATBD"/>
+  <pnx:Text id="ATBR"/>
+  <pnx:Repeater id="ATBM">
+  <pnx:Text id="ATBM-element"/>
+</pnx:Repeater>
+</pnx:Repeater>
+<pnx:Repeater id="AAT">
+  <pnx:Text id="AAT-element"/>
+</pnx:Repeater>
+<pnx:Repeater id="EDT">
+  <pnx:Text id="EDTZ"/>
+  <pnx:Text id="EDTA"/>
+  <pnx:Text id="EDTN"/>
+</pnx:Repeater>
+<pnx:Repeater id="CMM">
+  <pnx:Repeater id="CMMN">
+  <pnx:Text id="CMMN-element"/>
+</pnx:Repeater>
+  <pnx:Text id="CMMD"/>
+  <pnx:Text id="CMMC"/>
+  <pnx:Text id="CMMF"/>
+</pnx:Repeater>
+<pnx:Repeater id="MTC">
+  <pnx:Text id="MTC-element"/>
+</pnx:Repeater>
+<pnx:Text id="MISU"/>
+<pnx:Text id="MISA"/>
+<pnx:Text id="MISL"/>
+<pnx:Text id="MISP"/>
+<pnx:Text id="MISD"/>
+<pnx:Text id="MISN"/>
+<pnx:Text id="MISS"/>
+<pnx:Text id="MISG"/>
+<pnx:Repeater id="MISV">
+  <pnx:Text id="MISV-element"/>
+</pnx:Repeater>
+<pnx:Text id="MISR"/>
+<pnx:Text id="MIST"/>
+<pnx:Text id="FIL"/>
+<pnx:Text id="FRM"/>
+<pnx:Text id="STCC"/>
+<pnx:Text id="STCS"/>
+<pnx:Repeater id="RST">
+  <pnx:Text id="RSTD"/>
+  <pnx:Text id="RSTS"/>
+  <pnx:Text id="RSTE"/>
+  <pnx:Repeater id="RSTN">
+  <pnx:Text id="RSTN-element"/>
+</pnx:Repeater>
+  <pnx:Repeater id="RSTR">
+  <pnx:Text id="RSTR-element"/>
+</pnx:Repeater>
+</pnx:Repeater>
+<pnx:Text id="DESO"/>
+<pnx:Text id="DESI"/>
+<pnx:Text id="DESS"/>
+<pnx:Repeater id="ISR">
+  <pnx:Text id="ISRC"/>
+  <pnx:Text id="ISRL"/>
+  <pnx:Text id="ISRS"/>
+  <pnx:Text id="ISRT"/>
+  <pnx:Text id="ISRP"/>
+  <pnx:Text id="ISRA"/>
+  <pnx:Text id="ISRI"/>
+</pnx:Repeater>
+<pnx:Repeater id="STM">
+  <pnx:Text id="STMC"/>
+  <pnx:Text id="STMQ"/>
+  <pnx:Text id="STMI"/>
+  <pnx:Text id="STMU"/>
+  <pnx:Text id="STMP"/>
+  <pnx:Text id="STMD"/>
+</pnx:Repeater>
+<pnx:Text id="NSC"/>
+<pnx:Text id="ACQT"/>
+<pnx:Text id="ACQN"/>
+<pnx:Text id="ACQD"/>
+<pnx:Text id="ACQL"/>
+<pnx:Text id="CDGG"/>
+<pnx:Repeater id="CDGS">
+  <pnx:Text id="CDGS-element"/>
+</pnx:Repeater>
+<pnx:Repeater id="CDGI">
+  <pnx:Text id="CDGI-element"/>
+</pnx:Repeater>
+<pnx:Repeater id="NVC">
+  <pnx:Text id="NVCT"/>
+  <pnx:Text id="NVCE"/>
+  <pnx:Text id="NVCD"/>
+</pnx:Repeater>
+<pnx:Repeater id="ALN">
+  <pnx:Text id="ALNT"/>
+  <pnx:Text id="ALND"/>
+  <pnx:Text id="ALNN"/>
+</pnx:Repeater>
+<pnx:Repeater id="ESP">
+  <pnx:Text id="ESPT"/>
+  <pnx:Text id="ESPU"/>
+  <pnx:Text id="ESPD"/>
+</pnx:Repeater>
+<pnx:Repeater id="FTA">
+  <pnx:Text id="FTAX"/>
+  <pnx:Text id="FTAP"/>
+  <pnx:Text id="FTAN"/>
+  <pnx:Text id="FTAT"/>
+</pnx:Repeater>
+<pnx:Repeater id="VDS">
+  <pnx:Text id="VDST"/>
+  <pnx:Text id="VDSI"/>
+  <pnx:Repeater id="VDSP">
+  <pnx:Text id="VDSP-element"/>
+</pnx:Repeater>
+</pnx:Repeater>
+<pnx:Repeater id="FNT">
+  <pnx:Text id="FNTP"/>
+  <pnx:Text id="FNTA"/>
+  <pnx:Text id="FNTT"/>
+  <pnx:Text id="FNTD"/>
+  <pnx:Text id="FNTF"/>
+  <pnx:Text id="FNTN"/>
+  <pnx:Text id="FNTS"/>
+</pnx:Repeater>
+<pnx:Repeater id="BIB">
+  <pnx:Text id="BIBX"/>
+  <pnx:Text id="BIBA"/>
+  <pnx:Text id="BIBD"/>
+  <pnx:Text id="BIBN"/>
+  <pnx:Text id="BIBI"/>
+  <pnx:Text id="BIBH"/>
+</pnx:Repeater>
+<pnx:Repeater id="MST">
+  <pnx:Text id="MSTT"/>
+  <pnx:Text id="MSTL"/>
+  <pnx:Text id="MSTD"/>
+</pnx:Repeater>
+<pnx:Repeater id="RSE">
+  <pnx:Text id="RSER"/>
+  <pnx:Text id="RSET"/>
+  <pnx:Text id="RSEC"/>
+  <pnx:Text id="RSED"/>
+  <pnx:Text id="RSEN"/>
+</pnx:Repeater>
+<pnx:Repeater id="CMP">
+  <pnx:Text id="CMPD"/>
+  <pnx:Repeater id="CMPN">
+  <pnx:Text id="CMPN-element"/>
+</pnx:Repeater>
+</pnx:Repeater>
+<pnx:Repeater id="FUR">
+  <pnx:Text id="FUR-element"/>
+</pnx:Repeater>
+<pnx:Text id="RVMD"/>
+<pnx:Text id="RVMN"/>
+<pnx:Repeater id="AGG">
+  <pnx:Text id="AGGD"/>
+  <pnx:Text id="AGGN"/>
+</pnx:Repeater>
+<pnx:Repeater id="ISP">
+  <pnx:Text id="ISPD"/>
+  <pnx:Text id="ISPN"/>
+</pnx:Repeater>
+<pnx:Text id="OSS"/>
+
+
+            </pnx:RecordDetail>
+            <pnx:Link id="backbtn" editableRegion="afterContent" cssClass="moreLeft" label="{i18n:MW_BACK_TO_SEARCH}" />
+        </pnx:State>
+    </pnx:StateSwitch>
+</pnx:Page>

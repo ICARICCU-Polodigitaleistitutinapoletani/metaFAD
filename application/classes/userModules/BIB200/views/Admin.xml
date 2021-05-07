@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:include
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:com="metafad.common.views.components.*"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:c="metafad.iccd.views.components.*"
+	  src="metafad.common.views.templates.TemplateModuleAdmin">
+
+<pnx:template name="filterByInstitute" value="false"/>
+<pnx:template name="documentRenderCell" value="metafad.common.views.renderer.authority.CellEditDraftDelete"/>
+    <pnx:template name="model" value="BIB200.models.Model"/>
+    <pnx:template name="show_external_id" value="false"/>
+    <pnx:template name="controller_name" value="metafad.gestioneDati.boards.controllers.*"/>
+    <pnx:template name="autocompleteController" value="metafad.common.controllers.ajax.AutoComplete"/>
+    <pnx:template name="grid_fields">
+		<pnx:DataGridColumn columnName="BIBA_s" headerText="{i18n:BIBA}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="BIBC_s" headerText="{i18n:BIBC}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="BIBG_s" headerText="{i18n:BIBG}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="BIBH_s" headerText="{i18n:BIBH}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="BIBT_s" headerText="{i18n:BIBT}" renderCell="metafad.common.views.renderer.ShortField"/>
+        <pnx:DataGridColumn columnName="isValid_i" width="20px" sortable="false" searchable="false"
+                            headerText="{i18n:Validata}" cssClass="center"
+                            renderCell="pinaxcms.views.renderer.CellIsActive"/>
+        <pnx:DataGridColumn columnName="document_detail_status" width="20px" sortable="false" searchable="false"
+                            headerText="{i18n:Pubblicata}" cssClass="center"
+                            renderCell="metafad.common.views.renderer.CellDocPublished"/>
+    </pnx:template>
+
+    
+
+    <pnx:template name="form_fields">
+        <pnx:Hidden id="isTemplate"/>
+        <pnx:Hidden data="type=modalPagePreview;pageid=BIB200_preview;" id="popupPreview"/>
+        <pnx:Input id="templateTitle" label="{i18n:Titolo template}" required="true"/>
+        <pnx:JSscript folder="metafad/common/js/relations"/>
+        <pnx:JSscript folder="userModules/BIB200/js"/>
+        
+
+        
+
+        
+
+        <pnx:JSTabGroup id="innerTabs" showNav="true">
+<pnx:JSTab dropdown="true" id="CD-tab" label="{i18n:CD}">
+<pnx:Fieldset id="CD" label="{i18n:CD}" required="true">
+  <pnx:Input id="TSK" label="{i18n:TSK}" required="true" maxLength="5" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##BIB200##}"/>
+  <pnx:Input id="NCU" label="{i18n:NCU}" maxLength="8"/>
+  <pnx:Input id="ESC" label="{i18n:ESC}" required="true" maxLength="25"/>
+  <pnx:Input id="ECP" label="{i18n:ECP}" maxLength="25"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="BI-tab" label="{i18n:BI}">
+<pnx:Fieldset id="BI" label="{i18n:BI}" required="true">
+  <pnx:Fieldset id="BIB" label="{i18n:BIB}" required="true">
+    <pnx:Input id="BIBA" label="{i18n:BIBA}" required="true" maxLength="100"/>
+    <pnx:Input id="BIBC" label="{i18n:BIBC}" maxLength="70"/>
+    <pnx:Input id="BIBF" label="{i18n:BIBF}" required="true" maxLength="25" data="type=FormEditSelectMandatory;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##BIB200##,##code##:##VA_BIBF_BIB##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+    <pnx:Input id="BIBG" label="{i18n:BIBG}" required="true" maxLength="250"/>
+    <pnx:Input id="BIBT" label="{i18n:BIBT}" maxLength="250"/>
+    <pnx:Input id="BIBL" label="{i18n:BIBL}" maxLength="50"/>
+    <pnx:Input id="BIBZ" label="{i18n:BIBZ}" maxLength="50"/>
+    <pnx:Input id="BIBD" label="{i18n:BIBD}" required="true" maxLength="10"/>
+    <pnx:Input id="BIBE" label="{i18n:BIBE}" maxLength="70"/>
+    <pnx:Input id="BIBS" label="{i18n:BIBS}" maxLength="25"/>
+    <pnx:Input id="BIBV" label="{i18n:BIBV}" maxLength="25"/>
+    <pnx:Input id="BIBP" label="{i18n:BIBP}" maxLength="25"/>
+    <pnx:Input id="BIBH" label="{i18n:BIBH}" required="true" maxLength="8"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab id="historyTab" label="{i18n:Storico}" routeUrl="linkHistory" cssClassTab="pull-right"/></pnx:JSTabGroup>
+
+    </pnx:template>
+
+    <pnx:template name="custom_states">
+      <mvc:State name="history" label="{i18n:Storico}" url="linkHistory">
+        <pnx:Hidden controllerName="##controller_name##" />
+        <pnx:JSTabGroup id="innerTabs">
+          <pnx:JSTab id="historyTab" label="{i18n:Storico}" cssClassTab="pull-right">
+            <cms:FormEdit addValidationJs="false">
+              <cmp:ShowHistory id="history" model="BIB200.models.Model"/>
+              <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:Confronta}" type="button" cssClass="btn btn-primary js-pinaxcms-history" data="action=add" />
+              </cms:FormButtonsPanel>
+            </cms:FormEdit>
+          </pnx:JSTab>
+          <pnx:JSTab id="editTab" label="{i18n:Scheda}" routeUrl="linkEdit" cssClassTab="pull-right"/>
+        </pnx:JSTabGroup>
+      </mvc:State>
+      <mvc:State name="show,showDraft" label="{i18n:Show}">
+        <c:FormEdit id="editForm" newCode="true" controllerName="##controller_name##">
+          <pnx:Hidden id="__model" value="BIB200.models.Model" />
+          <pnx:JSTabGroup id="innerTabs" showNav="true">
+<pnx:JSTab dropdown="true" id="CD-tab" label="{i18n:CD}">
+<pnx:Fieldset id="CD" label="{i18n:CD}" required="true">
+  <pnx:Input readOnly="true" id="TSK" label="{i18n:TSK}" required="true" maxLength="5" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##BIB200##}"/>
+  <pnx:Input readOnly="true" id="NCU" label="{i18n:NCU}" maxLength="8"/>
+  <pnx:Input readOnly="true" id="ESC" label="{i18n:ESC}" required="true" maxLength="25"/>
+  <pnx:Input readOnly="true" id="ECP" label="{i18n:ECP}" maxLength="25"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="BI-tab" label="{i18n:BI}">
+<pnx:Fieldset id="BI" label="{i18n:BI}" required="true">
+  <pnx:Fieldset id="BIB" label="{i18n:BIB}" required="true">
+    <pnx:Input readOnly="true" id="BIBA" label="{i18n:BIBA}" required="true" maxLength="100"/>
+    <pnx:Input readOnly="true" id="BIBC" label="{i18n:BIBC}" maxLength="70"/>
+    <pnx:Input readOnly="true" id="BIBF" label="{i18n:BIBF}" required="true" maxLength="25" data="type=FormEditSelectMandatory;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##BIB200##,##code##:##VA_BIBF_BIB##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+    <pnx:Input readOnly="true" id="BIBG" label="{i18n:BIBG}" required="true" maxLength="250"/>
+    <pnx:Input readOnly="true" id="BIBT" label="{i18n:BIBT}" maxLength="250"/>
+    <pnx:Input readOnly="true" id="BIBL" label="{i18n:BIBL}" maxLength="50"/>
+    <pnx:Input readOnly="true" id="BIBZ" label="{i18n:BIBZ}" maxLength="50"/>
+    <pnx:Input readOnly="true" id="BIBD" label="{i18n:BIBD}" required="true" maxLength="10"/>
+    <pnx:Input readOnly="true" id="BIBE" label="{i18n:BIBE}" maxLength="70"/>
+    <pnx:Input readOnly="true" id="BIBS" label="{i18n:BIBS}" maxLength="25"/>
+    <pnx:Input readOnly="true" id="BIBV" label="{i18n:BIBV}" maxLength="25"/>
+    <pnx:Input readOnly="true" id="BIBP" label="{i18n:BIBP}" maxLength="25"/>
+    <pnx:Input readOnly="true" id="BIBH" label="{i18n:BIBH}" required="true" maxLength="8"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+</pnx:JSTabGroup>
+
+          <cms:FormButtonsPanel id="formButtons">
+              <pnx:HtmlButton label="{i18n:Indietro}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" />
+          </cms:FormButtonsPanel>
+        </c:FormEdit>
+      </mvc:State>
+  </pnx:template>
+</pnx:include>

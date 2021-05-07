@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+  xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+  xmlns:cms="pinaxcms.views.components.*"
+  xmlns:mvc="pinax.mvc.components.*"
+  xmlns:c="metafad.iccd.views.components.*"
+  defaultEditableRegion="content"
+  templateType="php"
+  templateFileName="Popup.php">
+
+<pnx:Import src="_common.xml"/>
+
+<mvc:State name="edit">
+    <c:FormEdit id="editForm" newCode="true" controllerName="metafad.mag.controllers.media.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="metafad.mag.models.Dis"/>
+
+        <pnx:Fieldset id="dis_item" label="{i18n:DIS Item}" data="type=repeat;collapsable=false;repeatMin=0">
+          <pnx:Input id="file" label="{i18n:File}" required="true"/>
+          <pnx:List id="preview" label="{i18n:Preview}" emptyValue="">
+              <pnx:ListItem key="thumbnail" value="thumbnail"/>
+              <pnx:ListItem key="sample" value="sample"/>
+          </pnx:List>
+          <pnx:Input id="available" label="{i18n:Available}" />
+        </pnx:Fieldset>
+
+        <cms:FormButtonsPanel id="formButtons">
+          <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-primary js-pinaxcms-save"
+                          data="action=save" acl="*,edit" />
+        </cms:FormButtonsPanel>
+    </c:FormEdit>
+    </mvc:State>
+</mvc:Page>

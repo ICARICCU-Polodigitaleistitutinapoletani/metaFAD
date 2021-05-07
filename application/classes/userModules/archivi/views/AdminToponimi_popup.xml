@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:cmp="archivi.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Popup.php"
+    defaultAction="edit">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State id="stateEdit" name="edit,editDraft" label="{i18n:Scheda}" draw="false" cssClass="editState">
+
+        <com:FormEdit id="editForm" newCode="true" controllerName="archivi.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="archivi.models.Toponimi"/>
+            <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}"/>
+
+            <pnx:JSscript folder="userModules/archivi/js"/>
+            <pnx:JSscript folder="userModules/archivi/js/Toponimi"/>
+
+            <pnx:JSTabGroup id="Toponimi" showNav="true" cssClass="nav nav-tabs js-tab-section">
+
+<pnx:JSTab id="tabToponimi" label="Toponimi" dropdown="true">
+  <pnx:Panel cssClass="col-md-8 active text-tab">
+    <pnx:Input id="intestazione" readOnly="true" label="Intestazione"/>
+    <pnx:Input id="nomeLuogo" label="Nome del luogo/Toponimo" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-toponimi&quot;,##code##:##VA_ARCHIVE_VOCI_TOPONIMO_NOME##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_VOCI_TOPONIMO_NOME"/>
+    <pnx:Input id="comuneAttuale" label="Comune attuale" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-toponimi&quot;,##level##:##Direct4##, ##code##:##VC_Localizzazione##};dictId=VC_Localizzazione"/>
+    <pnx:Input id="denominazioneCoeva" label="Denominazione coeva"/>
+    <pnx:Input id="qualifica" label="Qualifica" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-toponimi&quot;,##level##:##1##};dictId=VC_ARCHIVE_QUALIFICA_TOPONIMO"/>
+    <pnx:Hidden id="externalID" readOnly="true" label="ID importazione"/>
+  </pnx:Panel>
+</pnx:JSTab>
+
+
+            </pnx:JSTabGroup>
+
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=save" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel"/>
+            </cms:FormButtonsPanel>
+        </com:FormEdit>
+        <pnx:JSscript><![CDATA[
+        $( document ).ready( function(){
+            $('.js-pinaxcms-save').data('trigger',function (e, data) {
+
+                var msg = {
+                    type: 'save',
+                    id: $('#__id').val(),
+                    text: $('#intestazione').val()
+                }
+
+                Pinax.events.broadcast("pinax.FormEdit.modalPage.message", msg);
+            });
+
+            $('.js-pinaxcms-cancel').click(function (e) {
+                parent.postMessage('{"type":"cancel"}', parent.location.origin);
+            });
+        });
+        ]]></pnx:JSscript>
+    </mvc:State>
+</mvc:Page>

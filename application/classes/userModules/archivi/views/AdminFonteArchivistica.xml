@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page" 
+  xmlns:pnx="http://www.pinax.org/dtd/1.0/" 
+  xmlns:cms="pinaxcms.views.components.*" 
+  xmlns:mvc="pinax.mvc.components.*" 
+  xmlns:cmp="archivi.views.components.*" 
+  xmlns:com="metafad.common.views.components.*" 
+  xmlns:boards="metafad.gestioneDati.boards.views.components.*" 
+  defaultEditableRegion="content" templateType="php" templateFileName="Page.php">
+
+  <pnx:Import src="_common.xml" />
+
+  <com:ModalConfirm label="Attenzione" message="Sicuro di voler proseguire?" />
+  <com:ModalAlert label="Attenzione" message="Operazione non corretta" />
+
+  <mvc:State id="stateIndex" name="index" label="{i18n:Fonti Archivistiche}" url="archivi-FonteArchivistica">
+    <cmp:DataGridSolr id="dataGrid" enableSorting="true" filterByInstitute="true" recordClassName="archivi.models.FonteArchivistica" cssClass="table table-bordered table-striped" controllerName="archivi.controllers.*" fullTextSearch="true" JQueryUI="true" autocompleteController="archivi.controllers.ajax.AutoComplete">
+      <pnx:DataGridColumn columnName="identificativo_s" headerText="{i18n:Identificativo per la Fonte}" />
+      <pnx:DataGridColumn columnName="denominazione_s" headerText="{i18n:Titolo}" />
+
+      <pnx:DataGridColumn columnName="id" sortable="false" searchable="false" cssClass="actions" renderCell="archivi.views.renderer.CellSelectEditDraftDelete" />
+    </cmp:DataGridSolr>
+    <cmp:AddButton label="Fonti Archivistiche" acl="*,new" type="FonteArchivistica" routeUrl="archiviMVCAdd" editableRegion="actions" recordClassName="archivi.models.FonteArchivistica" dataGridAjaxId="dataGrid" />
+  </mvc:State>
+
+  <mvc:State id="stateEdit" name="edit,editDraft" label="{i18n:Scheda}" draw="false" cssClass="editState">
+
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active" addQueryString="true" visible="false" />
+
+    <pnx:JSscript folder="userModules/archivi/js" editableRegion="tail" />
+
+
+    <com:FormEdit id="editForm" newCode="true" controllerName="archivi.controllers.*">
+      <pnx:Hidden id="__id" />
+      <pnx:Hidden id="__model" value="archivi.models.FonteArchivistica" />
+      <pnx:Hidden id="instituteKey" />
+      <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}" />
+      <pnx:Input id="external_id" label="{i18n:ID}" size="90" disabled="true" visible="false" />
+
+      <pnx:Hidden id="isTemplate" />
+      <pnx:Input id="templateTitle" label="{i18n:Titolo template}" />
+      <pnx:Link cssClass="tree openTree fa fa-list" enabled="false" />
+      <pnx:JSTabGroup id="FonteArchivistica" showNav="true" cssClass="nav nav-tabs js-tab-section">
+
+
+        <pnx:Panel cssClass="col-md-4 gerarchia no-padding" text="Gerarchia: " enabled="false">
+          <cmp:Tree id="treeview" startId="0" title="" controllerName="archivi.controllers.Gerarchia" />
+        </pnx:Panel>
+
+
+        <pnx:JSTab id="tabIdentificazione" label="Identificazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="codici" label="Codici">
+              <pnx:Input id="acronimoSistema" label="Acronimo di sistema" readOnly="true" />
+              <pnx:Input id="identificativo" readOnly="true" label="Identificativo per la Fonte" />
+              <pnx:Input id="codiceIdentificativoSistema" readOnly="true" label="Codice identificativo di sistema" />
+              <pnx:Fieldset id="codiceIdentificativoPrecedente" label="Codice identificativo precedente" data="type=repeat;noEmptyMessage=true">
+                <pnx:Input id="codice" label="Codice" />
+              </pnx:Fieldset>
+              <pnx:Hidden id="externalID" readOnly="true" label="ID importazione" />
+            </pnx:Fieldset>
+            <pnx:Input id="localizzazioneSegnatura" label="Localizzazione segnatura" />
+            <pnx:Input id="titoloBreve" label="Titolo breve" />
+            <pnx:Input id="titolo" label="Titolo" required="true" />
+            <pnx:Input id="descrizione" label="Descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabRiferimentiWeb" label="Riferimenti Web" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="riferimentiWeb" label="Riferimenti web" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="denominazioneSitoWeb" label="Denominazione sito o pagina web" />
+              <pnx:Input id="descrizione" label="Descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input id="dataInserimento" cssClass="js-archive-dateTextBox form-control" label="Data di inserimento" />
+              <pnx:Input id="url" label="URL" data="type=url" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabCompilazione" label="Compilazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input id="linguaDescrizioneRecord" label="Lingua di descrizione del record" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;return_object=true;proxy_params={##module##:&quot;archivi-fontearchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_ISO_639_3##};dictId=VC_ARCHIVE_ISO_639_3" />
+            <pnx:Fieldset id="compilazione" label="Compilazione" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="redattore" label="Redattore" />
+              <pnx:Input id="azione" label="Azione" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-fontearchivistica&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_COMPILAZIONE_AZIONE##};dictId=VC_ARCHIVE_COMPILAZIONE_AZIONE" />
+              <pnx:Input id="noteRedazionali" label="Note redazionali" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input id="data" cssClass="js-archive-dateTextBox form-control js-archive-dateCompilazione" label="Data" />
+            </pnx:Fieldset>
+            <pnx:Input id="osservazioni" label="Osservazioni" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+
+
+        <pnx:JSTab id="history" label="{i18n:Storico}" cssClassTab="pull-right" routeUrl="archivihistory" />
+        <pnx:JSTab id="edit" label="{i18n:Scheda}" cssClassTab="fake-active pull-right" />
+      </pnx:JSTabGroup>
+
+      <cms:FormButtonsPanel>
+        <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=save" acl="*,edit" />
+        <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save" data="action=saveClose" acl="*,edit" />
+        <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft" />
+        <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft" />
+        <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel" />
+
+      </cms:FormButtonsPanel>
+    </com:FormEdit>
+  </mvc:State>
+
+  <mvc:State name="show,showDraft" label="{i18n:Show}" draw="false">
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active" addQueryString="true" visible="false" />
+
+    <pnx:JSscript folder="userModules/archivi/js" editableRegion="tail" />
+
+    <com:FormEdit id="editForm" newCode="true" controllerName="archivi.controllers.*">
+      <pnx:Hidden id="__id" />
+      <pnx:Hidden id="__model" value="archivi.models.FonteArchivistica" />
+      <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}" />
+
+      <pnx:JSTabGroup id="FonteArchivistica" showNav="true" cssClass="nav nav-tabs js-tab-section">
+
+        <pnx:JSTab id="tabIdentificazione" label="Identificazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="codici" label="Codici">
+              <pnx:Input readOnly="true" id="acronimoSistema" label="Acronimo di sistema" />
+              <pnx:Input readOnly="true" id="identificativo" label="Identificativo per la Fonte" />
+              <pnx:Input readOnly="true" id="codiceIdentificativoSistema" label="Codice identificativo di sistema" />
+              <pnx:Fieldset id="codiceIdentificativoPrecedente" label="Codice identificativo precedente" data="readOnly=true;type=repeat;noEmptyMessage=true">
+                <pnx:Input readOnly="true" id="codice" label="Codice" />
+              </pnx:Fieldset>
+              <pnx:Hidden id="externalID" readOnly="true" label="ID importazione" />
+            </pnx:Fieldset>
+            <pnx:Input readOnly="true" id="localizzazioneSegnatura" label="Localizzazione segnatura" />
+            <pnx:Input readOnly="true" id="titoloBreve" label="Titolo breve" />
+            <pnx:Input readOnly="true" id="titolo" label="Titolo" required="true" />
+            <pnx:Input readOnly="true" id="descrizione" label="Descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabRiferimentiWeb" label="Riferimenti Web" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Fieldset id="riferimentiWeb" label="Riferimenti web" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="denominazioneSitoWeb" label="Denominazione sito o pagina web" />
+              <pnx:Input readOnly="true" id="descrizione" label="Descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input readOnly="true" id="dataInserimento" cssClass="js-archive-dateTextBox form-control" label="Data di inserimento" />
+              <pnx:Input readOnly="true" id="url" label="URL" data="type=url" />
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+        <pnx:JSTab id="tabCompilazione" label="Compilazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-8 active text-tab">
+            <pnx:Input readOnly="true" id="linguaDescrizioneRecord" label="Lingua di descrizione del record" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;return_object=true;proxy_params={##module##:&quot;archivi-fontearchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_ISO_639_3" />
+            <pnx:Fieldset id="compilazione" label="Compilazione" data="readOnly=true;type=repeat;noEmptyMessage=true">
+              <pnx:Input readOnly="true" id="redattore" label="Redattore" />
+              <pnx:Input readOnly="true" id="azione" label="Azione" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-fontearchivistica&quot;,##level##:##1##};dictId=VC_ARCHIVE_COMPILAZIONE_AZIONE" />
+              <pnx:Input readOnly="true" id="noteRedazionali" label="Note redazionali" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+              <pnx:Input readOnly="true" id="data" cssClass="js-archive-dateTextBox form-control js-archive-dateCompilazione" label="Data" />
+            </pnx:Fieldset>
+            <pnx:Input readOnly="true" id="osservazioni" label="Osservazioni" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+
+
+      </pnx:JSTabGroup>
+
+      <cms:FormButtonsPanel>
+        <pnx:HtmlButton label="{i18n:Indietro}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" />
+      </cms:FormButtonsPanel>
+    </com:FormEdit>
+  </mvc:State>
+
+  <mvc:State name="delete">
+    <pnx:Hidden controllerName="archivi.controllers.*" />
+  </mvc:State>
+
+  <mvc:State name="toggleFEVisibility">
+    <pnx:Hidden controllerName="archivi.controllers.ToggleFEVisibility" />
+  </mvc:State>
+
+  <mvc:State id="stateHistory" name="history" label="{i18n:Storico}" url="linkHistory">
+    <pnx:JSTabGroup id="innerTabs">
+      <pnx:JSTab id="historyTab" label="{i18n:Storico}" cssClassTab="pull-right">
+        <cms:FormEdit addValidationJs="false" controllerName="archivi.controllers.*">
+          <boards:ShowHistory id="history" model="archivi.models.FonteArchivistica" />
+          <cms:FormButtonsPanel>
+            <pnx:HtmlButton label="{i18n:Confronta}" type="button" cssClass="btn btn-primary js-pinaxcms-history" data="action=add" />
+          </cms:FormButtonsPanel>
+        </cms:FormEdit>
+      </pnx:JSTab>
+      <pnx:JSTab id="editTab" label="{i18n:Scheda}" routeUrl="linkEdit" cssClassTab="pull-right" />
+    </pnx:JSTabGroup>
+  </mvc:State>
+</mvc:Page>

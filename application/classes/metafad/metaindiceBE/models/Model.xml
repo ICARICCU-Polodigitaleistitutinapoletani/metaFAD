@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model:Model
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:model="pinax.models.*/"
+    model:tableName="metaindiceBE"
+    model:usePrefix="true"
+    model:type="document"
+    model:baseClass="metafad.common.models.ActiveRecordDocument">
+
+    <model:Script parent="model">
+    <![CDATA[
+    public function getTitle()
+    {
+    }
+
+    public function getSolrDocument()
+    {
+        $solrModel = array(
+            '__id' => 'id',
+			'dominio' => 'dominio_s'
+        );
+
+        $solrModel = array_merge(parent::getSolrDocument(), $solrModel);
+
+        return $solrModel;
+    }
+
+    public function getBeAdvancedSearchFields()
+    {
+        $searchFields = array(
+            array (
+                'type' => 'text',
+                'label' => 'Identificativo',
+                'field' => 'id',
+            ),
+            array (
+                'type' => 'text',
+                'label' => 'Denominazione',
+                'field' => 'denominazione_titolo_s',
+            ),
+            array (
+                'type' => 'text',
+                'label' => 'Chi',
+                'field' => 'chi_txt',
+            ),
+            array (
+                'type' => 'text',
+                'label' => 'Cosa',
+                'field' => 'cosa_txt',
+            ),
+            array (
+                'type' => 'text',
+                'label' => 'Dove',
+                'field' => 'dove_txt',
+            ),
+            array (
+                'type' => 'text',
+                'label' => 'Quando',
+                'field' => 'quando_txt',
+            ),
+            array (
+                'type' => 'checkbox',
+                'label' => 'Digitale',
+                'field' => 'digitale_i',
+            ),
+            array (
+                'type' => 'autocomplete',
+                'label' => 'Autore',
+                'field' => 'autore_txt',
+            ),
+            array (
+                'type' => 'text',
+                'label' => 'Data Creazione',
+                'field' => 'data_creazione_s',
+            ),
+            'Tipologia' => 'tipologia_s',
+            'Provenienza' => 'dominio_s',
+        );
+
+        return $searchFields;
+    }
+
+    ]]>
+    </model:Script>
+
+    <model:Define>
+
+    </model:Define>
+</model:Model>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:include
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:com="metafad.common.views.components.*"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:c="metafad.iccd.views.components.*"
+	  src="metafad.common.views.templates.TemplateModuleAdmin">
+
+<pnx:template name="filterByInstitute" value="false"/>
+<pnx:template name="documentRenderCell" value="metafad.common.views.renderer.authority.CellEditDraftDelete"/>
+    <pnx:template name="model" value="AUT400.models.Model"/>
+    <pnx:template name="show_external_id" value="false"/>
+    <pnx:template name="controller_name" value="metafad.gestioneDati.boards.controllers.*"/>
+    <pnx:template name="autocompleteController" value="metafad.common.controllers.ajax.AutoComplete"/>
+    <pnx:template name="grid_fields">
+		<pnx:DataGridColumn columnName="AUTN_s" headerText="{i18n:AUTN}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="AUTH_s" headerText="{i18n:AUTH}" renderCell="metafad.common.views.renderer.ShortField"/>
+        <pnx:DataGridColumn columnName="isValid_i" width="20px" sortable="false" searchable="false"
+                            headerText="{i18n:Validata}" cssClass="center"
+                            renderCell="pinaxcms.views.renderer.CellIsActive"/>
+        <pnx:DataGridColumn columnName="document_detail_status" width="20px" sortable="false" searchable="false"
+                            headerText="{i18n:Pubblicata}" cssClass="center"
+                            renderCell="metafad.common.views.renderer.CellDocPublished"/>
+    </pnx:template>
+
+    
+
+    <pnx:template name="form_fields">
+        <pnx:Hidden id="isTemplate"/>
+        <pnx:Hidden data="type=modalPagePreview;pageid=AUT400_preview;" id="popupPreview"/>
+        <pnx:Input id="templateTitle" label="{i18n:Titolo template}" required="true"/>
+        <pnx:JSscript folder="metafad/common/js/relations"/>
+        <pnx:JSscript folder="userModules/AUT400/js"/>
+        
+
+                    <pnx:Hidden data="type=modalPageSBNAUT;pageid=metafad.gestioneDati.sbnaut_popup;formtype=AUT;version=4" id="popup"/>
+            <pnx:Hidden id="VID"/>
+            <pnx:Link id="link-show-sbn" icon="fa fa-upload" label="Collega scheda SBN" editableRegion="actions" cssClass="link SBN"/>
+            <pnx:JSscript folder="metafad/gestioneDati/sbnaut/js"/>
+
+        
+
+        <pnx:JSTabGroup id="innerTabs" showNav="true">
+<pnx:JSTab dropdown="true" id="CD-tab" label="{i18n:CD}">
+<pnx:Fieldset id="CD" label="{i18n:CD}" required="true">
+  <pnx:Input id="TSK" label="{i18n:TSK}" required="true" maxLength="4" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+  <pnx:Input id="LIR" label="{i18n:LIR}" required="true" maxLength="1" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+  <pnx:Input id="NCU" label="{i18n:NCU}" maxLength="8"/>
+  <pnx:Input id="ESC" label="{i18n:ESC}" required="true" maxLength="25"/>
+  <pnx:Input id="ECP" label="{i18n:ECP}" maxLength="25"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="AC-tab" label="{i18n:AC}">
+<pnx:Fieldset id="AC" label="{i18n:AC}" data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;repeatMax=1;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+  <pnx:Fieldset id="ACC" label="{i18n:ACC}" data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+    <pnx:Input id="ACCE" label="{i18n:ACCE}" required="true" maxLength="250"/>
+    <pnx:Input id="ACCC" label="{i18n:ACCC}" required="true" maxLength="150"/>
+    <pnx:Input id="ACCP" label="{i18n:ACCP}" maxLength="250"/>
+    <pnx:Input id="ACCS" label="{i18n:ACCS}" maxLength="2000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+    <pnx:Input id="ACCW" label="{i18n:ACCW}" maxLength="500"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="AU-tab" label="{i18n:AU}">
+<pnx:Fieldset id="AU" label="{i18n:AU}" required="true">
+  <pnx:Fieldset id="AUT" label="{i18n:AUT}" required="true">
+    <pnx:Input id="AUTN" label="{i18n:AUTN}" required="true" maxLength="250"/>
+    <pnx:Input id="AUTH" label="{i18n:AUTH}" required="true" maxLength="8"/>
+    <pnx:Input id="AUTP" label="{i18n:AUTP}" required="true" maxLength="2" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+    <pnx:Input id="AUTE" label="{i18n:AUTE}" maxLength="1" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+    <pnx:Input id="AUTA" label="{i18n:AUTA}" required="true" maxLength="100"/>
+    <pnx:Fieldset id="AUTQ" label="{i18n:AUTQ}" data="type=repeat;collapsable=false;repeatMin=0">
+        <pnx:Input id="AUTQ-element" label="{i18n:AUTQ}" maxLength="100" data="type=selectfrom;field=AUTQ;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##,##code##:##VA_AUTQ_AUT##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+</pnx:Fieldset>
+    <pnx:Input id="AUTF" label="{i18n:AUTF}" maxLength="100"/>
+    <pnx:Fieldset id="AUTU" label="{i18n:AUTU}" data="type=repeat;collapsable=false;repeatMin=0">
+        <pnx:Input id="AUTU-element" label="{i18n:AUTU}" maxLength="250" data="type=selectfrom;field=AUTU;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##,##code##:##VA_AUTU_AUT##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+  <pnx:Fieldset id="AUV" label="{i18n:AUV}" data="type=repeat;collapsable=false;repeatMin=0">
+      <pnx:Input id="AUV-element" label="{i18n:AUV}" maxLength="250"/>
+</pnx:Fieldset>
+  <pnx:Input id="NSC" label="{i18n:NSC}" maxLength="5000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="DO-tab" label="{i18n:DO}">
+<pnx:Fieldset id="DO" label="{i18n:DO}" data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;repeatMax=1;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+  <pnx:Fieldset id="BIB" label="{i18n:BIB}" data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+    <pnx:Input id="BIBR" label="{i18n:BIBR}" maxLength="100"/>
+    <pnx:Input id="BIBM" label="{i18n:BIBM}" required="true" maxLength="1000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+    <pnx:Input id="BIBN" label="{i18n:BIBN}" maxLength="2000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="AD-tab" label="{i18n:AD}">
+<pnx:Fieldset id="AD" label="{i18n:AD}" required="true">
+  <pnx:Fieldset id="ADS" label="{i18n:ADS}" required="true">
+    <pnx:Input id="ADSP" label="{i18n:ADSP}" required="true" maxLength="1" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+    <pnx:Input id="ADSM" label="{i18n:ADSM}" required="true" maxLength="250" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="CM-tab" label="{i18n:CM}">
+<pnx:Fieldset id="CM" label="{i18n:CM}" required="true">
+  <pnx:Fieldset id="CMP" label="{i18n:CMP}" required="true">
+    <pnx:Input id="CMPD" label="{i18n:CMPD}" required="true" maxLength="4"/>
+    <pnx:Fieldset id="CMPN" label="{i18n:CMPN}" required="true" data="type=repeat;collapsable=false;repeatMin=1">
+        <pnx:Input id="CMPN-element" label="{i18n:CMPN}" maxLength="250"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+  <pnx:Fieldset id="RSR" label="{i18n:RSR}" data="type=repeat;collapsable=false;repeatMin=0">
+      <pnx:Input id="RSR-element" label="{i18n:RSR}" maxLength="250"/>
+</pnx:Fieldset>
+  <pnx:Fieldset id="FUR" label="{i18n:FUR}" required="true" data="type=repeat;collapsable=false;repeatMin=1">
+      <pnx:Input id="FUR-element" label="{i18n:FUR}" maxLength="250"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="AN-tab" label="{i18n:AN}">
+<pnx:Fieldset id="AN" label="{i18n:AN}" data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;repeatMax=1;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+  <pnx:Input id="OSS" label="{i18n:OSS}" maxLength="5000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab id="historyTab" label="{i18n:Storico}" routeUrl="linkHistory" cssClassTab="pull-right"/></pnx:JSTabGroup>
+
+    </pnx:template>
+
+    <pnx:template name="custom_states">
+      <mvc:State name="history" label="{i18n:Storico}" url="linkHistory">
+        <pnx:Hidden controllerName="##controller_name##" />
+        <pnx:JSTabGroup id="innerTabs">
+          <pnx:JSTab id="historyTab" label="{i18n:Storico}" cssClassTab="pull-right">
+            <cms:FormEdit addValidationJs="false">
+              <cmp:ShowHistory id="history" model="AUT400.models.Model"/>
+              <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:Confronta}" type="button" cssClass="btn btn-primary js-pinaxcms-history" data="action=add" />
+              </cms:FormButtonsPanel>
+            </cms:FormEdit>
+          </pnx:JSTab>
+          <pnx:JSTab id="editTab" label="{i18n:Scheda}" routeUrl="linkEdit" cssClassTab="pull-right"/>
+        </pnx:JSTabGroup>
+      </mvc:State>
+      <mvc:State name="show,showDraft" label="{i18n:Show}">
+        <c:FormEdit id="editForm" newCode="true" controllerName="##controller_name##">
+          <pnx:Hidden id="__model" value="AUT400.models.Model" />
+          <pnx:JSTabGroup id="innerTabs" showNav="true">
+<pnx:JSTab dropdown="true" id="CD-tab" label="{i18n:CD}">
+<pnx:Fieldset id="CD" label="{i18n:CD}" required="true">
+  <pnx:Input readOnly="true" id="TSK" label="{i18n:TSK}" required="true" maxLength="4" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+  <pnx:Input readOnly="true" id="LIR" label="{i18n:LIR}" required="true" maxLength="1" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+  <pnx:Input readOnly="true" id="NCU" label="{i18n:NCU}" maxLength="8"/>
+  <pnx:Input readOnly="true" id="ESC" label="{i18n:ESC}" required="true" maxLength="25"/>
+  <pnx:Input readOnly="true" id="ECP" label="{i18n:ECP}" maxLength="25"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="AC-tab" label="{i18n:AC}">
+<pnx:Fieldset id="AC" label="{i18n:AC}" data="readOnly=true;type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;repeatMax=1;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+  <pnx:Fieldset id="ACC" label="{i18n:ACC}" data="readOnly=true;type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+    <pnx:Input readOnly="true" id="ACCE" label="{i18n:ACCE}" required="true" maxLength="250"/>
+    <pnx:Input readOnly="true" id="ACCC" label="{i18n:ACCC}" required="true" maxLength="150"/>
+    <pnx:Input readOnly="true" id="ACCP" label="{i18n:ACCP}" maxLength="250"/>
+    <pnx:Input readOnly="true" id="ACCS" label="{i18n:ACCS}" maxLength="2000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+    <pnx:Input readOnly="true" id="ACCW" label="{i18n:ACCW}" maxLength="500"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="AU-tab" label="{i18n:AU}">
+<pnx:Fieldset id="AU" label="{i18n:AU}" required="true">
+  <pnx:Fieldset id="AUT" label="{i18n:AUT}" required="true">
+    <pnx:Input readOnly="true" id="AUTN" label="{i18n:AUTN}" required="true" maxLength="250"/>
+    <pnx:Input readOnly="true" id="AUTH" label="{i18n:AUTH}" required="true" maxLength="8"/>
+    <pnx:Input readOnly="true" id="AUTP" label="{i18n:AUTP}" required="true" maxLength="2" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+    <pnx:Input readOnly="true" id="AUTE" label="{i18n:AUTE}" maxLength="1" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+    <pnx:Input readOnly="true" id="AUTA" label="{i18n:AUTA}" required="true" maxLength="100"/>
+    <pnx:Fieldset id="AUTQ" label="{i18n:AUTQ}" data="readOnly=true;type=repeat;collapsable=false;repeatMin=0">
+        <pnx:Input readOnly="true" id="AUTQ-element" label="{i18n:AUTQ}" maxLength="100" data="type=selectfrom;field=AUTQ;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##,##code##:##VA_AUTQ_AUT##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+</pnx:Fieldset>
+    <pnx:Input readOnly="true" id="AUTF" label="{i18n:AUTF}" maxLength="100"/>
+    <pnx:Fieldset id="AUTU" label="{i18n:AUTU}" data="readOnly=true;type=repeat;collapsable=false;repeatMin=0">
+        <pnx:Input readOnly="true" id="AUTU-element" label="{i18n:AUTU}" maxLength="250" data="type=selectfrom;field=AUTU;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##,##code##:##VA_AUTU_AUT##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+  <pnx:Fieldset id="AUV" label="{i18n:AUV}" data="readOnly=true;type=repeat;collapsable=false;repeatMin=0">
+      <pnx:Input readOnly="true" id="AUV-element" label="{i18n:AUV}" maxLength="250"/>
+</pnx:Fieldset>
+  <pnx:Input readOnly="true" id="NSC" label="{i18n:NSC}" maxLength="5000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="DO-tab" label="{i18n:DO}">
+<pnx:Fieldset id="DO" label="{i18n:DO}" data="readOnly=true;type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;repeatMax=1;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+  <pnx:Fieldset id="BIB" label="{i18n:BIB}" data="readOnly=true;type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+    <pnx:Input readOnly="true" id="BIBR" label="{i18n:BIBR}" maxLength="100"/>
+    <pnx:Input readOnly="true" id="BIBM" label="{i18n:BIBM}" required="true" maxLength="1000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+    <pnx:Input readOnly="true" id="BIBN" label="{i18n:BIBN}" maxLength="2000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="AD-tab" label="{i18n:AD}">
+<pnx:Fieldset id="AD" label="{i18n:AD}" required="true">
+  <pnx:Fieldset id="ADS" label="{i18n:ADS}" required="true">
+    <pnx:Input readOnly="true" id="ADSP" label="{i18n:ADSP}" required="true" maxLength="1" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+    <pnx:Input readOnly="true" id="ADSM" label="{i18n:ADSM}" required="true" maxLength="250" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT400##}"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="CM-tab" label="{i18n:CM}">
+<pnx:Fieldset id="CM" label="{i18n:CM}" required="true">
+  <pnx:Fieldset id="CMP" label="{i18n:CMP}" required="true">
+    <pnx:Input readOnly="true" id="CMPD" label="{i18n:CMPD}" required="true" maxLength="4"/>
+    <pnx:Fieldset id="CMPN" label="{i18n:CMPN}" required="true" data="readOnly=true;type=repeat;collapsable=false;repeatMin=1">
+        <pnx:Input readOnly="true" id="CMPN-element" label="{i18n:CMPN}" maxLength="250"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+  <pnx:Fieldset id="RSR" label="{i18n:RSR}" data="readOnly=true;type=repeat;collapsable=false;repeatMin=0">
+      <pnx:Input readOnly="true" id="RSR-element" label="{i18n:RSR}" maxLength="250"/>
+</pnx:Fieldset>
+  <pnx:Fieldset id="FUR" label="{i18n:FUR}" required="true" data="readOnly=true;type=repeat;collapsable=false;repeatMin=1">
+      <pnx:Input readOnly="true" id="FUR-element" label="{i18n:FUR}" maxLength="250"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="AN-tab" label="{i18n:AN}">
+<pnx:Fieldset id="AN" label="{i18n:AN}" data="readOnly=true;type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;repeatMax=1;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+  <pnx:Input readOnly="true" id="OSS" label="{i18n:OSS}" maxLength="5000" type="multiline" rows="10" cols="70" wrap="on" htmlEditor="true"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+</pnx:JSTabGroup>
+
+          <cms:FormButtonsPanel id="formButtons">
+              <pnx:HtmlButton label="{i18n:Indietro}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" />
+          </cms:FormButtonsPanel>
+        </c:FormEdit>
+      </mvc:State>
+  </pnx:template>
+</pnx:include>

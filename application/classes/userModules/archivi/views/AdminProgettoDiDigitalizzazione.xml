@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:cmp="archivi.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    xmlns:boards="metafad.gestioneDati.boards.views.components.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <com:ModalConfirm label="Attenzione" message="Sicuro di voler proseguire?"/>
+    <com:ModalAlert label="Attenzione" message="Operazione non corretta"/>
+
+    <mvc:State id="stateIndex" name="index" label="{i18n:Progetto}" url="archivi-ProgettoDiDigitalizzazione">
+        <cmp:DataGridSolr id="dataGrid" enableSorting="true" filterByInstitute="false" recordClassName="archivi.models.ProgettoDiDigitalizzazione" cssClass="table table-bordered table-striped" controllerName="archivi.controllers.*" fullTextSearch="true" JQueryUI="true" autocompleteController="archivi.controllers.ajax.AutoComplete">
+            <pnx:DataGridColumn columnName="identificativo_s" headerText="{i18n:Identificativo per il Progetto}"/>
+            <pnx:DataGridColumn columnName="denominazione_s" headerText="{i18n:Denominazione}"/>
+            <pnx:DataGridColumn columnName="cronologia_s" headerText="{i18n:Estremo cronologico testuale}"/>
+            <pnx:DataGridColumn columnName="id" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.authority.CellEditDraftDelete"/>
+        </cmp:DataGridSolr>
+        <cmp:AddButton label="Progetto di Digitalizzazione" acl="*,new" type="ProgettoDiDigitalizzazione" routeUrl="archiviMVCAdd" editableRegion="actions" recordClassName="archivi.models.ProgettoDiDigitalizzazione" dataGridAjaxId="dataGrid"/>
+    </mvc:State>
+
+    <mvc:State id="stateEdit" name="edit,editDraft" label="{i18n:Scheda}" draw="false" cssClass="editState">
+        <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active" addQueryString="true" visible="false"/>
+
+        <pnx:JSscript folder="userModules/archivi/js" editableRegion="tail"/>
+
+        <com:FormEdit id="editForm" newCode="true" controllerName="archivi.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="archivi.models.ProgettoDiDigitalizzazione"/>
+            <pnx:Hidden id="instituteKey" />
+            <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}"/>
+            <pnx:Input id="external_id" label="{i18n:ID}" size="90" disabled="true" visible="false"/>
+            <pnx:Hidden id="isTemplate"/>
+            <pnx:Input id="templateTitle" label="{i18n:Titolo template}"/>
+            <pnx:Link cssClass="tree openTree fa fa-list" enabled="false"/>
+            <pnx:JSTabGroup id="ProgettoDiDigitalizzazione" showNav="true" cssClass="nav nav-tabs js-tab-section">
+                <pnx:Panel cssClass="col-md-4 gerarchia no-padding" text="Gerarchia: " enabled="false">
+                    <cmp:Tree id="treeview" startId="0" title="" controllerName="archivi.controllers.Gerarchia"/>
+                </pnx:Panel>
+
+                <pnx:JSTab id="tabIdentificazione" label="Identificazione" dropdown="true">
+                    <pnx:Panel cssClass="col-md-8 active text-tab">
+                        <pnx:Fieldset id="codici" label="Codici">
+                            <pnx:Input id="acronimoSistema" label="Acronimo di sistema" required="true" readOnly="true"/>
+                            <pnx:Input id="identificativo" readOnly="true" label="Identificativo per il Progetto"/>
+                            <pnx:Input id="codiceIdentificativoSistema" readOnly="true" label="Codice identificativo di sistema"/>
+                            <pnx:Hidden id="externalID" readOnly="true" label="ID importazione"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="denominazione" label="Denominazione">
+                            <pnx:Input id="denominazione" label="Denominazione del progetto" required="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="acronimoProgetto" label="Acronimo">
+                            <pnx:Input id="acronimoProgetto" label="Acronimo del progetto"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="entePrincipaleCoinvolto" label="Ente principale coinvolto">
+                            <pnx:Input id="entePrincipaleDenominazione" label="Denominazione ente" required="true" data="type=modalPage;pageId=archivi-Enti_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Enti"/>
+                            <pnx:Input readOnly="true" id="entePrincipaleQualificazione" value="Responsabile" required="true" label="Qualificazione della partecipazione al progetto"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="enteCoinvolto" label="Ente coinvolto" data='type=repeat;collapsable=false;'>
+                            <pnx:Input id="entitaDenominazione" label="Denominazione ente" data="type=modalPage;pageId=archivi-Enti_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Enti"/>
+/>
+                            <pnx:Input id="qualificazione" label="Qualificazione della partecipazione al progetto" cssClass="form-control" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##code##:##VA_ARCHIVE_PROGETTO_ENTE_COINVOLTO##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_PROGETTO_ENTE_COINVOLTO"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="tipologia" cssClass="boldMessage" label="Tipologia e finalità" data="type=repeat;collapsable=false;repeatMin=1">
+                            <pnx:Input id="tipologiaProgetto" label="Tipologia e finalità del progetto" required="true" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##code##:##VA_ARCHIVE_TIPOLOGIA_PROGETTO##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_TIPOLOGIA_PROGETTO"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="storiaProgetto" cssClass="boldMessage" label="Storia del progetto" required="true" data="type=repeat;collapsable=false;repeatMin=1;repeatMax=1">
+                            <pnx:Input id="noteStoriche" label="Note storiche su origine e realizzazione del progetto" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Fieldset id="cronologia" label="Estremi cronologici di realizzazione del progetto" required="true">
+                                <pnx:Input id="estremoCronologicoTestuale" readOnly="true" cssClass="js-archive-cronologia-concatText form-control" label="Estremo cronologico testuale"/>
+                                <pnx:List id="tipoData" label="Tipologia data" cssClass="js-archive-cronologia-dateType form-control">
+                                    <pnx:ListItem value="Intervallo di date" key="data-intervallo"/>
+                                    <pnx:ListItem value="Data singola" key="data-singola"/>
+                                    <pnx:ListItem value="Data aperta" key="data-aperta"/>
+                                    <pnx:ListItem value="Data non rilevabile/non rilevata" key="data-non-rilevabile"/>
+                                </pnx:List>
+                                <pnx:Fieldset id="estremoRemoto" cssClass="js-archive-cronologia-remotoRoot js-archive-cronologia-estremo" label="Estremo cronologico remoto">
+                                    <pnx:Input id="estremoRemoto_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data"/>
+                                    <pnx:Input id="estremoRemoto_secolo" cssClass="js-archive-cronologia-century form-control" label="Secolo" data="type=conditionalSelectFrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_SECOLO##};dictId=VC_ARCHIVE_SECOLO;target=*`--&gt;estremoRemoto_specifica"/>
+                                    <pnx:Input id="estremoRemoto_specifica" cssClass="js-archive-cronologia-specifica form-control" label="Specifica" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_SPEC_SECOLO##};dictId=VC_ARCHIVE_SPEC_SECOLO"/>
+                                    <pnx:Input id="estremoRemoto_validita" cssClass="js-archive-cronologia-valid-data form-control" label="Validità" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_VALIDITA_DATA##};dictId=VC_ARCHIVE_VALIDITA_DATA"/>
+                                    <pnx:Input id="estremoRemoto_codificaData" label="Codifica della data" readOnly="true" cssClass="js-archive-cronologia-codificaText form-control"/>
+                                    <pnx:Input id="estremoRemoto_noteData" cssClass="js-archive-cronologia-note-data form-control" label="Note alla data" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                                </pnx:Fieldset>
+                                <pnx:Fieldset id="estremoRecente" cssClass="js-archive-cronologia-recenteRoot js-archive-cronologia-estremo" label="Estremo cronologico recente">
+                                    <pnx:Input id="estremoRecente_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data"/>
+                                    <pnx:Input id="estremoRecente_secolo" cssClass="js-archive-cronologia-century form-control" label="Secolo" data="type=conditionalSelectFrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_SECOLO##};dictId=VC_ARCHIVE_SECOLO;target=*`--&gt;estremoRecente_specifica"/>
+                                    <pnx:Input id="estremoRecente_specifica" cssClass="js-archive-cronologia-specifica form-control" label="Specifica" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_SPEC_SECOLO##};dictId=VC_ARCHIVE_SPEC_SECOLO"/>
+                                    <pnx:Input id="estremoRecente_validita" cssClass="js-archive-cronologia-valid-data form-control" label="Validità" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_VALIDITA_DATA##};dictId=VC_ARCHIVE_VALIDITA_DATA"/>
+                                    <pnx:Input id="estremoRecente_codificaData" label="Codifica della data" readOnly="true" cssClass="js-archive-cronologia-codificaText form-control"/>
+                                    <pnx:Input id="estremoRecente_noteData" cssClass="js-archive-cronologia-note-data form-control" label="Note alla data" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                                </pnx:Fieldset>
+                                <pnx:Input id="qualificaData" cssClass="js-archive-cronologia-qualifica-data form-control" label="Qualifica della data" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_QUALIFICA_DATA##};dictId=VC_ARCHIVE_QUALIFICA_DATA"/>
+                                <pnx:Input id="ProgettoNotaDatazione" label="Nota alla datazione" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            </pnx:Fieldset>
+                            <pnx:Input id="statoAvanzamento" label="Informazioni sommarie sullo stato di avanzamento" required="true" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                        </pnx:Fieldset>
+                    </pnx:Panel>
+                </pnx:JSTab>
+
+                <pnx:JSTab id="tabDescrizione" label="Descrizione" dropdown="true">
+                    <pnx:Panel cssClass="col-md-8 active text-tab">
+                        <pnx:Fieldset id="descrizioneSintetica" label="Descrizione sintetica del progetto culturale e delle risorse digitalizzate">
+                            <pnx:Input id="obiettivi" label="Obiettivi" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Input id="criteriSelezione" label="Criteri di selezione e descrizione del materiale" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Input id="criteriRiproduzione" label="Criteri di riproduzione" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Input id="coperturaSpaziale" label="Copertura spaziale della documentazione" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Input id="coperturaTemporale" label="Copertura temporale della documentazione" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="descrizioneTecnica" label="Descrizione della realizzazione tecnica">
+                            <pnx:Input id="architetturaSistema" label="Architettura del sistema digitale di gestione dati e immagini" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input id="dimensioniArchivio" label="Dimensioni dell'archivio digitale" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input id="formatoImg" label="Formato delle immagini on-line" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input id="formatiPerRiproduzione" label="Formati disponibili per la riproduzione" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input id="risoluzioni" label="Risoluzioni adottate" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input id="gestioniColore" label="Gestioni del colore" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input id="altriSoftware" label="Altri software o piattaforme tecnologiche utilizzate per la gestione/pubblicazione dei materiali" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input id="strumentazioneRipresa" label="Strumentazione di ripresa" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input id="standardUtilizzati" label="Standard utilizzati" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="areeTematiche" cssClass="boldMessage" label="Aree tematiche" data="type=repeat;collapsable=false;repeatMin=1">
+                            <pnx:Input id="areeTematiche" label="Aree tematiche della documentazione interessata dal progetto" required="true" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_TEMATISMO##};dictId=VC_ARCHIVE_TEMATISMO"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="accesso" label="Condizioni di accesso" data="type=repeat;collapsable=false">
+                            <pnx:Input id="condizioniAccesso" label="Descrizione delle condizioni di accesso agli originali analogici per ente detentore della documentazione" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="copyright" label="Descrizione ente detentore dei diritti" data="type=repeat;collapsable=false">
+                            <pnx:Input id="diritti" label="Descrizione del detentore (ente) dei diritti sulla documentazione digitalizzata e analogica" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="entiRel" cssClass="boldMessage" label="Enti collegati" data="type=repeat;repeatMin=1" required="true">
+                            <pnx:Input required="true" id="enteRel" label="Ente" data="type=modalPage;pageId=archivi-Enti_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Enti"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="complessi" cssClass="boldMessage" label="Complessi archivistici collegati" data="type=repeat;repeatMin=1" required="true">
+                            <pnx:Input required="true" id="linkComplessi" label="Complesso archivistico" data="type=selectConservatori;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.ComplessoArchivistico;selected_callback=archivi.controllers.ajax.GetConservatore;getId=true;return_object=true;textfield=_denominazione;idconservatore=conservatore;idcomplesso=complessi"/>
+                        </pnx:Fieldset>
+                        <pnx:Hidden id="complessiLinked" label="Numero complessi collegati"/>
+                        <pnx:Fieldset id="riferimentiBibliografici" label="Riferimenti bibliografici" data="type=repeat;noEmptyMessage=true">
+                            <pnx:Input id="linkRiferimentiBibliografici" label="Riferimenti bibliografici" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.SchedaBibliografica;return_object=true;textfield=_denominazione"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="conservatore" label="Soggetto conservatore" data="type=repeat;noEmptyMessage=true" cssClass="conservatoreDiv">;
+                            <pnx:Input readOnly="true" id="soggettoConservatore" label="Soggetto conservatore" data='type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.ProduttoreConservatore;return_object=true;textfield=_denominazione'/>
+                        </pnx:Fieldset>
+                    </pnx:Panel>
+                </pnx:JSTab>
+
+                <pnx:JSTab id="tabCompilazione" label="Compilazione" dropdown="true">
+                    <pnx:Panel cssClass="col-md-8 active text-tab">
+                        <pnx:Fieldset id="compilazioneLingua" label="Compilazione">
+                            <pnx:Input id="linguaDescrizioneRecord" label="Lingua di descrizione del record" data="type=selectfrom;return_object=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_ISO_639_3##};dictId=VC_ARCHIVE_ISO_639_3"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="compilazione" cssClass="boldMessage" label="Compilazione" required="true" data="type=repeat;collapsable=false;repeatMin=1">
+                            <pnx:Input readOnly="true" id="tipologiaRedattore" value="Persona" label="Tipologia redattore"/>
+                            <pnx:Input id="redattore" label="Redattore"/>
+                            <pnx:Input id="azione" label="Azione" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_COMPILAZIONE_AZIONE##};dictId=VC_ARCHIVE_COMPILAZIONE_AZIONE"/>
+                            <pnx:Input id="note" label="Note redazionali" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input id="data" required="true" cssClass="js-archive-dateTextBox form-control js-archive-dateCompilazione" label="Data" readOnly="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Input id="osservazioni" label="Osservazioni" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                    </pnx:Panel>
+                </pnx:JSTab>
+                <pnx:JSTab id="tabMediaCollegati" label="Media Collegati" dropdown="true">
+                    <pnx:Panel cssClass="col-md-8 active text-tab">
+                        <pnx:List id="visibility" label="Visibilità FE">
+                            <pnx:ListItem value="Completa (RDV)" key="rdv"/>
+                            <pnx:ListItem value="Visibile in ricerca e dettaglio, no viewer (RD)" key="rd"/>
+                            <pnx:ListItem value="Visibile in ricerca, no dettaglio e viewer (R)" key="r"/>
+                            <pnx:ListItem value="Non visibile" key="0"/>
+                        </pnx:List>
+                        <pnx:Input id="mediaCollegati" label="Media Collegati" data="type=mediapicker;preview=true"/>
+                    </pnx:Panel>
+                </pnx:JSTab>
+
+                <pnx:JSTab id="history" label="{i18n:Storico}" cssClassTab="pull-right" routeUrl="archivihistory"/>
+                <pnx:JSTab id="edit" label="{i18n:Scheda}" cssClassTab="fake-active pull-right"/>
+            </pnx:JSTabGroup>
+
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=save" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save" data="action=saveClose" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel"/>
+                <pnx:HtmlButton label="{i18n:Valida CAT-SAN}" type="button" cssClass="btn btn-flat js-pinaxcms-save" data="action=validate" acl="*,publish" />
+            </cms:FormButtonsPanel>
+        </com:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="show,showDraft" label="{i18n:Show}" draw="false">
+        <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active" addQueryString="true" visible="false"/>
+
+        <pnx:JSscript folder="userModules/archivi/js" editableRegion="tail"/>
+
+        <com:FormEdit id="editForm" newCode="true" controllerName="archivi.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="archivi.models.ProgettoDiDigitalizzazione"/>
+            <pnx:Hidden id="instituteKey" />
+            <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}"/>
+            <pnx:Input id="external_id" label="{i18n:ID}" size="90" disabled="true" visible="false"/>
+            <pnx:Hidden id="isTemplate"/>
+            <pnx:Input id="templateTitle" label="{i18n:Titolo template}"/>
+            <pnx:Link cssClass="tree openTree fa fa-list" enabled="false"/>
+            <pnx:JSTabGroup id="ProgettoDiDigitalizzazione" showNav="true" cssClass="nav nav-tabs js-tab-section">
+                <pnx:Panel cssClass="col-md-4 gerarchia no-padding" text="Gerarchia: " enabled="false">
+                    <cmp:Tree id="treeview" startId="0" title="" controllerName="archivi.controllers.Gerarchia"/>
+                </pnx:Panel>
+
+                <pnx:JSTab id="tabIdentificazione" label="Identificazione" dropdown="true">
+                    <pnx:Panel cssClass="col-md-8 active text-tab">
+                        <pnx:Fieldset id="codici" label="Codici">
+                            <pnx:Input readOnly="true" id="acronimoSistema" label="Acronimo di sistema" required="true"/>
+                            <pnx:Input readOnly="true" id="identificativo" label="Identificativo per il Progetto"/>
+                            <pnx:Input readOnly="true" id="codiceIdentificativoSistema" label="Codice identificativo di sistema"/>
+                            <pnx:Hidden readOnly="true" id="externalID" label="ID importazione"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="denominazione" label="Denominazione">
+                            <pnx:Input readOnly="true" id="denominazione" label="Denominazione del progetto" required="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="acronimoProgetto" label="Acronimo">
+                            <pnx:Input readOnly="true" id="acronimoProgetto" label="Acronimo del progetto"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="entePrincipaleCoinvolto" label="Ente principale coinvolto">
+                            <pnx:Input readOnly="true" id="entePrincipaleDenominazione" label="Denominazione ente" required="true" data="type=modalPage;pageId=archivi-Enti_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Enti"/>
+/>
+                            <pnx:Input readOnly="true" id="entePrincipaleQualificazione" value="Responsabile" required="true" label="Qualificazione della partecipazione al progetto"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="enteCoinvolto" label="Ente coinvolto">
+                            <pnx:Input readOnly="true" id="entitaDenominazione" label="Denominazione ente" data="type=modalPage;pageId=archivi-Enti_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Enti"/>
+/>
+                            <pnx:Input readOnly="true" id="qualificazione" label="Qualificazione della partecipazione al progetto" cssClass="form-control" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##code##:##VA_ARCHIVE_PROGETTO_ENTE_COINVOLTO##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_PROGETTO_ENTE_COINVOLTO"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="tipologia" label="Tipologia e finalità" data="type=repeat;collapsable=false;repeatMin=1;readOnly=true">
+                            <pnx:Input readOnly="true" id="tipologiaProgetto" label="Tipologia e finalità del progetto" required="true" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##code##:##VA_ARCHIVE_TIPOLOGIA_PROGETTO##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_TIPOLOGIA_PROGETTO"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="storiaProgetto" label="Storia del progetto" required="true" data="type=repeat;collapsable=false;repeatMin=1;repeatMax=1">
+                            <pnx:Input readOnly="true" id="noteStoriche" label="Note storiche su origine e realizzazione del progetto" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Fieldset id="cronologia" label="Estremi cronologici di realizzazione del progetto" required="true">
+                                <pnx:Input readOnly="true" id="estremoCronologicoTestuale" cssClass="js-archive-cronologia-concatText form-control" label="Estremo cronologico testuale"/>
+                                <pnx:List id="tipoData" readOnly="true" label="Tipologia data" cssClass="js-archive-cronologia-dateType update-orig-select form-control">
+                                    <pnx:ListItem value="Intervallo di date" key="data-intervallo"/>
+                                    <pnx:ListItem value="Data singola" key="data-singola"/>
+                                    <pnx:ListItem value="Data aperta" key="data-aperta"/>
+                                    <pnx:ListItem value="Data non rilevabile/non rilevata" key="data-non-rilevabile"/>
+                                </pnx:List>
+                                <pnx:Fieldset id="estremoRemoto" cssClass="js-archive-cronologia-remotoRoot js-archive-cronologia-estremo" label="Estremo cronologico remoto">
+                                    <pnx:Input readOnly="true" id="estremoRemoto_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data"/>
+                                    <pnx:Input readOnly="true" id="estremoRemoto_secolo" cssClass="js-archive-cronologia-century form-control" label="Secolo" data="type=conditionalSelectFrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##};dictId=VC_ARCHIVE_SECOLO;target=*`--&gt;estremoRemoto_specifica"/>
+                                    <pnx:Input readOnly="true" id="estremoRemoto_specifica" cssClass="js-archive-cronologia-specifica form-control" label="Specifica" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##};dictId=VC_ARCHIVE_SPEC_SECOLO"/>
+                                    <pnx:Input readOnly="true" id="estremoRemoto_validita" cssClass="js-archive-cronologia-valid-data form-control" label="Validità" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##};dictId=VC_ARCHIVE_VALIDITA_DATA"/>
+                                    <pnx:Input readOnly="true" id="estremoRemoto_codificaData" label="Codifica della data" cssClass="js-archive-cronologia-codificaText form-control"/>
+                                    <pnx:Input readOnly="true" id="estremoRemoto_noteData" cssClass="js-archive-cronologia-note-data form-control" label="Note alla data" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                                </pnx:Fieldset>
+                                <pnx:Fieldset id="estremoRecente" cssClass="js-archive-cronologia-recenteRoot js-archive-cronologia-estremo" label="Estremo cronologico recente">
+                                    <pnx:Input readOnly="true" id="estremoRecente_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data"/>
+                                    <pnx:Input readOnly="true" id="estremoRecente_secolo" cssClass="js-archive-cronologia-century form-control" label="Secolo" data="type=conditionalSelectFrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##};dictId=VC_ARCHIVE_SECOLO;target=*`--&gt;estremoRecente_specifica"/>
+                                    <pnx:Input readOnly="true" id="estremoRecente_specifica" cssClass="js-archive-cronologia-specifica form-control" label="Specifica" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##};dictId=VC_ARCHIVE_SPEC_SECOLO"/>
+                                    <pnx:Input readOnly="true" id="estremoRecente_validita" cssClass="js-archive-cronologia-valid-data form-control" label="Validità" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##};dictId=VC_ARCHIVE_VALIDITA_DATA"/>
+                                    <pnx:Input readOnly="true" id="estremoRecente_codificaData" label="Codifica della data" cssClass="js-archive-cronologia-codificaText form-control"/>
+                                    <pnx:Input readOnly="true" id="estremoRecente_noteData" cssClass="js-archive-cronologia-note-data form-control" label="Note alla data" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                                </pnx:Fieldset>
+                                <pnx:Input readOnly="true" id="qualificaData" cssClass="js-archive-cronologia-qualifica-data form-control" label="Qualifica della data" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##};dictId=VC_ARCHIVE_QUALIFICA_DATA"/>
+                                <pnx:Input readOnly="true" id="ProgettoNotaDatazione" label="Nota alla datazione" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            </pnx:Fieldset>
+                            <pnx:Input readOnly="true" id="statoAvanzamento" label="Informazioni sommarie sullo stato di avanzamento" required="true" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                        </pnx:Fieldset>
+                    </pnx:Panel>
+                </pnx:JSTab>
+
+                <pnx:JSTab id="tabDescrizione" label="Descrizione" dropdown="true">
+                    <pnx:Panel cssClass="col-md-8 active text-tab">
+                        <pnx:Fieldset id="descrizioneSintetica" label="Descrizione sintentica del progetto culturale e delle risorse digitalizzate">
+                            <pnx:Input readOnly="true" id="obiettivi" label="Obiettivi" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Input readOnly="true" id="criteriSelezione" label="Criteri di selezione e descrizione del materiale" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Input readOnly="true" id="criteriRiproduzione" label="Criteri di riproduzione" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Input readOnly="true" id="coperturaSpaziale" label="Copertura spaziale della documentazione" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true"/>
+                            <pnx:Input readOnly="true" id="coperturaTemporale" label="Copertura temporale della documentazione" type="multiline" rows="5" wrap="on" htmlEditor="true" required="true" />
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="descrizioneTecnica" label="Descrizione della realizzazione tecnica">
+                            <pnx:Input readOnly="true" id="architetturaSistema" label="Architettura del sistema digitale di gestione dati e immagini" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input readOnly="true" id="dimensioniArchivio" label="Dimensioni dell'archivio digitale" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input readOnly="true" id="formatoImg" label="Formato delle immagini on-line" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input readOnly="true" id="formatiPerRiproduzione" label="Formati disponibili per la riproduzione" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input readOnly="true" id="risoluzioni" label="Risoluzioni adottate" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input readOnly="true" id="gestioniColore" label="Gestioni del colore" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input readOnly="true" id="altriSoftware" label="Altri software o piattaforme tecnologica utilizzate per la gestione/pubblicazione dei materiali" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input readOnly="true" id="strumentazioneRipresa" label="Strumentazione di ripresa" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input readOnly="true" id="standardUtilizzati" label="Standard utilizzati" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="areeTematiche" label="Aree tematiche" data="type=repeat;collapsable=false;repeatMin=1;readOnly=true">
+                            <pnx:Input readOnly="true" id="areeTematiche" label="Aree tematiche della documentazione interessata dal progetto" required="true" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##};dictId=VC_ARCHIVE_TEMATISMO"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="accesso" label="Condizioni di accesso" data="type=repeat;collapsable=false;readOnly=true">
+                            <pnx:Input readOnly="true" id="condizioniAccesso" label="Descrizione delle condizioni di accesso agli originali analogici per ente detentore della documentazione" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="copyright" label="Descrizione ente detentore dei diritti" data="type=repeat;collapsable=false;readOnly=true">
+                            <pnx:Input readOnly="true" id="diritti" label="Descrizione del detentore (ente) dei diritti sulla documentazione digitalizzata e analogica" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="entiRel" label="Enti collegati" data="type=repeat;repeatMin=1;readOnly=true" required="true">
+                            <pnx:Input readOnly="true" required="true" id="enteRel" label="Ente" data="type=modalPage;pageId=archivi-Enti_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Enti"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="complessi" label="Complessi archivistici collegati" data="readOnly=true;type=repeat;repeatMin=1" required="true">
+                            <pnx:Input readOnly="true" required="true" id="linkComplessi" label="Complessi archivistici" data="type=selectConservatori;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.ComplessoArchivistico;selected_callback=archivi.controllers.ajax.GetConservatore;getId=true;return_object=true;textfield=_denominazione;idconservatore=conservatore;idcomplesso=complessi"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="riferimentiBibliografici" label="Riferimenti bibliografici" data="readOnly=true;type=repeat;noEmptyMessage=true">
+                            <pnx:Input readOnly="true" id="linkRiferimentiBibliografici" label="Riferimenti bibliografici" data="type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.SchedaBibliografica;return_object=true;textfield=_denominazione"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="conservatore" label="Soggetto conservatore" data="readOnly=true;type=repeat;noEmptyMessage=true" cssClass="conservatoreDiv">
+                            <pnx:Input readOnly="true" id="soggettoConservatore" label="Soggetto conservatore" data='type=dynamicselectfrom;proxy=archivi.models.ModelProxy;controller=archivi.controllers.ajax.GetFieldValueFromId;model=archivi.models.ProduttoreConservatore;return_object=true;textfield=_denominazione'/>
+                        </pnx:Fieldset>
+                    </pnx:Panel>
+                </pnx:JSTab>
+
+                <pnx:JSTab id="tabCompilazione" label="Compilazione" dropdown="true">
+                    <pnx:Panel cssClass="col-md-8 active text-tab">
+                        <pnx:Fieldset id="compilazioneLingua" label="Compilazione">
+                            <pnx:Input readOnly="true" id="linguaDescrizioneRecord" label="Lingua di descrizione del record" data="type=selectfrom;return_object=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##};dictId=VC_ARCHIVE_ISO_639_3"/>
+                        </pnx:Fieldset>
+                        <pnx:Fieldset id="compilazione" label="Compilazione" required="true" data="readOnly=true;type=repeat;collapsable=false;repeatMin=1">
+                            <pnx:Input readOnly="true" id="tipologiaRedattore" value="Persona" label="Tipologia redattore"/>
+                            <pnx:Input readOnly="true" id="redattore" label="Redattore"/>
+                            <pnx:Input readOnly="true" id="azione" label="Azione" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-progettodidigitalizzazione&quot;,##level##:##1##, ##code##:##VC_ARCHIVE_COMPILAZIONE_AZIONE##};dictId=VC_ARCHIVE_COMPILAZIONE_AZIONE"/>
+                            <pnx:Input readOnly="true" id="note" label="Note redazionali" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                            <pnx:Input readOnly="true" required="true" id="data" cssClass="js-archive-dateTextBox form-control js-archive-dateCompilazione" label="Data"/>
+                        </pnx:Fieldset>
+                        <pnx:Input readOnly="true" id="osservazioni" label="Osservazioni" type="multiline" rows="5" wrap="on" htmlEditor="true"/>
+                    </pnx:Panel>
+                </pnx:JSTab>
+            </pnx:JSTabGroup>
+
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:Indietro}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" />
+            </cms:FormButtonsPanel>
+        </com:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="archivi.controllers.*"/>
+    </mvc:State>
+
+    <mvc:State name="toggleFEVisibility">
+        <pnx:Hidden controllerName="archivi.controllers.ToggleFEVisibility"/>
+    </mvc:State>
+
+    <mvc:State id="stateHistory" name="history" label="{i18n:Storico}" url="linkHistory">
+        <pnx:JSTabGroup id="innerTabs">
+            <pnx:JSTab id="historyTab" label="{i18n:Storico}" cssClassTab="pull-right">
+                <cms:FormEdit addValidationJs="false" controllerName="archivi.controllers.*">
+                    <boards:ShowHistory id="history" model="archivi.models.ProgettoDiDigitalizzazione"/>
+                    <cms:FormButtonsPanel>
+                        <pnx:HtmlButton label="{i18n:Confronta}" type="button" cssClass="btn btn-primary js-pinaxcms-history" data="action=add" />
+                    </cms:FormButtonsPanel>
+                </cms:FormEdit>
+            </pnx:JSTab>
+            <pnx:JSTab id="editTab" label="{i18n:Scheda}" routeUrl="linkEdit" cssClassTab="pull-right"/>
+        </pnx:JSTabGroup>
+    </mvc:State>
+</mvc:Page>

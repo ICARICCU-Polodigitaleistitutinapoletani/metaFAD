@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:c="metafad.iccd.views.components.*"
+    xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:msv="metafad.gestioneDati.massiveEdit.views.components.*"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:iccd="metafad.thesaurus.views.components.*"
+    id="Page"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php">
+    
+    <pnx:Import src="_common.xml" />
+
+    <mvc:State name="index">
+        <pnx:Modifier target="tabs" attribute="visible" value="false" />
+        <com:DataGridSolr id="dataGrid" enableSorting="true" setLastSearch="true"
+                            filterByInstitute="false" timeSortField="timestamp"
+                            recordClassName="metaindiceBE.models.Model" cssClass="table table-bordered table-striped" fullTextSearch="true" keyAndLabel="true"
+                            autocompleteController="metafad.common.controllers.ajax.AutoComplete"
+                            url="{config:metafad.solr.metaindiceBE.url}" allRecords="true">
+            <pnx:DataGridColumn columnName="denominazione_titolo_s" headerText="{i18n:Demominazione}" />
+            <pnx:DataGridColumn columnName="tipologia_s" headerText="{i18n:Tipologia}" />
+            <pnx:DataGridColumn columnName="dominio_s" headerText="{i18n:Dominio}" />
+            <pnx:DataGridColumn columnName="url_t" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.CellGoToUrl" />
+        </com:DataGridSolr>
+    </mvc:State>
+   
+</mvc:Page>

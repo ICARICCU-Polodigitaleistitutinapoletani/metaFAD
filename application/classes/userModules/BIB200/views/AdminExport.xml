@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:include
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    src="metafad.common.views.templates.TemplateModuleAdminExport">
+
+    <pnx:template name="model" value="BIB200.models.Model"/>
+    <pnx:template name="autocompleteController" value="metafad.common.controllers.ajax.AutoComplete"/>
+    <pnx:template name="grid_fields">
+		<pnx:DataGridColumn columnName="BIBA_s" headerText="{i18n:BIBA}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="BIBC_s" headerText="{i18n:BIBC}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="BIBG_s" headerText="{i18n:BIBG}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="BIBH_s" headerText="{i18n:BIBH}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="BIBT_s" headerText="{i18n:BIBT}" renderCell="metafad.common.views.renderer.ShortField"/>
+    </pnx:template>
+</pnx:include>

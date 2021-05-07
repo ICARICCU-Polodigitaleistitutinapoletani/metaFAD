@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:EmptyComponent
+	xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:c="metafad.common.views.components.*"
+    xmlns:inst="metafad.usersAndPermissions.institutes.views.components.*">
+
+    <pnx:Authenticator accessPageId="Login" label="" logoutPageId="Logout" cssClass="logout" editableRegion="navigation" />
+    <inst:User editableRegion="navigation" />
+
+    <c:NavigationMenu id="menu" startFrom="home" depth="+10" forceLink="true" drawAllChilds="true" selectParent="true" showPath="true" showOnlyChilds="true"  editableRegion="leftSidebar" attributeToSelect="class" cssCurrent="active" />
+
+    <pnx:MessageBox type="ERROR" cssClass="alert-block alert-error"/>
+    <pnx:MessageBox type="SUCCESS" cssClass="alert-block alert-success"/>
+
+    <c:PageTitle id="pageTitle" cssClass="page-title" tag="h1" editableRegion="pageTitle" drawIcon="true"/>
+</pnx:EmptyComponent>

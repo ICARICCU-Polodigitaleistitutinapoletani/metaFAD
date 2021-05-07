@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mvc:Page id="Page"
+  xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+  xmlns:cms="pinaxcms.views.components.*"
+  xmlns:mvc="pinax.mvc.components.*"
+  xmlns:cmp="metafad.mods.views.components.*"
+  xmlns:com="metafad.common.views.components.*"
+  defaultEditableRegion="content"
+  templateType="php"
+  templateFileName="Page.php">
+
+  <pnx:Import src="_common.xml" />
+
+  <mvc:State id="stateIndex" name="index" label="{i18n:Mods}" url="Mods">
+    <com:DataGridSolr id="dataGrid" enableSorting="true" filterByInstitute="true" recordClassName="metafad.mods.models.Model" cssClass="table table-bordered table-striped" controllerName="metafad.mods.controllers.*" fullTextSearch="true" JQueryUI="true" autocompleteController="metafad.common.controllers.ajax.AutoComplete">
+      <pnx:DataGridColumn columnName="titolo_s" headerText="{i18n:Titolo}" />
+      <pnx:DataGridColumn columnName="tipologiaRisorsa_s" headerText="{i18n:Tipologia}" />
+      <pnx:DataGridColumn columnName="id" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.CellEditDraftDelete" />
+    </com:DataGridSolr>
+    <com:AddButton label="MODS" acl="*,new" type="mods" routeUrl="actionsMVCAdd" editableRegion="actions" dataGridAjaxId="dataGrid" />
+  </mvc:State>
+
+  <mvc:State id="stateEdit" name="edit,editDraft" label="{i18n:Scheda}" draw="false" cssClass="editState">
+    <com:FormEdit id="editForm" newCode="true" controllerName="metafad.mods.controllers.*">
+ 
+      <pnx:Hidden id="__id" />
+      <pnx:Hidden id="__model" value="metafad.mods.models.Model" />
+
+      <pnx:JSTabGroup id="Mods" showNav="true" cssClass="nav nav-tabs js-tab-section">
+
+        <pnx:JSTab id="tabIdentificazione" label="Identificazione e descrizione" dropdown="true">
+          <pnx:Panel cssClass="col-md-12 active text-tab">
+            <pnx:Fieldset id="identificativo-rep" label="Identificativo" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="identificativo" label="Identificativo" />
+              <pnx:List id="tipo" label="Tipo" emptyValue=" - ">
+                <pnx:ListItem value="BID" />
+                <pnx:ListItem value="DOI" />
+                <pnx:ListItem value="ISBN" />
+                <pnx:ListItem value="ISSN" />
+                <pnx:ListItem value="SIGI" />
+                <pnx:ListItem value="uri" />
+                <pnx:ListItem value="locale" />
+              </pnx:List>
+            </pnx:Fieldset>
+            <pnx:Fieldset id="lingua-rep" label="Lingua" data="type=repeat;noEmptyMessage=true;repeatMin=1">
+              <pnx:Input id="lingua" label="Lingua" required="true" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##mods##,##level##:##1##};dictId=VC_ARCHIVE_ISO_639_3" />
+            </pnx:Fieldset>
+            <pnx:Fieldset label="Tipologia di risorsa">
+              <pnx:List id="tipologiaRisorsa" label="Tipologia" required="true" emptyValue=" - ">
+                <pnx:ListItem value="testo a stampa" />
+                <pnx:ListItem value="materiale cartografico" />
+                <pnx:ListItem value="musica notata" />
+                <pnx:ListItem value="registrazione sonora musicale" />
+                <pnx:ListItem value="registrazione sonora non musicale" />
+                <pnx:ListItem value="registrazione sonora" />
+                <pnx:ListItem value="grafica" />
+                <pnx:ListItem value="materiale video e da proiezione" />
+                <pnx:ListItem value="oggetto" />
+                <pnx:ListItem value="materiale multimendiale" />
+                <pnx:ListItem value="risorsa elettronica" />
+              </pnx:List>
+            </pnx:Fieldset>
+            <pnx:Fieldset label="Titolo">
+              <pnx:List id="tipoTitolo" label="Tipo titolo" emptyValue=" - ">
+                <pnx:ListItem value="numerato" />
+                <pnx:ListItem value="abbreviato" />
+                <pnx:ListItem value="tradotto" />
+                <pnx:ListItem value="alternativo" />
+                <pnx:ListItem value="uniforme" />
+              </pnx:List>
+              <pnx:Input id="titolo" label="Titolo" required="true" />
+              <pnx:Input id="complementoTitolo" label="Complemento del titolo" />
+              <pnx:Input id="numeroParteTitolo" label="Numero della parte" />
+              <pnx:Input id="nomeParte" label="Nome della parte" />
+            </pnx:Fieldset>
+            <pnx:Fieldset id="autore-rep" label="Autore" data="type=repeat;noEmptyMessage=true">
+              <pnx:List id="tipoNome" label="Tipo nome" emptyValue=" - ">
+                <pnx:ListItem value="persona" />
+                <pnx:ListItem value="ente" />
+                <pnx:ListItem value="famiglia" />
+              </pnx:List>
+              <pnx:Input id="nome" label="Nome" />
+              <pnx:Input id="ruolo" label="Ruolo" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##mods##,##level##:##1##};dictId=VC_MODS_RUOLO"/>
+              <pnx:Input id="descrizione" label="Descrizione" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            </pnx:Fieldset>
+            <pnx:Fieldset label="Note editoriali">
+              <pnx:Input id="luogo" label="Luogo" required="true" data="type=selectfrom;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##mods##,##code##:##VA_MODS_LUOGO##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_MODS_LUOGO"/>
+              <pnx:Input id="editore" label="Editore" data="type=selectfrom;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##mods##;##code##:##VA_MODS_EDITORE##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_MODS_EDITORE"/>
+              <pnx:Fieldset id="date" label="Date" data="type=repeat;repeatMin=1;repeatMax=1;">
+                <pnx:Input id="estremoRemoto_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data remota" />
+                <pnx:Input id="estremoRecente_data" cssClass="js-archive-cronologia-dateInput form-control" label="Data recente" />
+                <pnx:Input id="qualifica" label="Qualifica" required="true" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusTermProxy;proxy_params={##dictionaryCode##:##VC_MODS_QUALIFICA_DATA##};dictId=VC_MODS_QUALIFICA_DATA" />
+              </pnx:Fieldset>
+            </pnx:Fieldset>
+            <pnx:Fieldset label="Descrizione fisica">
+              <pnx:Fieldset label="Materia e tecnica">
+                <pnx:Fieldset id="materia-rep" label="Materia" data="type=repeat;noEmptyMessage=true">
+                  <pnx:Input id="materia" label="Materia" data="type=selectfrom;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##mods##,##code##:##VA_MODS_MATERIA##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_MODS_MATERIA"/>
+                </pnx:Fieldset>
+                <pnx:Fieldset id="tecnica-rep" label="Tecnica" data="type=repeat;noEmptyMessage=true">
+                  <pnx:Input id="tecnica" label="Tecnica" data="type=selectfrom;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##mods##,##code##:##VA_MODS_TECNICA##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_MODS_TECNICA"/>
+                </pnx:Fieldset>
+                <pnx:Input id="tipoEstensione" label="Tipo ed estensione" />
+              </pnx:Fieldset>
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+
+        <pnx:JSTab id="tabSemantica" label="Semantica" dropdown="true">
+          <pnx:Panel cssClass="col-md-12 active text-tab">
+            <pnx:Input id="abstract" label="Abstract" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            <pnx:Input id="tavolaContenuti" label="Tavola dei contenuti" type="multiline" rows="5" wrap="on" htmlEditor="true" />
+            <pnx:Fieldset id="soggetto-rep" label="Soggetto" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="soggetto" label="Soggetto" data="type=selectfrom;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##mods##,##code##:##VA_MODS_SOGGETTO##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_MODS_SOGGETTO"/>
+            </pnx:Fieldset>
+            <pnx:Input id="classificazione" label="Classificazione" data="type=selectfrom;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##mods##,##code##:##VA_MODS_CLASSIFICAZIONE##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_MODS_CLASSIFICAZIONE"/>
+          </pnx:Panel>
+        </pnx:JSTab>
+
+        <pnx:JSTab id="tabRelazioni" label="Relazioni" dropdown="true">
+          <pnx:Panel cssClass="col-md-12 active text-tab">
+            <pnx:Fieldset id="titoloCollegato-rep" label="Titolo collegato" data="type=repeat;noEmptyMessage=true">>
+              <pnx:Input id="titoloCollegato" label="Titolo" data="type=selectfrom;proxy=metafad.mods.models.proxy.ModuleProxy;return_object=true" />
+              <pnx:List id="tipoRelazione" label="Tipo di relazione" emptyValue=" - ">
+                <pnx:ListItem value="preceding" />
+                <pnx:ListItem value="succeeding" />
+                <pnx:ListItem value="original" />
+                <pnx:ListItem value="host" />
+                <pnx:ListItem value="constituent" />
+                <pnx:ListItem value="series" />
+                <pnx:ListItem value="otherVersion" />
+                <pnx:ListItem value="otherFormat" />
+                <pnx:ListItem value="isReferencedBy" />
+                <pnx:ListItem value="references" />
+                <pnx:ListItem value="reviewOf" />
+              </pnx:List>
+            </pnx:Fieldset>
+            <pnx:Fieldset id="parte-rep" label="Parte" data="type=repeat;noEmptyMessage=true">
+              <pnx:List id="tipologiaParte" label="Tipologia" emptyValue=" - ">
+                <pnx:ListItem value="part" />
+                <pnx:ListItem value="volume" />
+                <pnx:ListItem value="issue" />
+                <pnx:ListItem value="chapter" />
+                <pnx:ListItem value="section" />
+                <pnx:ListItem value="paragraph" />
+                <pnx:ListItem value="track" />
+              </pnx:List>
+              <pnx:Input id="numeroParte" label="Numero dell parte" />
+              <pnx:Fieldset label="Titolo">
+                <pnx:Input id="titoloParte" label="Titolo" />
+                <pnx:List id="tipoTitoloParte" label="Tipo di titolo" emptyValue=" - ">
+                  <pnx:ListItem value="part" />
+                  <pnx:ListItem value="volume" />
+                  <pnx:ListItem value="issue" />
+                  <pnx:ListItem value="chapter" />
+                  <pnx:ListItem value="section" />
+                  <pnx:ListItem value="paragraph" />
+                  <pnx:ListItem value="track" />
+                </pnx:List>
+              </pnx:Fieldset>
+            </pnx:Fieldset>
+          </pnx:Panel>
+        </pnx:JSTab>
+
+        <pnx:JSTab id="tabCopie" label="Copie" dropdown="true">
+          <pnx:Panel cssClass="col-md-12 active text-tab">
+            <pnx:Input id="localizzazione" label="Localizzazione" data="type=selectfrom;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##mods##,##level##:##1##};dictId=VC_MODS_LOCALIZZAZIONE" />
+            <pnx:Fieldset id="collocazione-rep" label="Collocazione" data="type=repeat;noEmptyMessage=true">
+              <pnx:Input id="collocazione" label="Collocazione" />
+              <pnx:Input id="specificazione" label="Specificazione" />
+              <pnx:Fieldset id="inventario-rep" label="Inventario" data="type=repeat;noEmptyMessage=true">
+                <pnx:Input id="inventario" label="Inventario" />
+              </pnx:Fieldset>
+            </pnx:Fieldset>
+            <pnx:Input id="condizioniAccesso" label="Condizioni d'accesso" />
+          </pnx:Panel>
+        </pnx:JSTab>
+
+        <pnx:JSTab id="tabCompilazione" label="Compilazione" dropdown="true">
+          <pnx:Panel cssClass="col-md-12 active text-tab">
+            <pnx:Input id="compilatore" label="Compilatore" required="true" readOnly="true" />
+            <pnx:Input id="dataCreazione" label="Data di creazione" required="true" readOnly="true" />
+            <pnx:Input id="dataModifica" label="Data di modifica" readOnly="true" />
+          </pnx:Panel>
+        </pnx:JSTab>
+
+        <pnx:JSTab dropdown="true" visible="true" id="linkeMedia_tab" label="{i18n:Media}" enabled="true">
+          <pnx:Input id="linkedStruMag" label="Metadato strutturale collegato" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.strumag.models.proxy.StruMagProxy;return_object=true" />
+
+          <pnx:Fieldset cssClass="linkedMediaRepeater" id="linkedMedia" label="Media collegati a scheda" data="type=repeat;collapsable=false;repeatMin=0" required="true">
+            <pnx:Input data="type=mediapicker;preview=true" id="media" required="false" />
+          </pnx:Fieldset>
+        </pnx:JSTab>
+      </pnx:JSTabGroup>
+
+      <cms:FormButtonsPanel>
+        <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save-novalidation" data="action=save" acl="*,edit" />
+        <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveClose" acl="*,edit" />
+        <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft" />
+        <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft" />
+        <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel" />
+      </cms:FormButtonsPanel>
+    </com:FormEdit>
+  </mvc:State>
+
+  <mvc:State name="delete">
+    <pnx:Hidden controllerName="metafad.mods.controllers.*" />
+  </mvc:State>
+
+  <pnx:JSscript folder="metafad/mods/js" enabled="true"/>
+</mvc:Page>

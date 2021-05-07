@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:WebSite>
+    <pnx:Page id="home" adm:acl="a" adm:aclLabel="Accesso amministrazione" select="dashboard">
+        <pnx:Page id="dashboard" pageType="metafad.dashboard.views.Dashboard"  value="{i18n:Dashboard}" icon="fa fa-home" adm:acl="*"/>
+        <pnx:Page id="gestione-dati" pageType="" value="{i18n:Gestione dati}" icon="fa fa-archive" >
+            <pnx:Page id="gestione-dati/patrimonio" pageType="" value="{i18n:Patrimonio}" icon="fa fa-angle-double-right" adm:acl="*" />
+            <pnx:Page id="gestione-dati/archivi" pageType="" value="{i18n:Archivi}" icon="fa fa-angle-double-right" adm:acl="*" />
+            <pnx:Page id="gestione-dati-bibliografico" pageType="Empty" value="{i18n:Bibliografico}" icon="fa fa-angle-double-right"  adm:acl="*" adm:aclPageTypes="metafad.sbn.modules.sbnunimarc,metafad.sbn.unimarcSBN_popup" />
+            <pnx:Page id="gestione-dati/authority" pageType="" value="{i18n:Authority}" icon="fa fa-angle-double-right" adm:acl="*" >
+                <pnx:Page id="gestione-dati/authority/iccd" pageType="" value="{i18n:ICCD}" icon="fa fa-angle-double-right" adm:acl="*" />
+                <pnx:Page id="gestione-dati/authority/archivi" pageType="" value="{i18n:Archivi}" icon="fa fa-angle-double-right" adm:acl="*"/>
+                <pnx:Page id="gestione-dati/authority/sbn" pageType="" value="{i18n:SBN AUT}" icon="fa fa-angle-double-right" adm:acl="*" />
+            </pnx:Page>
+        </pnx:Page>
+
+        <pnx:Page id="peb-app" pageType="" value="{i18n:PEB}" icon="fa fa-cubes" adm:acl="*">
+            <pnx:Page id="ontologie" pageType="PEB_ontology" value="{i18n:Gestione ontologie}" icon="fa fa-angle-double-right" adm:acl="*"/>
+            <pnx:Page id="contenuti-ontologie" pageType="PEB_content" value="{i18n:Gestione contenuti}" icon="fa fa-angle-double-right" adm:acl="*"/>
+            <pnx:Page id="config-metaindice" pageType="PEB_metaindice" value="{i18n:Configurazione Metaindice}" icon="fa fa-angle-double-right" adm:acl="*"/>
+        </pnx:Page>
+        
+        <pnx:Page id="teca" pageType="" value="{i18n:Teca}" icon="fa fa-th" adm:acl="*" />
+        <pnx:Page id="opac" pageType="" value="{i18n:OPAC}" icon="fa fa-folder-o" adm:acl="*"/>
+        <pnx:Page id="ecommerce" value="{i18n:Ecommerce}" icon="fa fa-shopping-cart " adm:acl="*" adm:aclPageTypes="ecommerce-licences,ecommerce-orders,ecommerce-requestes" select="*" />
+        <pnx:Page id="utenti-e-permessi" pageType="" value="{i18n:Utenti e permessi}" icon="fa fa-users" adm:acl="*" adm:aclPageTypes="utenti-e-permessi-istituti,utenti-e-permessi-utenti,utenti-e-permessi-ruoli">
+            <pnx:Page id="utenti-e-permessi-selezione-istituto" hide="true" pageType="metafad.usersAndPermissions.institutes.views.InstituteSelect" value="{i18n:Istituti}" icon="fa fa-angle-double-right" />
+            <pnx:Page id="utenti-e-permessi-istituto-mancante" hide="true" pageType="metafad.usersAndPermissions.institutes.views.InstituteMissing" value="{i18n:Istituti}" icon="fa fa-angle-double-right"/>
+            <pnx:Page id="utenti-e-permessi-istituti" visible="{php:__Config::get('metafad.be.hasInstitutes')}" pageType="metafad.usersAndPermissions.institutes.views.Admin" value="{i18n:Istituti}" icon="fa fa-angle-double-right no-rot" adm:acl="*" />
+            <pnx:Page id="utenti-e-permessi-utenti" pageType="metafad.usersAndPermissions.users.views.Admin" value="{i18n:Utenti}" icon="fa fa-angle-double-right no-rot" adm:acl="*" />
+            <pnx:Page id="utenti-e-permessi-ruoli" pageType="metafad.usersAndPermissions.roles.views.Admin" value="{i18n:Ruoli}" icon="fa fa-angle-double-right no-rot" adm:acl="*" />
+            <pnx:Page id="utenti-e-permessi-gruppi" pageType="metafad.usersAndPermissions.groupManager.views.GroupManagerEdit" value="{i18n:Gruppi}" icon="fa fa-angle-double-right no-rot" adm:acl="*" />
+        </pnx:Page>
+        <pnx:Page id="impostazioni-sistema" pageType="" value="{i18n:Impostazioni sistema}" icon="fa fa-gear" adm:acl="*"/>
+        <pnx:modulesAdmin />
+
+
+        <pnx:Page id="link-fe" value="{i18n:Gestione portale}" url="route:link-be-portale" icon="fa fa-external-link" />
+        <pnx:Page id="link-moviohub" value="{i18n:Movio}" url="route:link-moviohub" icon="fa fa-external-link" visible="{config:metafad.be.hasMovio}" />
+    </pnx:Page>
+
+    <pnx:Page pageType="Login" id="login" value="{i18n:Login}" />
+    <pnx:Page pageType="Logout" id="Logout" />
+    <pnx:Page pageType="PEB" id="ontology.manager" value="{i18n:Pagina PEB}" />
+    <pnx:Page pageType="metafad.importer.views.StorageBrowser" id="StorageBrowser" />
+    <pnx:Page pageType="metafad.gestioneDati.sbnweb.views.popupSBN" id="metafad.gestionedati.sbnweb_popup" />
+    <pnx:Page pageType="metafad.gestioneDati.sbnaut.views.popupSBN" id="metafad.gestionedati.sbnaut_popup" />
+    <pnx:Page id="gestione-profilo" pageType="metafad.usersAndPermissions.users.views.AdminProfile" value="{i18n:Gestione profilo}"/>
+</pnx:WebSite>

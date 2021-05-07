@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.mag.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          xmlns:c="metafad.iccd.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active"
+                            addQueryString="true" visible="false"/>
+
+    <mvc:State id="stateIndex" name="index" label="{i18n:Elenco}" url="metafad.mag#list">
+        <com:DataGridSolr id="dataGrid" recordClassName="metafad.mag.models.Model" cssClass="table table-bordered table-striped" fullTextSearch="true">
+            <pnx:DataGridColumn columnName="BIB_dc_identifier_index_t" headerText="{i18n:Identificativo}" width="12"/>
+            <pnx:DataGridColumn columnName="BIB_dc_title_t" headerText="{i18n:Titolo}" width="40" renderCell="metafad.common.views.renderer.ShortField"/>
+            <pnx:DataGridColumn columnName="update_at_s" headerText="{i18n:Data modifica}" width="15"/>
+            <pnx:DataGridColumn columnName="isValid" sortable="false" searchable="false" width="10" headerText="{i18n:Validata}" cssClass="center" renderCell="pinaxcms.views.renderer.CellIsActive" />
+            <pnx:DataGridColumn columnName="document_detail_status" headerText="{i18n:Pubblicato}" width="10" cssClass="center" renderCell="metafad.common.views.renderer.CellDocPublished" />
+            <pnx:DataGridColumn columnName="document_id" sortable="false" searchable="false" width="10" cssClass="actions"
+                                renderCell="metafad.mag.views.renderer.CellEditDraftDeleteDownload"/>
+        </com:DataGridSolr>
+        <com:AddButton acl="*,new" cssClass="dataGridAddButton" label="" routeUrl="tecamag/edit/" editableRegion="actions"
+                       recordClassName="metafad.mag.models.Model" dataGridAjaxId="dataGrid"/>
+    </mvc:State>
+
+    <mvc:State name="edit,editDraft,show">
+
+    <pnx:Panel id="panelImages">
+      <cmp:LinkedImages id="linkedImages"/>
+    </pnx:Panel>
+
+    <pnx:Link id="showImagesLink" icon="fa fa-picture-o" label="Mostra immagini" editableRegion="actions" cssClass="link showImagesMAG"/>
+    <pnx:JSscript folder="metafad/mag/js/media_popup" />
+    <pnx:JSscript folder="metafad/mag/js/gestione_mag" editableRegion="tail"/>
+
+    <c:FormEdit id="editForm" newCode="true" controllerName="metafad.mag.controllers.*">
+        <com:Container cssClass="fadStrumagStru">
+                <pnx:Hidden id="__id"/>
+                <pnx:Hidden id="__model" value="metafad.mag.models.Model"/>
+                <!-- <pnx:Hidden id="physicalSTRU" />-->
+                <pnx:Hidden id="logicalStru" />
+
+                <pnx:Hidden id="flagVestito" />
+                <pnx:Hidden id="flagParent" />
+
+                <pnx:Hidden id="relatedStru" />
+                <pnx:Hidden data="type=modalPageIMG;pageid=img_popup;" id="popup"/>
+                <com:Container cssClass="col-sm-12 form-link" cssId="schedaMag">
+                    <com:Container cssClass="col-sm-3">
+                      <pnx:Panel cssClass="control-label-link"><pnx:Text>Record collegato</pnx:Text></pnx:Panel>
+                    </com:Container>
+                    <com:Container cssClass="col-sm-3">
+                      <pnx:List id="linkedFormType" emptyValue="-">
+                        <pnx:ListItem key="metafad.sbn.modules.sbnunimarc" value="SBN Unimarc" />
+                        <pnx:ListItem key="SchedaF400" value="Scheda F 4.00" />
+                        <pnx:ListItem key="SchedaS300" value="Scheda S 3.00" />
+                        <pnx:ListItem key="SchedaOA300" value="Scheda OA 3.00" />
+                        <pnx:ListItem key="SchedaD300" value="Scheda D 3.00" />
+                        <pnx:ListItem key="archivi.models.UnitaArchivistica" value="Unità archivistica" />
+                        <pnx:ListItem key="archivi.models.UnitaDocumentaria" value="Unità documentaria" />
+                      </pnx:List>                    
+                    </com:Container>
+                    <com:Container id="linkedFormContainer" cssClass="linkedFormContainer col-sm-5">
+                      <pnx:Input id="linkedForm" data="type=selectfrom;proxy=metafad.mag.models.proxy.FormProxy;return_object=true;"/>
+                    </com:Container>
+                </com:Container>
+                <com:Container cssClass="col-sm-12 form-link" cssId="linkMag">
+                  <com:Container cssClass="col-sm-3">
+                    <pnx:Panel cssClass="control-label-link"><pnx:Text>Metadati strutturali collegati</pnx:Text></pnx:Panel>
+                  </com:Container>
+                  <com:Container cssClass="col-sm-9">
+                    <pnx:Input id="linkedStru" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.strumag.models.proxy.StruMagProxy;return_object=true" />
+                  </com:Container>
+                </com:Container>
+                <!-- <pnx:Panel cssClass="col-sm-12" id="stato-div">
+                  <pnx:Panel cssClass="col-sm-2" id="stato-label">
+                    <pnx:Text wrapTag="span" html="true" text="Stato"/>
+                  </pnx:Panel>
+                  <pnx:Panel cssClass="col-sm-2">
+                    <pnx:RadioButton id="lavorazione" label="{i18n:Lavorazione}" applyFormItemTemplate="false" checkedValue="" name="stato"/>
+                  </pnx:Panel>
+                  <pnx:Panel cssClass="col-sm-2">
+                    <pnx:RadioButton id="revisione" label="{i18n:Revisione}" applyFormItemTemplate="false" checkedValue="" name="stato"/>
+                  </pnx:Panel>
+                  <pnx:Panel cssClass="col-sm-2">
+                    <pnx:RadioButton id="pubblicato" label="{i18n:Pubblicato}" applyFormItemTemplate="false" checkedValue="" name="stato"/>
+                  </pnx:Panel>
+                </pnx:Panel> -->
+        <pnx:JSTabGroup id="innerTabs" showNav="true">
+
+            <pnx:JSTab id="editGen" label="{i18n:GEN}" dropdown="true">
+                <pnx:Input id="GEN_creation" label="{i18n:Creation}" readOnly="true"/>
+                <pnx:Input id="GEN_lastUpdate" label="{i18n:Last update}" readOnly="true"/>
+                <pnx:Input id="GEN_stprog" label="{i18n:Stprog}" required="true"/>
+                <pnx:Input id="GEN_collection" label="{i18n:Collection}"/>
+                <pnx:Input id="GEN_agency" label="{i18n:Agency}" required="true"/>
+                <pnx:List id="GEN_access_rights" label="{i18n:AccessRight}" required="true" emptyValue="">
+                    <pnx:ListItem key="0" value="0 (uso riservato all'interno dell'istituzione)"/>
+                    <pnx:ListItem key="1" value="1 (uso pubblico)"/>
+                </pnx:List>
+                <pnx:List id="GEN_completeness" label="{i18n:Completeness}" required="true" emptyValue="">
+                    <pnx:ListItem key="0" value="0 (digitalizzazione completa)"/>
+                    <pnx:ListItem key="1" value="1 (digitalizzazione parziale)"/>
+                </pnx:List>
+            </pnx:JSTab>
+
+            <pnx:JSTab id="editBib" label="BIB" dropdown="true">
+              <pnx:List id="BIB_level" label="{i18n:Level}" required="true" emptyValue="">
+                  <pnx:ListItem key="a" value="a (spoglio)"/>
+                  <pnx:ListItem key="m" value="m (monografia)"/>
+                  <pnx:ListItem key="s" value="s (seriale)"/>
+                  <pnx:ListItem key="c" value="c (raccolta prodotta dall'istituzione)"/>
+                  <pnx:ListItem key="f" value="f (unit&#224; archivistica)"/>
+                  <pnx:ListItem key="d" value="d (unit&#224; documentaria)"/>
+              </pnx:List>
+              <pnx:Fieldset id="BIB_dc_identifier" label="{i18n:dc:identifier}" data="type=repeat;collapsable=false;repeatMin=1" required="true">
+                <pnx:Input id="BIB_dc_identifier_value" label="{i18n:dc:identifier}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_title" label="{i18n:dc:title}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_title_value" label="{i18n:dc:title}"/>
+                <pnx:Input id="BIB_dc_title_lang" label="{i18n:Lang}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_creator" label="{i18n:dc:creator}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_creator_value" label="{i18n:dc:creator}"/>
+                <pnx:Input id="BIB_dc_creator_lang" label="{i18n:Lang}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_publisher" label="{i18n:dc:publisher}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_publisher_value" label="{i18n:dc:publisher}"/>
+                <pnx:Input id="BIB_dc_publisher_lang" label="{i18n:Lang}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_subject" label="{i18n:dc:subject}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_subject_value" label="{i18n:dc:subject}"/>
+                <pnx:Input id="BIB_dc_subject_lang" label="{i18n:Lang}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_description" label="{i18n:dc:description}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_description_value" label="{i18n:dc:description}"/>
+                <pnx:Input id="BIB_dc_description_lang" label="{i18n:Lang}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_contributor" label="{i18n:dc:contributor}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_contributor_value" label="{i18n:dc:contributor}"/>
+                <pnx:Input id="BIB_dc_contributor_lang" label="{i18n:Lang}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_date" label="{i18n:dc:date}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_date_value" label="{i18n:dc:date}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_type" label="{i18n:dc:type}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_type_value" label="{i18n:dc:type}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_format" label="{i18n:dc:format}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_format_value" label="{i18n:dc:format}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_source" label="{i18n:dc:source}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_source_value" label="{i18n:dc:source}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_language" label="{i18n:dc:language}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_language_value" label="{i18n:dc:language}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_relation_fieldset" label="{i18n:Relazioni}">
+                <pnx:Input id="list_options" label="{i18n:Tipo di relazione da inserire}" />
+                <pnx:Fieldset id="BIB_dc_relation" label="{i18n:dc:relation}" data="type=repeat;collapsable=false;repeatMin=0">
+                  <pnx:Input id="BIB_dc_relation_value" label="{i18n:dc:relation}" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.mag.models.proxy.MagRelationProxy;return_object=true;"/>
+                </pnx:Fieldset>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_coverage" label="{i18n:dc:coverage}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_coverage_value" label="{i18n:dc:coverage}"/>
+              </pnx:Fieldset>
+              <pnx:Fieldset id="BIB_dc_rights" label="{i18n:dc:rights}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_dc_rights_value" label="{i18n:dc:rights}"/>
+              </pnx:Fieldset>
+
+              <pnx:Fieldset id="BIB_holdings" label="{i18n:Holdings}" data="type=repeat;collapsable=false;repeatMin=0">
+                <pnx:Input id="BIB_holdings_ID" label="{i18n:ID}"/>
+                <pnx:Input id="BIB_holdings_library" label="{i18n:Library}"/>
+                <pnx:Input id="BIB_holdings_inventory_number" label="{i18n:Inventory number}"/>
+                <pnx:Fieldset id="BIB_holdings_shelfmark" label="{i18n:Shelfmark}" data="type=repeat;collapsable=false;repeatMin=0">
+                  <pnx:Input id="BIB_holdings_shelfmark_value" label="{i18n:Shelfmark}"/>
+                  <pnx:Input id="BIB_holdings_shelfmark_type" label="{i18n:Type}"/>
+                </pnx:Fieldset>
+              </pnx:Fieldset>
+
+              <pnx:Fieldset id="BIB_local_bib" label="{i18n:Local bib}">
+                <pnx:Fieldset id="BIB_local_bib_geo_coord" label="{i18n:Geo coord}" data="type=repeat;collapsable=false;repeatMin=0">
+                  <pnx:Input id="BIB_local_bib_geo_coord-element" label="{i18n:Geo coord}"/>
+                </pnx:Fieldset>
+                <pnx:Fieldset id="BIB_local_bib_not_date" label="{i18n:Not date}" data="type=repeat;collapsable=false;repeatMin=0">
+                  <pnx:Input id="BIB_local_bib_not_date-element" label="{i18n:Not date}"/>
+                </pnx:Fieldset>
+              </pnx:Fieldset>
+
+              <pnx:Fieldset id="BIB_piece" label="{i18n:Piece}" cssClass="hide">
+                <pnx:Input id="BIB_piece_year" label="{i18n:Year}" data="level=s"/>
+                <pnx:Input id="BIB_piece_issue" label="{i18n:Issue}" data="level=s"/>
+                <pnx:Input id="BIB_piece_stpiece_per" label="{i18n:Stpiece per}" data="level=s"/>
+                <pnx:Input id="BIB_piece_part_number" label="{i18n:Part number}" data="level=m"/>
+                <pnx:Input id="BIB_piece_part_name" label="{i18n:Part name}" data="level=m"/>
+                <pnx:Input id="BIB_piece_stpiece_vol" label="{i18n:Stpiece vol}" data="level=m"/>
+              </pnx:Fieldset>
+            </pnx:JSTab>
+
+            <pnx:JSTab id="strutab" label="{i18n:STRU}" dropdown="true">
+              <pnx:List id="stru_options" label="{i18n:Opzioni di collegamento}" >
+                  <pnx:ListItem key="0" value="Solo struttura fisica" selected="true"/>
+                  <pnx:ListItem key="1" value="Solo struttura logica"/>
+                  <pnx:ListItem key="2" value="Struttura fisica e logica"/>
+              </pnx:List>
+              <cmp:StruManagement id="struComponent" data=""/>
+              <!-- <cmp:ShowStru id="stru" data=""/>
+              <cmp:ElementContainer id="showElements" /> -->
+            </pnx:JSTab>
+
+            <pnx:JSTab id="file" label="{i18n:FILE}" dropdown="true">
+              <pnx:Input data="type=mediapicker;preview=true" id="FTA-image" label="{i18n:Collega media dal DAM}" required="false" />
+              <pnx:HtmlButton label="{i18n:Conferma}" type="button" cssClass="btn btn-flat btn-dam" />
+              <pnx:JSTabGroup id="fileTabs" showNav="false" cssClass="nav nav-tabs">
+                <pnx:JSTab id="img" label="{i18n:Immagini}" dropdown="false" cssClass="tab-pane-media active">
+                  <cmp:ShowFiles id="show-img" type="img"/>
+                </pnx:JSTab>
+                <pnx:JSTab id="doc" label="{i18n:Documenti}" dropdown="false" cssClass="tab-pane-media hide">
+                  <cmp:ShowFiles id="show-doc" type="doc"/>
+                </pnx:JSTab>
+                <pnx:JSTab id="audio" label="{i18n:Audio}" dropdown="false" cssClass="tab-pane-media hide">
+                  <cmp:ShowFiles id="show-audio" type="audio"/>
+                </pnx:JSTab>
+                <pnx:JSTab id="video" label="{i18n:Video}" dropdown="false" cssClass="tab-pane-media hide">
+                  <cmp:ShowFiles id="show-video" type="video"/>
+                </pnx:JSTab>
+                <pnx:JSTab id="ocr" label="{i18n:OCR}" dropdown="false" cssClass="tab-pane-media hide">
+                  <cmp:ShowFiles id="show-ocr" type="ocr"/>
+                </pnx:JSTab>
+                <pnx:JSTab id="dis" label="{i18n:DIS}" dropdown="false" cssClass="tab-pane-media hide">
+                  <cmp:ShowFiles id="show-dis" type="dis"/>
+                </pnx:JSTab>
+              </pnx:JSTabGroup>
+            </pnx:JSTab>
+
+            <pnx:JSTab id="imggroup" label="{i18n:IMG GROUP}"  dropdown="true">
+              <pnx:Fieldset id="GEN_img_group" label="{i18n:Img Group}" data="type=FormEditRepeatMediaGroup;collapsable=true;repeatMin=0">
+                <com:Container cssClass="col-sm-12 group-id-div">
+                  <com:Container cssClass="col-sm-8">
+                    <pnx:Input id="GEN_img_group_ID" label="{i18n:ID}" required="true"/>
+                  </com:Container>
+                  <com:Container cssClass="col-sm-4 metadata-link">
+                    <pnx:Link icon="fa fa-file-o" label="Carica metadati da immagine" cssClass="link metadata"/>
+                    <pnx:Panel cssClass="hide">
+                      <pnx:Hidden data="type=metadataPopup;pageid=metadata_popup;" id="metadata-popup"/>                     
+                      <pnx:Hidden data="type=mediapickerMAG;externalFiltersOR=[{'type':'IMAGE'},{'type':'CONTAINER'}];preview=true" id="media-dam" required="false" />
+                    </pnx:Panel>
+                  </com:Container>
+                </com:Container>
+                <pnx:Fieldset id="GEN_img_group_image_metrics" label="{i18n:Image metrics}">
+                  <pnx:List id="GEN_img_group_image_metrics_samplingfrequencyunit" label="{i18n:Sampling Frequency Unit}" required="true" >
+                      <pnx:ListItem key="1" value="1 (nessuna unit&#224; di misura definita)"/>
+                      <pnx:ListItem key="2" value="2 (inch, pollice)"/>
+                      <pnx:ListItem key="3" value="3 (centimetro)"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_img_group_image_metrics_samplingfrequencyplane" label="{i18n:Sampling Frequency Plane}" required="true" >
+                      <pnx:ListItem key="1" value="1 (camera/scanner focal plane)"/>
+                      <pnx:ListItem key="2" value="2 (object plane)"/>
+                      <pnx:ListItem key="3" value="3 (source object plane)"/>
+                  </pnx:List>
+                  <pnx:Input id="GEN_img_group_image_metrics_xsamplingfrequency" label="{i18n:X Sampling Frequency}"/>
+                  <pnx:Input id="GEN_img_group_image_metrics_ysamplingfrequency" label="{i18n:Y Sampling Frequency}"/>
+                  <pnx:List id="GEN_img_group_image_metrics_bitpersample" label="{i18n:Bit per Sample}" required="true" emptyValue="">
+                      <pnx:ListItem key="1" value="1 (bitonale, bianco e nero)"/>
+                      <pnx:ListItem key="4" value="4 (4-bit scala di grigi)"/>
+                      <pnx:ListItem key="8" value="8 (8-bit scala di grigi o gamma di 256 colori)"/>
+                      <pnx:ListItem key="8,8,8" value="8,8,8 (24-bit RGB)"/>
+                      <pnx:ListItem key="16,16,16" value="16,16,16 (48-bit TIFF, HDR)"/>
+                      <pnx:ListItem key="8,8,8,8" value="8,8,8,8 (32-bit CMYK)"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_img_group_image_metrics_photometricinterpretation" label="{i18n:Photometric Interpretation}" required="true" emptyValue="">
+                      <pnx:ListItem key="WhiteIsZero" value="WhiteIsZero"/>
+                      <pnx:ListItem key="BlackIsZero" value="BlackIsZero"/>
+                      <pnx:ListItem key="RGB" value="RGB"/>
+                      <pnx:ListItem key="Palette color" value="Palette color"/>
+                      <pnx:ListItem key="Transparency Mask" value="Transparency Mask"/>
+                      <pnx:ListItem key="CMYK" value="CMYK"/>
+                      <pnx:ListItem key="YcbCr" value="YcbCr"/>
+                      <pnx:ListItem key="CIELab" value="CIELab"/>
+                  </pnx:List>
+                </pnx:Fieldset>
+                <pnx:Input id="GEN_img_group_ppi" label="{i18n:PPI}" type="number"/>
+                <pnx:Input id="GEN_img_group_dpi" label="{i18n:DPI}" type="number"/>
+                <pnx:Fieldset id="GEN_img_group_format" label="{i18n:Format}" required="true" emptyValue="">
+                  <pnx:Input id="GEN_img_group_format_name" label="{i18n:Name}"/>
+                  <pnx:List id="GEN_img_group_format_mime" label="{i18n:Mime}" required="true" emptyValue="">
+                      <pnx:ListItem key="image/jpeg" value="image/jpeg"/>
+                      <pnx:ListItem key="image/tiff" value="image/tiff"/>
+                      <pnx:ListItem key="image/gif" value="image/gif"/>
+                      <pnx:ListItem key="image/png" value="image/png"/>
+                      <pnx:ListItem key="image/vnd.djvu" value="image/vnd.djvu"/>
+                      <pnx:ListItem key="application/pdf" value="application/pdf"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_img_group_format_compression" label="{i18n:Compression}" required="true" emptyValue="">
+                      <pnx:ListItem key="Uncompressed" value="Uncompressed"/>
+                      <pnx:ListItem key="CCITT 1D" value="CCITT 1D"/>
+                      <pnx:ListItem key="CCITT Group 3" value="CCITT Group 3"/>
+                      <pnx:ListItem key="CCITT Group 4" value="CCITT Group 4"/>
+                      <pnx:ListItem key="LZW" value="LZW"/>
+                      <pnx:ListItem key="JPG" value="JPG"/>
+                      <pnx:ListItem key="PNG" value="PNG"/>
+                      <pnx:ListItem key="DJVU" value="DJVU"/>
+                  </pnx:List>
+                </pnx:Fieldset>
+                <pnx:Fieldset id="GEN_img_group_scanning" label="{i18n:Scanning}" emptyValue="">
+                  <pnx:Input id="GEN_img_group_scanning_sourcetype" label="{i18n:Source Type}"/>
+                  <pnx:Input id="GEN_img_group_scanning_scanningagency" label="{i18n:Scanning Agency}"/>
+                  <pnx:Input id="GEN_img_group_scanning_devicesource" label="{i18n:Device source}"/>
+                  <pnx:Fieldset id="GEN_img_group_scanning_scanningsystem" label="{i18n:Scanning System}" emptyValue="">
+                    <pnx:Input id="GEN_img_group_scanning_scanningsystem_scanner_manufacturer" label="{i18n:Scanner manufacturer}"/>
+                    <pnx:Input id="GEN_img_group_scanning_scanningsystem_scanner_model" label="{i18n:Scanner Model}"/>
+                    <pnx:Input id="GEN_img_group_scanning_scanningsystem_capture_software" label="{i18n:Capture software}"/>
+                  </pnx:Fieldset>
+                </pnx:Fieldset>
+              </pnx:Fieldset>
+            </pnx:JSTab>
+
+            <pnx:JSTab id="audiogroup" label="{i18n:AUDIO GROUP}"  dropdown="true">
+              <pnx:Fieldset id="GEN_audio_group" label="{i18n:Audio Group}"  data="type=FormEditRepeatMediaGroup;collapsable=true;repeatMin=0">
+                <pnx:Input id="GEN_audio_group_ID" label="{i18n:ID}" required="true"/>
+                <pnx:Fieldset id="GEN_audio_group_audio_metrics" label="{i18n:Audio Metrics}">
+                  <pnx:List id="GEN_audio_group_audio_metrics_samplingfrequency" label="{i18n:Sampling Frequency}" required="true" emptyValue="">
+                      <pnx:ListItem key="8" value="8"/>
+                      <pnx:ListItem key="11.025" value="11.025"/>
+                      <pnx:ListItem key="12" value="12"/>
+                      <pnx:ListItem key="16" value="16"/>
+                      <pnx:ListItem key="22.05" value="22.05"/>
+                      <pnx:ListItem key="24" value="24"/>
+                      <pnx:ListItem key="32" value="32"/>
+                      <pnx:ListItem key="44.1" value="44.1"/>
+                      <pnx:ListItem key="48" value="48"/>
+                      <pnx:ListItem key="96" value="96"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_audio_group_audio_metrics_bytepersample" label="{i18n:Byte per Sample}" required="true" emptyValue="">
+                      <pnx:ListItem key="8" value="8"/>
+                      <pnx:ListItem key="16" value="16"/>
+                      <pnx:ListItem key="24" value="24"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_audio_group_audio_metrics_bitrate" label="{i18n:BitRate}" required="true" emptyValue="">
+                      <pnx:ListItem key="24" value="24"/>
+                      <pnx:ListItem key="32" value="32"/>
+                      <pnx:ListItem key="48" value="48"/>
+                      <pnx:ListItem key="56" value="56"/>
+                      <pnx:ListItem key="64" value="64"/>
+                      <pnx:ListItem key="96" value="96"/>
+                      <pnx:ListItem key="128" value="128"/>
+                      <pnx:ListItem key="160" value="160"/>
+                      <pnx:ListItem key="192" value="192"/>
+                      <pnx:ListItem key="256" value="256"/>
+                      <pnx:ListItem key="320" value="320"/>
+                      <pnx:ListItem key="384" value="384"/>
+                  </pnx:List>
+                </pnx:Fieldset>
+                <pnx:Fieldset id="GEN_audio_group_format" label="{i18n:Format}" required="true" emptyValue="">
+                  <pnx:Input id="GEN_audio_group_format_name" label="{i18n:Name}"/>
+                  <pnx:List id="GEN_audio_group_format_mime" label="{i18n:Mime}" required="true" emptyValue="">
+                      <pnx:ListItem key="audio/wav" value="audio/wav"/>
+                      <pnx:ListItem key="audio/mpeg" value="audio/mpeg"/>
+                      <pnx:ListItem key="audio/mpg" value="audio/mpg"/>
+                      <pnx:ListItem key="audio/mp3" value="audio/mp3"/>
+                      <pnx:ListItem key="audio/x-mpeg" value="audio/x-mpeg"/>
+                      <pnx:ListItem key="audio/midi" value="audio/midi"/>
+                      <pnx:ListItem key="audio/x-realaudio" value="audio/x-realaudio"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_audio_group_format_compression" label="{i18n:Compression}" emptyValue="">
+                      <pnx:ListItem key="Uncompressed" value="Uncompressed"/>
+                      <pnx:ListItem key="Linear PCM" value="Linear PCM"/>
+                      <pnx:ListItem key="MPEG-1 layer 1" value="MPEG-1 layer 1"/>
+                      <pnx:ListItem key="MPEG-1 layer 2" value="MPEG-1 layer 2"/>
+                      <pnx:ListItem key="MPEG-1 layer 3" value="MPEG-1 layer 3"/>
+                      <pnx:ListItem key="AC3" value="AC3"/>
+                      <pnx:ListItem key="Dolby" value="Dolby"/>
+                      <pnx:ListItem key="DTS" value="DTS"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_audio_group_format_channel_configuration" label="{i18n:Channel configuration}" emptyValue="">
+                      <pnx:ListItem key="Mono" value="Mono"/>
+                      <pnx:ListItem key="Dual mono" value="Dual mono"/>
+                      <pnx:ListItem key="Joint stereo" value="Joint stereo"/>
+                      <pnx:ListItem key="Stereo" value="Stereo"/>
+                      <pnx:ListItem key="2 ch" value="2 ch"/>
+                      <pnx:ListItem key="4 ch" value="4 ch"/>
+                      <pnx:ListItem key="5.1 ch" value="5.1 ch"/>
+                      <pnx:ListItem key="6.1 ch" value="6.1 ch"/>
+                  </pnx:List>
+                </pnx:Fieldset>
+                <pnx:Fieldset id="GEN_audio_group_transcription" label="{i18n:Transcription}">
+                  <pnx:Input id="GEN_audio_group_transcription_sourcetype" label="{i18n:Source Type}"/>
+                  <pnx:Input id="GEN_audio_group_transcription_transcriptionagency" label="{i18n:Transcription Agency}"/>
+                  <pnx:Input id="GEN_audio_group_transcription_transcriptiondate" type="datetime" label="{i18n:Transcription Date}"/>
+                  <pnx:Input id="GEN_audio_group_transcription_devicesource" label="{i18n:Device Source}"/>
+                  <pnx:Fieldset id="GEN_audio_group_transcription_transcriptionchain" label="{i18n:Transcription Chain}"  data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+                    <pnx:Fieldset id="GEN_audio_group_transcription_transcriptionchain_device_description" required="true" label="{i18n:Device Description}">
+                      <pnx:Input id="GEN_audio_group_transcription_transcriptionchain_device_description_type" required="true" label="{i18n:Type}"/>
+                      <pnx:Input id="GEN_audio_group_transcription_transcriptionchain_device_description_unique_identifier" label="{i18n:Unique identifier}"/>
+                      <pnx:Input id="GEN_audio_group_transcription_transcriptionchain_device_description_comments" label="{i18n:Comments}"/>
+                    </pnx:Fieldset>
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptionchain_device_manufacturer" required="true" label="{i18n:Device Manufacturer}"/>
+                    <pnx:Fieldset id="GEN_audio_group_transcription_transcriptionchain_device_model" required="true" label="{i18n:Device Model}">
+                      <pnx:Input id="GEN_audio_group_transcription_transcriptionchain_device_model_model" required="true" label="{i18n:Model}"/>
+                      <pnx:Input id="GEN_audio_group_transcription_transcriptionchain_device_model_serial_number" label="{i18n:Serial number}"/>
+                    </pnx:Fieldset>
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptionchain_capture_software" label="{i18n:Capture Software}"/>
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptionchain_device_settings" label="{i18n:Device Device settings}"/>
+                  </pnx:Fieldset>
+                  <pnx:Fieldset id="GEN_audio_group_transcription_transcriptionsummary" label="{i18n:Transcription Summary}"  data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptionsummary_grouping" required="true" label="{i18n:Grouping}"/>
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptionsummary_data_description" required="true" label="{i18n:Data description}"/>
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptionsummary_data_unit" label="{i18n:Data unit}"/>
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptionsummary_data_value" label="{i18n:Data value}"/>
+                  </pnx:Fieldset>
+                  <pnx:Fieldset id="GEN_audio_group_transcription_transcriptiondata" label="{i18n:Transcription Data}"  data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptiondata_grouping" required="true" label="{i18n:Grouping}"/>
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptiondata_data_description" required="true" label="{i18n:Data description}"/>
+                    <pnx:Input id="GEN_audio_group_transcription_transcriptiondata_data_unit" label="{i18n:Data unit}"/>
+                    <pnx:Fieldset id="GEN_audio_group_transcription_transcriptiondata_interval" label="{i18n:Interval}">
+                      <pnx:Input id="GEN_audio_group_transcription_transcriptiondata_interval_start" required="true" label="{i18n:Start}"/>
+                      <pnx:Input id="GEN_audio_group_transcription_transcriptiondata_interval_stop" required="true" label="{i18n:Stop}"/>
+                    </pnx:Fieldset>
+                    <pnx:Fieldset id="GEN_audio_group_transcription_transcriptiondata_data_value" label="{i18n:Data value}" data="type=repeat;collapsable=false;repeatMin=0">
+                      <pnx:Input id="GEN_audio_group_transcription_transcriptiondata_data_value-element" label="{i18n:Data value}"/>
+                    </pnx:Fieldset>
+                  </pnx:Fieldset>
+                </pnx:Fieldset>
+              </pnx:Fieldset>
+            </pnx:JSTab>
+
+            <pnx:JSTab id="videogroup" label="{i18n:VIDEO GROUP}" dropdown="true">
+              <pnx:Fieldset id="GEN_video_group" label="{i18n:Video Group}" data="type=FormEditRepeatMediaGroup;collapsable=true;repeatMin=0">
+                <pnx:Input id="GEN_video_group_ID" label="{i18n:ID}" required="true"/>
+                <pnx:Fieldset id="GEN_video_group_video_metrics" label="{i18n:Video Metrics}">
+                  <pnx:List id="GEN_video_group_video_metrics_videosize" label="{i18n:Video Size}" required="true" emptyValue="">
+                      <pnx:ListItem key="160x120" value="160x120"/>
+                      <pnx:ListItem key="176x144" value="176x144"/>
+                      <pnx:ListItem key="192x144" value="192x144"/>
+                      <pnx:ListItem key="280x180" value="280x180"/>
+                      <pnx:ListItem key="320x240" value="320x240"/>
+                      <pnx:ListItem key="352x288" value="352x288"/>
+                      <pnx:ListItem key="360x288" value="360x288"/>
+                      <pnx:ListItem key="384x288" value="384x288"/>
+                      <pnx:ListItem key="480x576" value="480x576"/>
+                      <pnx:ListItem key="720x576" value="720x576"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_video_group_video_metrics_aspectratio" label="{i18n:Aspect Ratio}" required="true" emptyValue="">
+                      <pnx:ListItem key="1:1" value="1:1"/>
+                      <pnx:ListItem key="4:3" value="4:3"/>
+                      <pnx:ListItem key="16:9" value="16:9"/>
+                      <pnx:ListItem key="2.11:1" value="2.11:1"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_video_group_video_metrics_framerate" label="{i18n:Frame Rate}" required="true" emptyValue="">
+                      <pnx:ListItem key="23.976" value="23.976"/>
+                      <pnx:ListItem key="24" value="24"/>
+                      <pnx:ListItem key="25" value="25"/>
+                      <pnx:ListItem key="29.97" value="29.97"/>
+                      <pnx:ListItem key="30" value="30"/>
+                      <pnx:ListItem key="50" value="50"/>
+                      <pnx:ListItem key="59.94" value="59.94"/>
+                      <pnx:ListItem key="60" value="60"/>
+                  </pnx:List>
+                </pnx:Fieldset>
+                <pnx:Fieldset id="GEN_video_group_format" label="{i18n:Format}" required="true" emptyValue="">
+                  <pnx:Input id="GEN_video_group_format_name" label="{i18n:Name}"/>
+                  <pnx:List id="GEN_video_group_format_mime" label="{i18n:Mime}" required="true" emptyValue="">
+                      <pnx:ListItem key="video/x-ms-asf" value="video/x-ms-asf"/>
+                      <pnx:ListItem key="video/avi" value="video/avi"/>
+                      <pnx:ListItem key="video/mpeg" value="video/mpeg"/>
+                      <pnx:ListItem key="video/vnd.rn-realvideo" value="video/vnd.rn-realvideo"/>
+                      <pnx:ListItem key="video/wmv" value="video/wmv"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_video_group_format_videoformat" label="{i18n:Video Format}" required="true" emptyValue="">
+                      <pnx:ListItem key="Component" value="Component"/>
+                      <pnx:ListItem key="NTSC" value="NTSC"/>
+                      <pnx:ListItem key="PAL" value="PAL"/>
+                      <pnx:ListItem key="SECAM" value="SECAM"/>
+                      <pnx:ListItem key="Unspecified" value="Unspecified"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_video_group_format_encode" label="{i18n:Encode}" required="true" emptyValue="">
+                      <pnx:ListItem key="interlaced" value="interlaced"/>
+                      <pnx:ListItem key="non-interlaced" value="non-interlaced"/>
+                  </pnx:List>
+                  <pnx:List id="GEN_video_group_format_streamtype" label="{i18n:Stream Type}" emptyValue="">
+                      <pnx:ListItem key="Uncompressed" value="Uncompressed"/>
+                      <pnx:ListItem key="MPEG-1" value="MPEG-1"/>
+                      <pnx:ListItem key="MPEG-2" value="MPEG-2"/>
+                      <pnx:ListItem key="MPEG-4" value="MPEG-4"/>
+                  </pnx:List>
+                  <pnx:Input id="GEN_video_group_format_codec" label="{i18n:Codec}"/>
+                </pnx:Fieldset>
+                <pnx:Fieldset id="GEN_video_group_digitisation" label="{i18n:Digitisation}" emptyValue="">
+                  <pnx:Input id="GEN_video_group_digitisation_sourcetype" label="{i18n:Source Type}"/>
+                  <pnx:Input id="GEN_video_group_digitisation_transcriptionagency" label="{i18n:Transcription Agency}"/>
+                  <pnx:Input id="GEN_video_group_digitisation_devicesource" label="{i18n:Device Source}"/>
+                  <pnx:Fieldset id="GEN_video_group_digitisation_transcriptionchain" label="{i18n:Transcription Chain}"  data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+                    <pnx:Fieldset id="GEN_video_group_digitisation_transcriptionchain_device_description" required="true" label="{i18n:Device Description}">
+                      <pnx:Input id="GEN_video_group_digitisation_transcriptionchain_device_description_type" required="true" label="{i18n:Type}"/>
+                      <pnx:Input id="GEN_video_group_digitisation_transcriptionchain_device_description_unique_identifier" label="{i18n:Unique identifier}"/>
+                      <pnx:Input id="GEN_video_group_digitisation_transcriptionchain_device_description_comments" label="{i18n:Comments}"/>
+                    </pnx:Fieldset>
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptionchain_device_manufacturer" required="true" label="{i18n:Device Manufacturer}"/>
+                    <pnx:Fieldset id="GEN_video_group_digitisation_transcriptionchain_device_model" required="true" label="{i18n:Device Model}">
+                      <pnx:Input id="GEN_video_group_digitisation_transcriptionchain_device_model_model" required="true" label="{i18n:Model}"/>
+                      <pnx:Input id="GEN_video_group_digitisation_transcriptionchain_device_model_serial_number" label="{i18n:Serial number}"/>
+                    </pnx:Fieldset>
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptionchain_capture_software" label="{i18n:Capture Software}"/>
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptionchain_device_settings" label="{i18n:Device Device settings}"/>
+                  </pnx:Fieldset>
+                  <pnx:Fieldset id="GEN_video_group_digitisation_transcriptionsummary" label="{i18n:Transcription Summary}"  data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptionsummary_grouping" required="true" label="{i18n:Grouping}"/>
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptionsummary_data_description" required="true" label="{i18n:Data description}"/>
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptionsummary_data_unit" label="{i18n:Data unit}"/>
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptionsummary_data_value" label="{i18n:Data value}"/>
+                  </pnx:Fieldset>
+                  <pnx:Fieldset id="GEN_video_group_digitisation_transcriptiondata" label="{i18n:Transcription Data}"  data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0">
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptiondata_grouping" required="true" label="{i18n:Grouping}"/>
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptiondata_data_description" required="true" label="{i18n:Data description}"/>
+                    <pnx:Input id="GEN_video_group_digitisation_transcriptiondata_data_unit" label="{i18n:Data unit}"/>
+                    <pnx:Fieldset id="GEN_video_group_digitisation_transcriptiondata_interval" label="{i18n:Interval}">
+                      <pnx:Input id="GEN_video_group_digitisation_transcriptiondata_interval_start" required="true" label="{i18n:Start}"/>
+                      <pnx:Input id="GEN_video_group_digitisation_transcriptiondata_interval_stop" required="true" label="{i18n:Stop}"/>
+                    </pnx:Fieldset>
+                    <pnx:Fieldset id="GEN_video_group_digitisation_transcriptiondata_data_value" label="{i18n:Data value}" data="type=repeat;collapsable=false;repeatMin=0">
+                      <pnx:Input id="GEN_video_group_digitisation_transcriptiondata_data_value-element" label="{i18n:Data value}"/>
+                    </pnx:Fieldset>
+                  </pnx:Fieldset>
+                </pnx:Fieldset>
+              </pnx:Fieldset>
+            </pnx:JSTab>
+
+            <pnx:JSTab id="relationsTab" label="{i18n:Relazioni}" routeUrl="linkRelations" cssClassTab="pull-right"/>
+        </pnx:JSTabGroup>
+
+        <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save-novalidation" data="action=save" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveClose" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel" />
+                <pnx:HtmlButton label="{i18n:Valida}" type="button" cssClass="btn btn-flat js-pinaxcms-save" data="action=validate" acl="*,publish" />
+        </cms:FormButtonsPanel>
+        </com:Container>
+    </c:FormEdit>
+    </mvc:State>
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.mag.controllers.Delete"/>
+    </mvc:State>
+
+    <mvc:State name="relations">
+      <pnx:Hidden controllerName="metafad.gestioneDati.boards.controllers.Relations"/>
+      <pnx:JSTabGroup id="innerTabs">
+        <pnx:JSTab id="relationsTab" label="{i18n:Relazioni}" cssClassTab="pull-right">
+        </pnx:JSTab>
+        <pnx:JSTab id="editTab" label="{i18n:Scheda}" routeUrl="linkEdit" cssClassTab="pull-right"/>
+      </pnx:JSTabGroup>
+      <cmp:MagRelation id="magRelation" />
+    </mvc:State>
+
+    <mvc:State name="import">
+      <pnx:JSTabGroup id="tabs" showNav="true">
+        <pnx:JSTab id="fileImport" label="{i18n:Import MAG da file}" dropdown="false">
+          <pnx:Panel cssClass="row col-md-12 margin-bottom">
+            <pnx:Text>ATTENZIONE : Il file deve essere uno zip che contiene l'XML del MAG e la cartella con le immagini</pnx:Text>
+          </pnx:Panel>
+          <c:FormEdit id="importForm" newCode="true" controllerName="metafad.mag.controllers.*" method="post" enctype="multipart/form-data">
+            <pnx:Input id="fileToImport" type="file" label="Zip contenente i file" required="true" />
+            <pnx:List id="formType" label="Aggancia alle schede" emptyValue="">
+              <pnx:ListItem key="metafad.sbn.modules.sbnunimarc.model.Model" value="SBN Unimarc" />
+              <pnx:ListItem key="SchedaF400.models.Model" value="Scheda F 4.00" />
+              <pnx:ListItem key="SchedaOA300.models.Model" value="Scheda OA 3.00" />
+              <pnx:ListItem key="SchedaS300.models.Model" value="Scheda S 3.00" />
+              <pnx:ListItem key="SchedaD300.models.Model" value="Scheda D 3.00" />
+              <pnx:ListItem key="archivi.models.UnitaDocumentaria" value="Unit&#224; Documentaria" />
+              <pnx:ListItem key="archivi.models.UnitaArchivistica" value="Unit&#224; Archivistica" />
+            </pnx:List>
+            <pnx:List id="importMode" label="{i18n:Modalit&#224; di importazione}" emptyValue="">
+                <pnx:ListItem key="substitute" value="Sostituisci i dati se gi&#224; presenti"/>
+            </pnx:List>
+
+            <pnx:Checkbox id="importMedia" label="Importa media" />
+            <cms:FormButtonsPanel>
+              <pnx:HtmlButton label="{i18n:Import}" name="action" cssClass="btn btn-flat btn-info" value="importProcedure" data="action=importProcedure" />
+            </cms:FormButtonsPanel>
+          </c:FormEdit>
+        </pnx:JSTab>
+        <pnx:JSTab id="fileImportServer" label="{i18n:Import MAG da server}" dropdown="false">
+          <c:FormEdit id="importForm" newCode="true" controllerName="metafad.mag.controllers.*" method="post" enctype="multipart/form-data">
+            <cmp:FilePicker id="folder" pageId="StorageBrowser" onlyFolder="true" onlyFirstLevel="false" required="false" label="{i18n:Cartella contenente i file}" title="{i18n:Seleziona cartella MAG}" />
+            <pnx:List id="formType" label="Aggancia alle schede" emptyValue="">
+              <pnx:ListItem key="metafad.sbn.modules.sbnunimarc.model.Model" value="SBN Unimarc" />
+              <pnx:ListItem key="SchedaF400.models.Model" value="Scheda F 4.00" />
+              <pnx:ListItem key="SchedaOA300.models.Model" value="Scheda OA 3.00" />
+              <pnx:ListItem key="SchedaS300.models.Model" value="Scheda S 3.00" />
+              <pnx:ListItem key="SchedaD300.models.Model" value="Scheda D 3.00" />
+              <pnx:ListItem key="archivi.models.UnitaDocumentaria" value="Unit&#224; Documentaria" />
+              <pnx:ListItem key="archivi.models.UnitaArchivistica" value="Unit&#224; Archivistica" />
+            </pnx:List>
+            <pnx:List id="importMode" label="{i18n:Modalit&#224; di importazione}" emptyValue="">
+                <pnx:ListItem key="substitute" value="Sostituisci i dati se gi&#224; presenti"/>
+            </pnx:List>
+
+            <pnx:Checkbox id="importMedia" label="Importa media" />
+            <cms:FormButtonsPanel>
+              <pnx:HtmlButton label="{i18n:Import}" name="action" cssClass="btn btn-flat btn-info" value="importProcedure" data="action=importProcedure" />
+            </cms:FormButtonsPanel>
+          </c:FormEdit>
+        </pnx:JSTab>
+        <pnx:JSTab id="formImport" label="{i18n:Genera MAG da schede}" dropdown="false" >
+          <c:FormEdit id="form_importForm" newCode="true" controllerName="metafad.mag.controllers.*" enctype="multipart/form-data">
+            <pnx:List id="form_formType" label="Seleziona un tipo di scheda" required="true">
+              <pnx:ListItem key="metafad.sbn.modules.sbnunimarc.model.Model" value="SBN Unimarc" />
+              <pnx:ListItem key="SchedaF400.models.Model" value="Scheda F 4.00" />
+              <pnx:ListItem key="SchedaOA300.models.Model" value="Scheda OA 3.00" />
+              <pnx:ListItem key="SchedaS300.models.Model" value="Scheda S 3.00" />
+              <pnx:ListItem key="SchedaD300.models.Model" value="Scheda D 3.00" />
+              <pnx:ListItem key="archivi.models.UnitaDocumentaria" value="Unit&#224; Documentaria" />
+              <pnx:ListItem key="archivi.models.UnitaArchivistica" value="Unit&#224; Archivistica" />
+            </pnx:List>
+            <pnx:List id="form_importMode" label="{i18n:Modalit&#224; di importazione}" emptyValue="">
+                <pnx:ListItem key="substitute" value="Sostituisci i dati se gi&#224; presenti"/>
+            </pnx:List>
+            <pnx:Input id="dateStart" label="Data inizio intervallo" type="date" required="true"/>
+            <pnx:Input id="dateEnd" label="Data fine intervallo" type="date" required="true"/>
+            <pnx:Panel cssClass="header-fieldset"><pnx:Text>Valori di default se non presenti nella scheda</pnx:Text></pnx:Panel>
+            <pnx:Fieldset id="fieldset-gen" label="GEN">
+              <pnx:Input id="GEN_stprog" label="{i18n:Stprog}" required="true"/>
+              <pnx:Input id="GEN_collection" label="{i18n:Collection}"/>
+              <pnx:Input id="GEN_agency" label="{i18n:Agency}" required="true"/>
+              <pnx:List id="GEN_access_rights" label="{i18n:AccessRight}" required="true" emptyValue="">
+                <pnx:ListItem key="0" value="0 (uso riservato all'interno dell'istituzione)"/>                   <pnx:ListItem key="1" value="1 (uso pubblico)"/>
+              </pnx:List>
+              <pnx:List id="GEN_completeness" label="{i18n:Completeness}" required="true" emptyValue="">
+                <pnx:ListItem key="0" value="0 (digitalizzazione completa)"/>
+                <pnx:ListItem key="1" value="1 (digitalizzazione parziale)"/>
+              </pnx:List>
+            </pnx:Fieldset>
+            <cms:FormButtonsPanel>
+              <pnx:HtmlButton label="{i18n:Import}" name="action" cssClass="btn btn-flat btn-info" value="formImportProcedure" data="action=formImportProcedure" acl="*,edit" />
+            </cms:FormButtonsPanel>
+          </c:FormEdit>
+        </pnx:JSTab>
+        <pnx:JSTab id="fileImportMets" label="{i18n:Importa METS-Google}" dropdown="false">   
+          <c:FormEdit id="importForm" newCode="true" controllerName="metafad.mag.controllers.*" enctype="multipart/form-data">
+              <pnx:Input id="fileToImport_mets" type="file" label="Zip contenente i file" required="true" />
+              <pnx:List id="formType_mets" label="Aggancia alle schede" emptyValue="">
+                <pnx:ListItem key="metafad.sbn.modules.sbnunimarc.model.Model" value="SBN Unimarc" />
+                <pnx:ListItem key="SchedaF400.models.Model" value="Scheda F 4.00" />
+                <pnx:ListItem key="SchedaOA300.models.Model" value="Scheda OA 3.00" />
+                <pnx:ListItem key="SchedaS300.models.Model" value="Scheda S 3.00" />
+                <pnx:ListItem key="SchedaD300.models.Model" value="Scheda D 3.00" />
+                <pnx:ListItem key="archivi.models.UnitaDocumentaria" value="Unit&#224; Documentaria" />
+                <pnx:ListItem key="archivi.models.UnitaArchivistica" value="Unit&#224; Archivistica" />
+              </pnx:List>
+              <pnx:List id="importMode_mets" label="{i18n:Modalit&#224; di importazione}" emptyValue="">
+                  <pnx:ListItem key="substitute" value="Sostituisci i dati se gi&#224; presenti"/>
+              </pnx:List>
+              <pnx:Panel cssClass="header-fieldset">
+                  <pnx:Text>Valori di default se non presenti nella scheda</pnx:Text>
+              </pnx:Panel>
+                <pnx:Fieldset id="fieldset-gen-mets" label="GEN">
+                  <pnx:Input id="GEN_stprog_mets" label="{i18n:Stprog}" required="true" />
+                  <pnx:Input id="GEN_collection_mets" label="{i18n:Collezione}" />
+                  <pnx:Input id="GEN_agency_mets" label="{i18n:Agenzia}" required="true" />
+                  <pnx:List id="GEN_access_rights_mets" label="{i18n:Diritti di accesso}" required="true" emptyValue="">
+                      <pnx:ListItem key="0" value="0 (uso riservato all'interno dell'istituzione)" />
+                      <pnx:ListItem key="1" value="1 (uso pubblico)" />
+                  </pnx:List>
+                  <pnx:List id="GEN_completeness_mets" label="{i18n:Completezza}" required="true" emptyValue="">
+                      <pnx:ListItem key="0" value="0 (digitalizzazione completa)" />
+                      <pnx:ListItem key="1" value="1 (digitalizzazione parziale)" />
+                  </pnx:List>
+                </pnx:Fieldset>
+              <cms:FormButtonsPanel>
+                  <pnx:HtmlButton label="{i18n:Import}" name="action" cssClass="btn btn-flat btn-info" value="metsProcedure" data="action=metsProcedure" />
+              </cms:FormButtonsPanel>
+          </c:FormEdit>
+        </pnx:JSTab>
+
+      </pnx:JSTabGroup>
+    </mvc:State>
+
+    <mvc:State name="importProcedure">
+      <pnx:Hidden controllerName="metafad.mag.controllers.ImportProcedure"/>
+    </mvc:State>
+
+    <mvc:State name="metsProcedure">
+      <pnx:Hidden controllerName="metafad.mag.controllers.MetsProcedure"/>
+    </mvc:State>
+
+    <mvc:State name="formImportProcedure">
+      <pnx:Hidden controllerName="metafad.mag.controllers.FormImportProcedure"/>
+    </mvc:State>
+
+    <mvc:State name="exportProcedure">
+      <pnx:Hidden controllerName="metafad.mag.controllers.ExportProcedure"/>
+    </mvc:State>
+
+    <mvc:State name="download">
+      <pnx:Hidden controllerName="metafad.mag.controllers.detail.Download"/>
+    </mvc:State>
+
+    <mvc:State name="getMagExport">
+      <pnx:Hidden controllerName="metafad.mag.controllers.GetMagExport"/>
+    </mvc:State>
+
+    <pnx:JSscript><![CDATA[
+    $( document ).ready( function(){
+        $('#relatedBoard').change(function(){
+            $($('#board').data('instance').$element).data('proxy', $(this).val());
+            $('#board').data('instance').initialize($('#board').data('instance').$element);
+            if($('#relatedBoard').val() != "MAG Libero"){
+                $('#s2id_board').attr("class", "select2-container form-control required");
+            } else {
+                $('#s2id_board').attr("class", "select2-container hidden required");
+            }
+        });
+
+
+    });
+
+    window.onload = function(){
+        if($('#s2id_board .select2-choice span').text().length !== 0){
+            $('#s2id_board').attr("class", "select2-container form-control required");
+        }
+    }
+
+
+]]></pnx:JSscript>
+
+</mvc:Page>

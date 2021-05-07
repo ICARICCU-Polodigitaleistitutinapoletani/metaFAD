@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page" 
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:com="metafad.common.views.components.*" 
+    xmlns:c="metafad.iccd.views.components.*" defaultEditableRegion="content" templateType="php" templateFileName="Popup.php" defaultAction="export">
+
+    <pnx:Import src="_common.xml" />
+    <mvc:StateTabNavigation id="tab" cssClass="nav nav-tabs" cssClassCurrent="active" />
+
+    <mvc:State name="export" label="Esporta schede">
+        <c:FormEdit id="exportFormIcarImport" newCode="true" enctype="multipart/form-data">
+            <pnx:Hidden id="exportSelected" value="true" />
+            <pnx:Input id="exportTitle" cssClass="form-control" label="Titolo esportazione" required="true" />
+            <pnx:Hidden id="ids" value="{php:__Request::get('recordId')}" />
+            <pnx:Hidden id="exportFormat" value="ead3" />
+            <pnx:Input id="configFile" required="true" cssClass="form-control" label="{i18n:File xml di configurazione}" type="file" />
+            <pnx:List id="exportMets" label="{i18n:Formato esportazione oggetti digitali}" size="90">
+                <pnx:ListItem key="dao" value="DAO" />
+                <pnx:ListItem key="mets" value="METS" />
+            </pnx:List>
+            <pnx:List id="exportType" label="{i18n:Tipo esportazione oggetti digitali}" size="90">
+                <pnx:ListItem key="file" value="File" />
+                <pnx:ListItem key="link" value="Link" />
+            </pnx:List>
+            <pnx:Input id="exportEmail" cssClass="form-control" label="Email di notifica" />
+            <pnx:Panel cssClass="export-mag-email-message col-sm-offset-3 col-sm-10 col-xs-12">
+                <pnx:Text>L'email verr&#224; inviata al termine dell'operazione, possono essere inseriti pi&#250; valori separati da virgola.</pnx:Text>
+            </pnx:Panel>
+            <pnx:HtmlButton label="{i18n:Esporta}" name="action" id="action" cssClass="btn btn-flat btn-info btn-export-mag" value="exportProcedure" data="action=exportProcedure" />
+        </c:FormEdit>
+    </mvc:State>
+    <pnx:JSscript folder="userModules/archivi/js/Icar-export" />
+</mvc:Page>

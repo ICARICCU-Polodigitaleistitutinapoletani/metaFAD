@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page" xmlns:pnx="pinax.components.*" xmlns:mvc="pinax.mvc.components.*" xmlns:cms="pinaxcms.views.components.*" xmlns:c="metafad.iccd.views.components.*" defaultEditableRegion="content" templateType="php" templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml" />
+
+    <mvc:State name="index">
+        <pnx:JSscript src="../application/classes/metafad/metaindicePEB/js/PebUtilities.js" />
+        <c:FormEdit id="editForm" newCode="true" controllerName="metafad.metaindicePEB.controllers.*">
+            <pnx:Hidden id="__id" />
+            <pnx:Hidden id="__model" value="metafad.metaindicePEB.models.Model" />
+
+            <pnx:JSTabGroup id="innerTabs" showNav="true">
+                <pnx:JSTab dropdown="true" id="chi-tab" label="{i18n:Chi}">
+                    <pnx:Fieldset id="chi" label="{i18n:Entità - proprietà}" data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+                        <pnx:Input id="entity" label="{i18n:Entità}" required="true" data="type=FormEditSelectMandatory;format_selection=formatThesaurusSelection;format_result=formatThesaurusResult;multiple=false;add_new_values=false;proxy=metafad.metaindicePEB.services.PebProxy;return_object=true;" />
+                        <pnx:Input id="properties" label="{i18n:Proprietà}" required="true" data="type=FormEditSelectMandatory;multiple=true;add_new_values=false;proxy=metafad.metaindicePEB.services.PebProxy;return_object=true;proxy_params={##entity##:##entity##}" />
+                    </pnx:Fieldset>
+                </pnx:JSTab>
+
+                <pnx:JSTab dropdown="true" id="cosa-tab" label="{i18n:Cosa}">
+                    <pnx:Fieldset id="cosa" label="{i18n:Entità - proprietà}" data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+                        <pnx:Input id="entity" label="{i18n:Entità}" required="true" data="type=FormEditSelectMandatory;format_selection=formatThesaurusSelection;format_result=formatThesaurusResult;multiple=false;add_new_values=false;proxy=metafad.metaindicePEB.services.PebProxy;return_object=true;" />
+                        <pnx:Input id="properties" label="{i18n:Proprietà}" required="true" data="type=FormEditSelectMandatory;multiple=true;add_new_values=false;proxy=metafad.metaindicePEB.services.PebProxy;return_object=true;proxy_params={##entity##:##entity##}" />
+                    </pnx:Fieldset>
+                </pnx:JSTab>
+
+                <pnx:JSTab dropdown="true" id="dove-tab" label="{i18n:Dove}">
+                    <pnx:Fieldset id="dove" label="{i18n:Entità - proprietà}" data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+                        <pnx:Input id="entity" label="{i18n:Entità}" required="true" data="type=FormEditSelectMandatory;format_selection=formatThesaurusSelection;format_result=formatThesaurusResult;multiple=false;add_new_values=false;proxy=metafad.metaindicePEB.services.PebProxy;return_object=true;" />
+                        <pnx:Input id="properties" label="{i18n:Proprietà}" required="true" data="type=FormEditSelectMandatory;multiple=true;add_new_values=false;proxy=metafad.metaindicePEB.services.PebProxy;return_object=true;proxy_params={##entity##:##entity##}" />
+                    </pnx:Fieldset>
+                </pnx:JSTab>
+
+                <pnx:JSTab dropdown="true" id="quando-tab" label="{i18n:Quando}">
+                    <pnx:Fieldset id="quando" label="{i18n:Entità - proprietà}" data="type=FormEditRepeatMandatory;collapsable=false;repeatMin=0;noEmptyMessage=true;customAddRowLabel=Aggiungi">
+                        <pnx:Input id="entity" label="{i18n:Entità}" required="true" data="type=FormEditSelectMandatory;format_selection=formatThesaurusSelection;format_result=formatThesaurusResult;multiple=false;add_new_values=false;proxy=metafad.metaindicePEB.services.PebProxy;return_object=true;" />
+                        <pnx:Input id="properties" label="{i18n:Proprietà}" required="true" data="type=FormEditSelectMandatory;multiple=true;add_new_values=false;proxy=metafad.metaindicePEB.services.PebProxy;return_object=true;proxy_params={##entity##:##entity##}" />
+                    </pnx:Fieldset>
+                </pnx:JSTab>
+            </pnx:JSTabGroup>
+
+            <cms:FormButtonsPanel id="formButtons">
+                <pnx:HtmlButton label="{i18n:Salva modifiche}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save-novalidation" data="action=save" acl="*,publish" />
+            </cms:FormButtonsPanel>
+        </c:FormEdit>
+    </mvc:State>
+</mvc:Page>

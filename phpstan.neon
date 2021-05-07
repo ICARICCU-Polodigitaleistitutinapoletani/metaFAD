@@ -1,0 +1,10 @@
+parameters:
+	level: 0
+	paths:
+		- application/classes
+		- vendor/icariccu/metafad-sdk/src
+		- vendor/icariccu/peb/src
+		- public
+	scanDirectories:
+		- vendor/icariccu/pinax/src
+		- vendor/chrisboulton

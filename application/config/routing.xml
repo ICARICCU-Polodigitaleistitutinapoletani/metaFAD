@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:Routing xmlns:pnx="http://www.pinax.org/dtd/1.0/">
+    <pnx:Route method="GET" value="rest/getIccdList/{value=model}/{value=institute}" controller="metafad.common.controllers.rest.GetIccdList"/>
+    <pnx:Route method="GET" value="rest/getIccd/{value=model}/{value=code}/{value=institute}" controller="metafad.common.controllers.rest.GetIccd"/>
+	<pnx:Route method="GET" value="rest/getJson/{value=type}" controller="metafad.common.controllers.rest.GetJson"/>
+    <pnx:Route method="GET" value="rest/strumag/list" controller="metafad.strumag.rest.controllers.List"/>
+    <pnx:Route method="GET" value="rest/strumag/{value=id}" controller="metafad.strumag.rest.controllers.Load"/>
+    <pnx:Route method="POST" value="rest/strumag" controller="metafad.strumag.rest.controllers.Save"/>
+    <pnx:Route method="PUT" value="rest/strumag/{value=id}" controller="metafad.strumag.rest.controllers.Save"/>
+    <pnx:Route method="GET" value="rest/viewer/metadato/{value=id}" controller="metafad.viewer.rest.controllers.Viewer"/>
+    <pnx:Route method="GET" value="rest/ecommerce/getLicense" controller="metafad.ecommerce.rest.controllers.GetLicense"/>
+    <pnx:Route method="GET" value="rest/printpdf" controller="metafad.print.controllers.PrintpdfFE" />
+
+    <!-- Servizi di ricerca -->
+    <pnx:Route method="POST" value="rest/search/{value=type}" controller="metafad.api.search.SolrIndexSearch" />
+    <pnx:Route method="GET" value="rest/search/{value=type}/{value=id}" controller="metafad.api.search.SolrIndexDetail" />
+
+    <!-- IIIF -->
+    <pnx:Route name="manifest" method="GET" value="rest/metadata/{valueRaw=uid}/manifest.json" controller="iiif.controllers.Manifest"/>
+    <pnx:Route name="iiifimage_metadata" method="GET" value="rest/iiif/{valueRaw=uid}" controller="iiif.controllers.ImageMetadata"/>
+    <pnx:Route name="iiifimage_info" method="GET" value="rest/iiif/{valueRaw=uid}/info.json" controller="iiif.controllers.ImageMetadata"/>
+    <pnx:Route name="iiifimage" method="GET" value="rest/iiif/{valueRaw=uid}/{value=region}/{value=size}/{value=rotation}/{value=quality}.{value=format}" controller="iiif.controllers.Image"/>
+
+    <pnx:Route name="archiviMVC" value="{pageId}/{value=sectionType}/{value=action}/{value=id}/{value=templateID}" />
+    <pnx:Route name="archiviMVCAdd" value="{pageId}/{value=sectionType}/{action=edit}/0/" parseUrl="false" />
+    <pnx:Route name="archiviMVCToggleFEVisibility" value="{pageId}/{action=toggleFEVisibility}/{value=model}/{value=id}" />
+    <pnx:Route name="archiviMVCDelete" value="{pageId}/{action=delete}/{value=model}/{value=id}" />
+    <pnx:Route name="archiviMVCAddTemplate" value="{pageId}/{value=sectionType}/{action=edit}/0/0" parseUrl="false" />
+
+    <pnx:Route name="actionsMVCDelete" value="{pageId}/{action=delete}/{value=model}/{value=id}" />
+    <pnx:Route name="actionsMVCNormalize" value="{pageId}/{action=normalize}/{value=model}/{value=id}" />
+    <pnx:Route name="actionsMVCToggleVisibility" value="{pageId}/{action=togglevisibility}/{value=model}/{value=id}" />
+    <pnx:Route name="actionsMVC" value="{pageId}/{value=action}/{value=id}/{value=templateID}" />
+    <pnx:Route name="actionsMVCAdd" value="{pageId}/{action=edit}/0/" parseUrl="false" />
+    <pnx:Route name="archiviOAIAdd" value="{pageId}/{action=oai}/0/" parseUrl="false" />
+    <pnx:Route name="actionsMVCEditMassive" value="{pageId}/{action=editMassive}/{value=id}/" parseUrl="false" />
+    <pnx:Route name="actionsMVCNormalizeMassive" value="{pageId}/{action=normalizeMassive}/{value=id}/" parseUrl="false" />
+    <pnx:Route name="actionsMVCAddTemplate" value="{pageId}/{action=edit}/0/0" parseUrl="false" />
+    <pnx:Route name="actionsMVCExport" value="{pageId}/{action=export}/{value=id}/" parseUrl="false" />
+    <pnx:Route name="linkEdit" value="{pageId}/{action=edit}/{value=id}/" parseUrl="false" />
+    <pnx:Route name="linkEditDraft" value="{pageId}/{action=editDraft}/{value=id}/" parseUrl="false" />
+    <pnx:Route name="linkEdit" value="{pageId}/{action=edit}/{value=id}/{value=templateID}" parseUrl="false" />
+    <pnx:Route name="linkHistory" value="{pageId}/{action=history}/{value=id}/" parseUrl="false" />
+    <pnx:Route name="linkRelations" value="{pageId}/{action=relations}/{value=id}/" parseUrl="false" />
+
+    <pnx:Route name="pinaxcmsMediaArchiveAdd" value="{pageId}/{action=add}" parseUrl="false" />
+
+    <pnx:Route name="linkHome" value="home" parseUrl="false" />
+    <pnx:Route name="linkCurrentPage" value="{pageId}" parseUrl="false" />
+    <pnx:Route name="linkChangeAction" value="{pageId}/{value=action}" />
+    <pnx:Route name="moduleAction" value="{pageId}/{value=action}" />
+    <pnx:Route name="logout" value="{pageId=Logout}" />
+    <pnx:Route name="login" value="{pageId=Login}" />
+    <pnx:Route name="link" value="{pageId}" />
+    <pnx:Route name="printpdf" value="{pageId=Printpdf}/{value=id}" />
+
+    <pnx:Route name="link-be-portale" value="{config=metafad.FE.url}/admin/" parseUrl="false" />
+    <pnx:Route name="link-moviohub" value="{config=metafad.FE.url}/../movio" parseUrl="false" />
+
+    <pnx:Route value="{pageId=PEB}/(.*)?" />
+</pnx:Routing>

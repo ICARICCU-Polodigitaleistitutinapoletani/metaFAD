@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model:Model
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:model="pinax.models.*/"
+    model:tableName="SchedaF300"
+    model:usePrefix="true"
+    model:type="document"
+    model:baseClass="metafad.common.models.ActiveRecordDocumentIccd">
+
+    <model:Script parent="model">
+    <![CDATA[
+    public function getTitle()
+    {
+        return $this->SGTI[0]->{'SGTI-element'} ? $this->SGTI[0]->{'SGTI-element'} : null;
+    }
+
+    public function getSolrDocument()
+    {
+        $solrModel = array(
+            '__id' => 'id',
+            'SchedaF300.models.Model' => 'document_type_t',
+            'updateDateTime' => 'update_at_s',
+            'document' => 'doc_store',
+            'isValid' => 'isValid_i',
+			'uniqueIccdId' => 'uniqueIccdId_s,uniqueIccdId_t',
+			'OGTD' => 'OGTD_s,OGTD_t',
+			'SGTI' => 'SGTI_s,SGTI_t',
+			'PVCC' => 'PVCC_s,PVCC_t',
+			'LDCN' => 'LDCN_s,LDCN_t',
+
+        );
+
+        $solrModel = array_merge(parent::getSolrDocument(), $solrModel);
+
+        return $solrModel;
+    }
+
+    public function getFESolrDocument()
+    {
+        $solrModel = array(
+            '__id' => 'id',
+            'SchedaF300.models.Model' => 'document_type_t',
+            'updateDateTime' => 'update_at_s',
+            'document' => 'doc_store',
+            'isValid' => 'isValid_i',
+            'feMapping' => 'true'
+        );
+
+        return $solrModel;
+    }
+
+    public function getBeMappingAdvancedSearch()
+    {
+        $solrModel = array(
+            '__id' => 'id',
+            'SchedaF300.models.Model' => 'document_type_t',
+            'updateDateTime' => 'update_at_s',
+            'document' => 'doc_store',
+            'isValid' => 'isValid_i',
+            'beMapping' => '{"NCTN":["NCTN"],"NCT":["uniqueIccdId"],"ROZ":["RV.ROZ"],"INVN":["INV.INVN"],"OGTD":["OGTD"],"SGTI":["SGTI"],"PVCS":["PVCS"],"PVCR":["PVCR"],"PVCP":["PVCP"],"PVCC":["PVCC"],"PVCL":["PVCL"],"PVL":["PVL"],"LDCT":["LDCT"],"LDCN":["LDCN"],"LDCC":["LDCC"],"LDCU":["LDCU"],"LDCM":["LDCM"],"LDCS":["LDCS"],"DTZG":["DT.DTZG"],"AUTN":["AUT.AUTN"],"ATBD":["ATB.ATBD"],"MTC":["MTC"],"FTAN":["FTA.FTAN"],"ADSP":["ADSP"],"ADSM":["ADSM"]}'
+        );
+
+        return $solrModel;
+    }
+
+    public function getBeAdvancedSearchFields()
+    {
+        $searchFields = array(
+			'NCTN' => 'nctn_txt',
+			'ROZ' => 'roz_txt',
+			'INVN' => 'invn_txt',
+			'OGTD' => 'ogtd_txt',
+			'SGTI' => 'sgti_txt',
+			'PVCS' => 'pvcs_txt',
+			'PVCR' => 'pvcr_txt',
+			'PVCP' => 'pvcp_txt',
+			'PVCC' => 'pvcc_txt',
+			'PVCL' => 'pvcl_txt',
+			'PVL' => 'pvl_txt',
+			'LDCT' => 'ldct_txt',
+			'LDCN' => 'ldcn_txt',
+			'LDCC' => 'ldcc_txt',
+			'LDCU' => 'ldcu_txt',
+			'LDCM' => 'ldcm_txt',
+			'LDCS' => 'ldcs_txt',
+			'DTZG' => 'dtzg_txt',
+			'AUTN' => 'autn_txt',
+			'ATBD' => 'atbd_txt',
+			'MTC' => 'mtc_txt',
+			'FTAN' => 'ftan_txt',
+			'ADSP' => 'adsp_txt',
+			'ADSM' => 'adsm_txt',
+
+        );
+
+        return $searchFields;
+    }
+
+    
+
+    ]]>
+    </model:Script>
+
+    <model:Define>
+<model:Field name="TSK" validator="notempty" type="string" length="4"/>
+<model:Field name="LIR" validator="notempty" type="string" length="5"/>
+<model:Field name="NCTR" validator="notempty" type="string" length="2"/>
+<model:Field name="NCTN" validator="notempty" type="string" length="8"/>
+<model:Field name="NCTS" type="string" length="2"/>
+<model:Field name="ESC" validator="notempty" type="string" length="25"/>
+<model:Field name="ECP" validator="notempty" type="string" length="25"/>
+<model:Field name="EPR" type="string" length="25"/>
+<model:Field name="RV" type="object" readFormat="false"/>
+<model:Field name="AC" type="object" readFormat="false"/>
+<model:Field name="OGTD" validator="notempty" type="string" length="70"/>
+<model:Field name="OGTB" validator="notempty" type="string" length="25"/>
+<model:Field name="OGTS" type="string" length="70"/>
+<model:Field name="QNTN" validator="notempty" type="string" length="10"/>
+<model:Field name="QNTC" type="string" length="10"/>
+<model:Field name="QNTO" type="string" length="4"/>
+<model:Field name="SGTI" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="SGTD" type="text" length="1000"/>
+<model:Field name="SGL" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="DES" type="object" readFormat="false"/>
+<model:Field name="CLF" type="object" readFormat="false"/>
+<model:Field name="THS" type="object" readFormat="false"/>
+<model:Field name="PVCS" type="string" length="50"/>
+<model:Field name="PVCR" validator="notempty" type="string" length="50"/>
+<model:Field name="PVCP" validator="notempty" type="string" length="3"/>
+<model:Field name="PVCC" validator="notempty" type="string" length="50"/>
+<model:Field name="PVCL" type="string" length="50"/>
+<model:Field name="PVCE" type="string" length="250"/>
+<model:Field name="PVL" type="string" length="250"/>
+<model:Field name="PVE" type="string" length="50"/>
+<model:Field name="LDCT" type="string" length="50"/>
+<model:Field name="LDCQ" type="string" length="50"/>
+<model:Field name="LDCN" validator="notempty" type="string" length="80"/>
+<model:Field name="LDCC" type="string" length="80"/>
+<model:Field name="LDCU" validator="notempty" type="string" length="250"/>
+<model:Field name="LDCS" type="string" length="250"/>
+<model:Field name="LDCM" validator="notempty" type="string" length="70"/>
+<model:Field name="UBFP" validator="notempty" type="string" length="150"/>
+<model:Field name="UBFS" type="string" length="150"/>
+<model:Field name="UBFT" type="string" length="150"/>
+<model:Field name="UBFQ" type="string" length="150"/>
+<model:Field name="UBFU" type="string" length="150"/>
+<model:Field name="UBFC" validator="notempty" type="string" length="150"/>
+<model:Field name="INV" type="object" readFormat="false"/>
+<model:Field name="STI" type="object" readFormat="false"/>
+<model:Field name="LA" type="object" readFormat="false"/>
+<model:Field name="LR" type="object" readFormat="false"/>
+<model:Field name="DTZG" validator="notempty" type="string" length="50"/>
+<model:Field name="DTZS" type="string" length="25"/>
+<model:Field name="DTSI" validator="notempty" type="string" length="15"/>
+<model:Field name="DTSV" type="string" length="25"/>
+<model:Field name="DTSF" validator="notempty" type="string" length="15"/>
+<model:Field name="DTSL" type="string" length="25"/>
+<model:Field name="DTM" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="ADT" type="object" readFormat="false"/>
+<model:Field name="AUF" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="AFB" type="object" readFormat="false"/>
+<model:Field name="AAF" type="object" readFormat="false"/>
+<model:Field name="AUT" option="AUT300.models.Model" type="object" readFormat="false"/>
+<model:Field name="ATB" type="object" readFormat="false"/>
+<model:Field name="PD" type="object" readFormat="false"/>
+<model:Field name="RO" type="object" readFormat="false"/>
+<model:Field name="MTX" validator="notempty" type="string" length="4"/>
+<model:Field name="MTC" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="MIS" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="FRM" type="string" length="50"/>
+<model:Field name="FVC" type="object" readFormat="false"/>
+<model:Field name="FVM" type="string" length="50"/>
+<model:Field name="MTS" type="text" length="1000"/>
+<model:Field name="FIL" type="string" length="250"/>
+<model:Field name="STCC" validator="notempty" type="string" length="25"/>
+<model:Field name="STCS" type="string" length="500"/>
+<model:Field name="RS" type="object" readFormat="false"/>
+<model:Field name="DA" type="object" readFormat="false"/>
+<model:Field name="ACQ" type="object" readFormat="false"/>
+<model:Field name="CDGG" validator="notempty" type="string" length="50"/>
+<model:Field name="CDGS" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="CDGI" type="object" readFormat="false"/>
+<model:Field name="NVC" type="object" readFormat="false"/>
+<model:Field name="ALN" type="object" readFormat="false"/>
+<model:Field name="ESP" type="object" readFormat="false"/>
+<model:Field name="CPR" type="object" readFormat="false"/>
+<model:Field name="FTA" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="VDC" type="object" readFormat="false"/>
+<model:Field name="REG" type="object" readFormat="false"/>
+<model:Field name="FNT" type="object" readFormat="false"/>
+<model:Field name="ADM" type="object" readFormat="false"/>
+<model:Field name="BIB" option="BIB300.models.Model" type="object" readFormat="false"/>
+<model:Field name="BIL" type="object" readFormat="false"/>
+<model:Field name="BSE" type="object" readFormat="false"/>
+<model:Field name="MST" type="object" readFormat="false"/>
+<model:Field name="ADSP" validator="notempty" type="string" length="1"/>
+<model:Field name="ADSM" validator="notempty" type="string" length="70"/>
+<model:Field name="ADSD" type="string" length="25"/>
+<model:Field name="CMPD" validator="notempty" type="string" length="4"/>
+<model:Field name="CMPN" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="RSR" type="object" readFormat="false"/>
+<model:Field name="FUR" validator="notempty" type="object" readFormat="false"/>
+<model:Field name="RVM" type="object" readFormat="false"/>
+<model:Field name="AGG" type="object" readFormat="false"/>
+<model:Field name="ISP" type="object" readFormat="false"/>
+<model:Field name="AN" type="object" readFormat="false"/>
+
+    </model:Define>
+</model:Model>

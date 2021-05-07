@@ -1,0 +1,63 @@
+{
+  "name": "icariccu/metafad",
+  "description": "metaFAD - Applicativo di catalogazione",
+  "license": "AGPL",
+  "repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/ICARICCU/Pinax"
+    },
+    {
+        "type": "vcs",
+        "url": "https://github.com/ICARICCU-Polodigitaleistitutinapoletani/metaFAD-peb"
+    },
+    {
+        "type": "vcs",
+        "url": "https://github.com/ICARICCU-Polodigitaleistitutinapoletani/metaFAD-sdk"
+    },
+    {
+        "type": "vcs",
+        "url": "https://github.com/chrisboulton/php-diff"
+    }
+  ],
+  "require": {
+    "icariccu/pinax-2": "dev-main",
+    "icariccu/metafad-sdk": "dev-main",
+    "icariccu/peb": "dev-main",
+    "chrisboulton/php-diff": "dev-master",
+    "phpoffice/phpexcel": "1.7.9",
+    "ext-pdo": "*",
+    "ramsey/uuid": "^3.7"
+  },
+  "require-dev": {
+    "vimeo/psalm": "^4.3",
+    "phpstan/phpstan": "^0.12.64"
+  },
+  "autoload": {
+    "psr-0": {
+    }
+  },
+  "scripts": {
+    "phpstan": [
+      "phpstan analyse --memory-limit 1G -c phpstan.neon"
+    ],
+    "psalm": [
+      "psalm"
+    ],
+    "psalm-nocache": [
+      "psalm --clear-global-cache",
+      "psalm --clear-cache",
+      "psalm"
+    ],
+    "quality-test": [
+      "@phpstan",
+      "@psalm"
+    ],
+    "clear-cache": [
+        "rm -rf cache/*.php",
+        "rm -rf public/cache/*.php",
+        "rm -rf public/cache/*.jpg",
+        "rm -rf public/cache/*.js"
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.mag.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          xmlns:c="metafad.iccd.views.components.*"
+          defaultEditableRegion="content"
+          defaultAction="export"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active"
+                            addQueryString="true" visible="false"/>
+
+    <mvc:State name="export">
+      <com:DataGridSolr id="dataGridExport" setLastSearch="true" recordClassName="metafad.mag.models.Model" cssClass="table table-bordered table-striped" fullTextSearch="true">
+          <pnx:DataGridColumn columnName="document_id" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.SelectionFlag" width="3" checkboxSelectPage="true" checkboxSelectAll="true"/>
+          <pnx:DataGridColumn columnName="BIB_dc_identifier_index_t" headerText="{i18n:Identificativo}" width="12"/>
+          <pnx:DataGridColumn columnName="BIB_dc_title_t" headerText="{i18n:Titolo}" width="40" renderCell="metafad.common.views.renderer.ShortField"/>
+          <pnx:DataGridColumn columnName="update_at_s" headerText="{i18n:Data modifica}" width="15"/>
+          <pnx:DataGridColumn columnName="document_id" sortable="false" searchable="false" width="10" cssClass="actions"
+                              renderCell="metafad.mag.views.renderer.CellShow"/>
+      </com:DataGridSolr>
+
+      <c:FormEdit id="exportForm" newCode="true" controllerName="metafad.mag.controllers.*" method="post" enctype="multipart/form-data">
+        <pnx:Panel cssClass="export-option aa">
+          <pnx:Panel cssClass="export-option-checkbox">
+            <pnx:Input id="exportAll" type="checkbox" value="exportAll" label="Esporta risultato della ricerca" cssClassLabel="" applyFormItemTemplate="false"/>
+          </pnx:Panel>
+          <pnx:Panel cssClass="export-option-checkbox">
+            <pnx:Input id="exportSelected" type="checkbox" value="exportSelected" label="Esporta record selezionati" cssClassLabel="" applyFormItemTemplate="false"/>
+          </pnx:Panel>exportTitle
+        </pnx:Panel>
+        <pnx:Panel id="countSelected" />
+        <pnx:Input id="exportTitle" cssClass="form-control" label="Titolo esportazione" required="true"/>
+        <pnx:Hidden id="ids" />
+        <pnx:List id="exportMode" cssClass="form-control" label="{i18n:Tipo di esportazione}" >
+            <pnx:ListItem key="zip" value="File ZIP"/>
+            <pnx:ListItem key="oai" value="OAI-PMH"/>
+        </pnx:List>
+        <pnx:List id="exportFormat" cssClass="form-control" label="{i18n:Formato esportazione}" >
+            <pnx:ListItem key="all" value="Tutto"/>
+            <pnx:ListItem key="S" value="S"/>
+            <pnx:ListItem key="M" value="M"/>
+            <pnx:ListItem key="H" value="H"/>
+        </pnx:List>
+        <pnx:Input id="exportEmail" cssClass="form-control" label="Email di notifica" required="true"/>
+        <pnx:Panel cssClass="export-mag-email-message col-sm-offset-3 col-sm-10 col-xs-12"><pnx:Text text="{i18n:exportEmail}"></pnx:Text></pnx:Panel>
+        <pnx:HtmlButton label="{i18n:Esporta}" name="action" cssClass="btn btn-flat btn-info btn-export-mag" value="exportProcedure" data="action=exportProcedure" />
+      </c:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="exportProcedure">
+      <pnx:Hidden controllerName="metafad.mag.controllers.ExportProcedure"/>
+    </mvc:State>
+
+    <mvc:State name="getMagExport">
+      <pnx:Hidden controllerName="metafad.mag.controllers.GetMagExport"/>
+    </mvc:State>
+
+</mvc:Page>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:cmp="archivi.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    xmlns:boards="metafad.gestioneDati.boards.views.components.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <com:ModalConfirm label="Attenzione" message="Sicuro di voler proseguire?"/>
+    <com:ModalAlert label="Attenzione" message="Operazione non corretta"/>
+
+    <mvc:State id="stateIndex" name="index" label="{i18n:Antroponimi}" url="archivi-Antroponimi">
+        <cmp:DataGridSolr id="dataGrid" enableSorting="true" filterByInstitute="false" recordClassName="archivi.models.Antroponimi"
+                          cssClass="table table-bordered table-striped"
+                          controllerName="archivi.controllers.*" fullTextSearch="true"
+                          JQueryUI="true" 
+                          autocompleteController="archivi.controllers.ajax.AutoComplete">
+<pnx:DataGridColumn columnName="intestazione_s" headerText="{i18n:Intestazione}"/>
+
+            <pnx:DataGridColumn columnName="id" sortable="false" searchable="false" cssClass="actions"
+                                renderCell="metafad.common.views.renderer.authority.CellEditDraftDelete"/>
+        </cmp:DataGridSolr>
+        <cmp:AddButton label="Antroponimi" acl="*,new" type="Antroponimi" routeUrl="archiviMVCAdd" editableRegion="actions"
+                       recordClassName="archivi.models.Antroponimi" dataGridAjaxId="dataGrid"/>
+    </mvc:State>
+
+    <mvc:State id="stateEdit" name="edit,editDraft" label="{i18n:Scheda}" draw="false" cssClass="editState">
+
+
+        <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active"
+                                addQueryString="true" visible="false"/>
+
+        <pnx:JSscript folder="userModules/archivi/js" editableRegion="tail"/>
+        <pnx:JSscript folder="userModules/archivi/js/Antroponimi" editableRegion="tail"/>
+
+        <com:FormEdit id="editForm" newCode="true" controllerName="archivi.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="archivi.models.Antroponimi"/>
+			<pnx:Hidden id="instituteKey" />
+            <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}"/>
+            <pnx:Input id="external_id" label="{i18n:ID}" size="90" disabled="true" visible="false"/>
+
+            <pnx:Hidden id="isTemplate"/>
+            <pnx:Input id="templateTitle" label="{i18n:Titolo template}"/>
+            <pnx:Link cssClass="tree openTree fa fa-list" enabled="false"/>
+            <pnx:JSTabGroup id="Antroponimi" showNav="true" cssClass="nav nav-tabs js-tab-section">
+
+
+            <pnx:Panel cssClass="col-md-4 gerarchia no-padding" text="Gerarchia: " enabled="false">
+                <cmp:Tree id="treeview" startId="0" title="" controllerName="archivi.controllers.Gerarchia"/>
+            </pnx:Panel>
+
+
+<pnx:JSTab id="tabAntroponimi" label="Antroponimi" dropdown="true">
+  <pnx:Panel cssClass="col-md-8 active text-tab">
+    <pnx:Input id="intestazione" readOnly="true" label="Intestazione"/>
+    <pnx:Input id="cognome" label="Cognome" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-antroponimi&quot;,##code##:##VA_ARCHIVE_VOCI_PERSONA_COGNOME##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_VOCI_PERSONA_COGNOME"/>
+    <pnx:Input id="nome" label="Nome" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-antroponimi&quot;,##code##:##VA_ARCHIVE_VOCI_PERSONA_NOME##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_VOCI_PERSONA_NOME"/>
+    <pnx:Input id="qualificazione" label="Qualificazione" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-antroponimi&quot;,##code##:##VA_ARCHIVE_VOCI_PERSONA_QUALIFICA##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_VOCI_PERSONA_QUALIFICA"/>
+    <pnx:Input id="dateAttivita" label="Date di attività"/>
+    <pnx:Input id="dataNascita" cssClass="js-archive-dateTextBox form-control" label="Data di nascita"/>
+    <pnx:Input id="dataMorte" cssClass="js-archive-dateTextBox form-control" label="Data di morte"/>
+    <pnx:Hidden id="externalID" readOnly="true" label="ID importazione"/>
+  </pnx:Panel>
+</pnx:JSTab>
+
+
+                <pnx:JSTab id="history" label="{i18n:Storico}" cssClassTab="pull-right"
+                           routeUrl="archivihistory"/>
+                <pnx:JSTab id="edit" label="{i18n:Scheda}" cssClassTab="fake-active pull-right"/>
+            </pnx:JSTabGroup>
+
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=save" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save" data="action=saveClose" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel"/>
+                
+            </cms:FormButtonsPanel>
+        </com:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="show,showDraft" label="{i18n:Show}" draw="false">
+        <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active"
+                                addQueryString="true" visible="false"/>
+
+        <pnx:JSscript folder="userModules/archivi/js" editableRegion="tail"/>
+
+        <com:FormEdit id="editForm" newCode="true" controllerName="archivi.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="archivi.models.Antroponimi"/>
+            <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}"/>
+
+            <pnx:JSTabGroup id="Antroponimi" showNav="true" cssClass="nav nav-tabs js-tab-section">
+
+<pnx:JSTab id="tabAntroponimi" label="Antroponimi" dropdown="true">
+  <pnx:Panel cssClass="col-md-8 active text-tab">
+    <pnx:Input readOnly="true" id="intestazione" label="Intestazione"/>
+    <pnx:Input readOnly="true" id="cognome" label="Cognome" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-antroponimi&quot;,##code##:##VA_ARCHIVE_VOCI_PERSONA_COGNOME##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_VOCI_PERSONA_COGNOME"/>
+    <pnx:Input readOnly="true" id="nome" label="Nome" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-antroponimi&quot;,##code##:##VA_ARCHIVE_VOCI_PERSONA_NOME##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_VOCI_PERSONA_NOME"/>
+    <pnx:Input readOnly="true" id="qualificazione" label="Qualificazione" data="type=selectfrom;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:&quot;archivi-antroponimi&quot;,##code##:##VA_ARCHIVE_VOCI_PERSONA_QUALIFICA##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm;dictId=VA_ARCHIVE_VOCI_PERSONA_QUALIFICA"/>
+    <pnx:Input readOnly="true" id="dateAttivita" label="Date di attività"/>
+    <pnx:Input readOnly="true" id="dataNascita" cssClass="js-archive-dateTextBox form-control" label="Data di nascita"/>
+    <pnx:Input readOnly="true" id="dataMorte" cssClass="js-archive-dateTextBox form-control" label="Data di morte"/>
+    <pnx:Hidden id="externalID" readOnly="true" label="ID importazione"/>
+  </pnx:Panel>
+</pnx:JSTab>
+
+
+            </pnx:JSTabGroup>
+
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:Indietro}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" />
+            </cms:FormButtonsPanel>
+        </com:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="archivi.controllers.*"/>
+    </mvc:State>
+
+    <mvc:State name="toggleFEVisibility">
+        <pnx:Hidden controllerName="archivi.controllers.ToggleFEVisibility"/>
+    </mvc:State>
+
+    <mvc:State id="stateHistory" name="history" label="{i18n:Storico}" url="linkHistory">
+      <pnx:JSTabGroup id="innerTabs">
+        <pnx:JSTab id="historyTab" label="{i18n:Storico}" cssClassTab="pull-right">
+          <cms:FormEdit addValidationJs="false" controllerName="archivi.controllers.*">
+            <boards:ShowHistory id="history" model="archivi.models.Antroponimi"/>
+            <cms:FormButtonsPanel>
+              <pnx:HtmlButton label="{i18n:Confronta}" type="button" cssClass="btn btn-primary js-pinaxcms-history" data="action=add" />
+            </cms:FormButtonsPanel>
+          </cms:FormEdit>
+        </pnx:JSTab>
+        <pnx:JSTab id="editTab" label="{i18n:Scheda}" routeUrl="linkEdit" cssClassTab="pull-right"/>
+      </pnx:JSTabGroup>
+    </mvc:State>
+</mvc:Page>

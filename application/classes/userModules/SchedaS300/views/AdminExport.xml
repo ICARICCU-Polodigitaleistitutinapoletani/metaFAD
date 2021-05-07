@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:include
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    src="metafad.common.views.templates.TemplateModuleAdminExport">
+
+    <pnx:template name="model" value="SchedaS300.models.Model"/>
+    <pnx:template name="autocompleteController" value="metafad.common.controllers.ajax.AutoComplete"/>
+    <pnx:template name="grid_fields">
+		<pnx:DataGridColumn columnName="NCTN_s" headerText="{i18n:NCTN}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="OGTD_s" headerText="{i18n:OGTD}" renderCell="metafad.common.views.renderer.ShortField"/>
+		<pnx:DataGridColumn columnName="SGTP_s" headerText="{i18n:SGTP}" renderCell="metafad.common.views.renderer.ShortField"/>
+    </pnx:template>
+</pnx:include>

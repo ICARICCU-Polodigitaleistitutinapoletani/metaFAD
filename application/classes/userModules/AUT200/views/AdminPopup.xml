@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+  xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+  xmlns:cms="pinaxcms.views.components.*"
+  xmlns:mvc="pinax.mvc.components.*"
+  xmlns:r="pinaxcms.roleManager.views.*"
+  xmlns:c="metafad.iccd.views.components.*"
+  xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+  defaultEditableRegion="content"
+  templateType="php"
+  templateFileName="Popup.php">
+
+<pnx:Import src="_common.xml"/>
+
+<mvc:State name="index">
+    <c:FormEdit id="editForm" newCode="true" controllerName="metafad.gestioneDati.boards.controllers.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="AUT200.models.Model"/>
+
+        <pnx:JSTabGroup id="innerTabs" showNav="true">
+<pnx:JSTab dropdown="true" id="CD-tab" label="{i18n:CD}">
+<pnx:Fieldset id="CD" label="{i18n:CD}" required="true">
+  <pnx:Input id="TSK" label="{i18n:TSK}" required="true" maxLength="5" data="type=FormEditSelectMandatory;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT200##}"/>
+  <pnx:Input id="NCU" label="{i18n:NCU}" maxLength="8"/>
+  <pnx:Input id="ESC" label="{i18n:ESC}" required="true" maxLength="25"/>
+  <pnx:Input id="ECP" label="{i18n:ECP}" maxLength="25"/>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab dropdown="true" id="AU-tab" label="{i18n:AU}">
+<pnx:Fieldset id="AU" label="{i18n:AU}" required="true">
+  <pnx:Fieldset id="AUT" label="{i18n:AUT}" required="true">
+    <pnx:Input id="AUTN" label="{i18n:AUTN}" required="true" maxLength="100"/>
+    <pnx:Input id="AUTA" label="{i18n:AUTA}" required="true" maxLength="70"/>
+    <pnx:Input id="AUTC" label="{i18n:AUTC}" maxLength="70"/>
+    <pnx:Input id="AUTO" label="{i18n:AUTO}" maxLength="70"/>
+    <pnx:Input id="AUTP" label="{i18n:AUTP}" maxLength="70"/>
+    <pnx:Input id="AUTE" label="{i18n:AUTE}" maxLength="70"/>
+    <pnx:Input id="AUTF" label="{i18n:AUTF}" maxLength="70"/>
+    <pnx:Input id="AUTV" label="{i18n:AUTV}" maxLength="350"/>
+    <pnx:Input id="AUTZ" label="{i18n:AUTZ}" maxLength="1" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT200##}"/>
+    <pnx:Input id="AUTL" label="{i18n:AUTL}" maxLength="50"/>
+    <pnx:Input id="AUTD" label="{i18n:AUTD}" maxLength="25"/>
+    <pnx:Input id="AUTX" label="{i18n:AUTX}" maxLength="50"/>
+    <pnx:Input id="AUTT" label="{i18n:AUTT}" maxLength="25"/>
+    <pnx:Input id="AUTG" label="{i18n:AUTG}" maxLength="250"/>
+    <pnx:Input id="AUTU" label="{i18n:AUTU}" required="true" maxLength="350" data="type=FormEditSelectMandatory;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT200##,##code##:##VA_AUTU_AUT##,##level##:##1##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+    <pnx:Input id="AUTQ" label="{i18n:AUTQ}" required="true" maxLength="100" data="type=FormEditSelectMandatory;multiple=false;add_new_values=true;proxy=metafad.thesaurus.models.proxy.ThesaurusProxy;proxy_params={##module##:##AUT200##,##code##:##VA_AUTQ_AUT##,##level##:##*##};selected_callback=metafad.thesaurus.controllers.ajax.AddTerm"/>
+    <pnx:Input id="AUTH" label="{i18n:AUTH}" required="true" maxLength="8"/>
+</pnx:Fieldset>
+</pnx:Fieldset>
+</pnx:JSTab>
+<pnx:JSTab id="historyTab" label="{i18n:Storico}" routeUrl="linkHistory" cssClassTab="pull-right"/></pnx:JSTabGroup>
+
+        <pnx:Panel cssClass="formButtons">
+            <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-primary js-pinaxcms-save"
+                            data="action=save" acl="*,edit"/>
+            <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link"
+                            cssClass="btn js-pinaxcms-cancel button-margin" data="action=close"/>
+        </pnx:Panel>
+    </c:FormEdit>
+    <pnx:JSscript><![CDATA[
+    $( document ).ready( function(){
+        $('.js-pinaxcms-save').data('trigger',function (e, data) {
+
+            var msg = {
+                type: 'save',
+                id: $('#__id').val(),
+                text: $('#AUTN').val() + ' - ' + $('#AUTH').val(),
+                values: data
+            }
+
+            Pinax.events.broadcast("pinax.FormEdit.modalPage.message", msg);
+        });
+
+        $('.js-pinaxcms-cancel').click(function (e) {
+            parent.postMessage('{"type":"cancel"}', parent.location.origin);
+        });
+    });
+    ]]></pnx:JSscript>
+    </mvc:State>
+</mvc:Page>

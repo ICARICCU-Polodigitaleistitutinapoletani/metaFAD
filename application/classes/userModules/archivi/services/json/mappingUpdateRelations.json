@@ -1,0 +1,206 @@
+{
+    "archivi.models.ComplessoArchivistico": {
+        "field": [
+            "denominazione"
+        ],
+        "voceIndice": false,
+        "target": [
+            {
+                "model": "ProduttoreConservatore",
+                "pageId": "archivi-ProduttoreConservatore",
+                "fields": {
+                    "complessiArchivisticiProduttore": "inputComplessiArchivistici",
+                    "complessiArchivisticiConservatore": "linkComplessiArchivistici"
+                }
+            },
+            {
+                "model": "ProgettoDiDigitalizzazione",
+                "pageId": "archivi-ProgettoDiDigitalizzazione",
+                "fields": {
+                    "complessi": "linkComplessi"
+                }
+            }
+        ]
+    },
+    "archivi.models.ProduttoreConservatore": {
+        "field": [
+            "ente_famiglia_denominazione.entitaDenominazione",
+            "famiglia_denominazione.entitaDenominazione",
+            "persona_denominazione.entitaDenominazione"
+        ],
+        "voceIndice": false,
+        "target": [
+            {
+                "model": "ComplessoArchivistico",
+                "pageId": "archivi-ComplessoArchivistico",
+                "fields": {
+                    "produttori": "soggettoProduttore"
+                },
+                "fieldNoRep": "soggettoConservatore"
+            },
+            {
+                "model": "ProgettoDiDigitalizzazione",
+                "pageId": "archivi-ProgettoDiDigitalizzazione",
+                "fields": {
+                    "complessi": "linkComplessi"
+                }
+            }
+        ]
+    },
+    "archivi.models.SchedaStrumentoRicerca": {
+        "field": [
+            "titoloNormalizzato"
+        ],
+        "voceIndice": false,
+        "target": [
+            {
+                "model": "ComplessoArchivistico",
+                "pageId": "archivi-ComplessoArchivistico",
+                "fields": {
+                    "strumentiRicerca": "linkStrumentiRicerca"
+                }
+            },
+            {
+                "model": "UnitaArchivistica",
+                "pageId": "archivi-UnitaArchivistica",
+                "fields": {
+                    "relazioneStrumento": "relStrumento"
+                }
+            },
+            {
+                "model": "UnitaDocumentaria",
+                "pageId": "archivi-UnitaDocumentaria",
+                "fields": {
+                    "relazioneStrumento": "relStrumento"
+                }
+            }
+        ]
+    },
+    "archivi.models.SchedaBibliografica": {
+        "field": [
+            "titoloLibroORivista"
+        ],
+        "voceIndice": false,
+        "target": [
+            {
+                "model": "ComplessoArchivistico",
+                "pageId": "archivi-ComplessoArchivistico",
+                "fields": {
+                    "riferimentiBibliografici": "linkRiferimentiBibliografici"
+                }
+            },
+            {
+                "model": "UnitaArchivistica",
+                "pageId": "archivi-UnitaArchivistica",
+                "fields": {
+                    "riferimentiBibliografici": "linkRiferimentiBibliografici"
+                }
+            },
+            {
+                "model": "UnitaDocumentaria",
+                "pageId": "archivi-UnitaDocumentaria",
+                "fields": {
+                    "riferimentiBibliografici": "linkRiferimentiBibliografici"
+                }
+            }
+        ]
+    },
+    "archivi.models.FonteArchivistica": {
+        "field": [
+            "titolo"
+        ],
+        "voceIndice": false,
+        "target": [
+            {
+                "model": "ComplessoArchivistico",
+                "pageId": "archivi-ComplessoArchivistico",
+                "fields": {
+                    "fontiArchivistiche": "linkFontiArchivistiche"
+                }
+            },
+            {
+                "model": "UnitaArchivistica",
+                "pageId": "archivi-UnitaArchivistica",
+                "fields": {
+                    "fontiArchivistiche": "linkFontiArchivistiche"
+                }
+            },
+            {
+                "model": "UnitaDocumentaria",
+                "pageId": "archivi-UnitaDocumentaria",
+                "fields": {
+                    "fontiArchivistiche": "linkFontiArchivistiche"
+                }
+            }
+        ]
+    },
+    "archivi.models.Antroponimi": {
+        "field": [
+            "cognome",
+            "nome"
+        ],
+        "voceIndice": true,
+        "target": [
+            {
+                "model": "UnitaArchivistica",
+                "pageId": "archivi-UnitaArchivistica",
+                "fields": {
+                    "antroponimi": "intestazione"
+                }
+            },
+            {
+                "model": "UnitaDocumentaria",
+                "pageId": "archivi-UnitaDocumentaria",
+                "fields": {
+                    "antroponimi": "intestazione",
+                    "autoreResponsabile": "autoreCognomeNome"
+                }
+            }
+        ]
+    },
+    "archivi.models.Enti": {
+        "field": [
+            "denominazioneEnte"
+        ],
+        "voceIndice": true,
+        "target": [
+            {
+                "model": "UnitaArchivistica",
+                "pageId": "archivi-UnitaArchivistica",
+                "fields": {
+                    "enti": "intestazione"
+                }
+            },
+            {
+                "model": "UnitaDocumentaria",
+                "pageId": "archivi-UnitaDocumentaria",
+                "fields": {
+                    "enti": "intestazione",
+                    "autoreResponsabile": "autoreDenominazione"
+                }
+            }
+        ]
+    },
+    "archivi.models.Toponimi": {
+        "field": [
+            "nomeLuogo"
+        ],
+        "voceIndice": true,
+        "target": [
+            {
+                "model": "UnitaArchivistica",
+                "pageId": "archivi-UnitaArchivistica",
+                "fields": {
+                    "toponimi": "intestazione"
+                }
+            },
+            {
+                "model": "UnitaDocumentaria",
+                "pageId": "archivi-UnitaDocumentaria",
+                "fields": {
+                    "toponimi": "intestazione"
+                }
+            }
+        ]
+    }
+}

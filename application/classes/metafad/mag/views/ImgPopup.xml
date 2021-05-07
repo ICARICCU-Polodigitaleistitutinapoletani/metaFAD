@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+  xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+  xmlns:cms="pinaxcms.views.components.*"
+  xmlns:mvc="pinax.mvc.components.*"
+  xmlns:c="metafad.iccd.views.components.*"
+  defaultEditableRegion="content"
+  templateType="php"
+  templateFileName="Popup.php">
+
+<pnx:Import src="_common.xml"/>
+
+<mvc:State name="edit">
+    <pnx:JSscript folder="metafad/mag/js/imgPopup" editableRegion="tail"/>
+
+    <c:FormEdit id="editForm" newCode="true" controllerName="metafad.mag.controllers.media.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="metafad.mag.models.Img"/>
+
+        <pnx:Input id="imggroupID" label="{i18n:Group}"/>
+        <pnx:Input id="sequence_number" label="{i18n:Sequence number}" type="number"/>
+        <pnx:Input id="nomenclature" label="{i18n:Nomenclature}"/>
+        <pnx:Fieldset id="usage" label="{i18n:Usage}" data="type=repeat;collapsable=false;repeatMin=0">
+          <pnx:List id="usage_value" label="{i18n:Usage}" emptyValue="">
+              <pnx:ListItem key="1" value="1 (master)"/>
+              <pnx:ListItem key="2" value="2 (alta risoluzione)"/>
+              <pnx:ListItem key="3" value="3 (bassa risoluzione)"/>
+              <pnx:ListItem key="4" value="4 (preview)"/>
+              <pnx:ListItem key="a" value="a (no copyright)"/>
+              <pnx:ListItem key="b" value="b (ha copyright)"/>
+          </pnx:List>
+        </pnx:Fieldset>
+        <pnx:List id="side" label="{i18n:Side}">
+          <pnx:ListItem key="left" value="left"/>
+          <pnx:ListItem key="right" value="right"/>
+          <pnx:ListItem key="double" value="double"/>
+          <pnx:ListItem key="part" value="part"/>
+        </pnx:List>
+        <pnx:List id="scale" label="{i18n:Scale}" type="number">
+          <pnx:ListItem key="0" value="0 (no)"/>
+          <pnx:ListItem key="1" value="1 (sì)"/>
+        </pnx:List>
+        <pnx:Hidden id="file" label="{i18n:File}" />
+        <pnx:Input id="md5" label="{i18n:MD5}" required="true" readOnly="true"/>
+        <pnx:Input id="filesize" label="{i18n:Filesize}" readOnly="true"/>
+        <pnx:Fieldset id="image_dimensions" required="true" label="{i18n:Image Dimensions}">
+          <pnx:Input id="imagelength" label="{i18n:Image Length}" type="number" required="true" readOnly="true"/>
+          <pnx:Input id="imagewidth" label="{i18n:Image Width}" type="number" required="true" readOnly="true"/>
+          <pnx:Input id="source_xdimension" label="{i18n:Source x Dimension}" type="number"/>
+          <pnx:Input id="source_ydimension" label="{i18n:Source y Dimension}" type="number"/>
+        </pnx:Fieldset>
+        <pnx:Fieldset id="image_metrics" label="{i18n:Image Metrics}">
+          <pnx:List id="samplingfrequencyunit" label="{i18n:Sampling Frequency Unit}" emptyValue="" required="true">
+              <pnx:ListItem key="1" value="1 (nessuna unit&#224; di misura definita)"/>
+              <pnx:ListItem key="2" value="2 (inch, pollice)"/>
+              <pnx:ListItem key="3" value="3 (centimetro)"/>
+          </pnx:List>
+          <pnx:List id="samplingfrequencyplane" label="{i18n:Sampling Frequency Plane}" emptyValue="" required="true">
+              <pnx:ListItem key="1" value="1 (camera/scanner focal plane)"/>
+              <pnx:ListItem key="2" value="2 (object plane)"/>
+              <pnx:ListItem key="3" value="3 (source object plane)"/>
+          </pnx:List>
+          <pnx:Input id="xsamplingfrequency" label="{i18n:X Sampling Frequency}"/>
+          <pnx:Input id="ysamplingfrequency" label="{i18n:Y Sampling Frequency}"/>
+          <pnx:List id="bitpersample" label="{i18n:Bit per Sample}" emptyValue="" required="true">
+              <pnx:ListItem key="1" value="1 (bitonale, bianco e nero)"/>
+              <pnx:ListItem key="4" value="4 (4-bit scala di grigi)"/>
+              <pnx:ListItem key="8" value="8 (8-bit scala di grigi o gamma di 256 colori)"/>
+              <pnx:ListItem key="8,8,8" value="8,8,8 (24-bit RGB)"/>
+              <pnx:ListItem key="16,16,16" value="16,16,16 (48-bit TIFF, HDR)"/>
+              <pnx:ListItem key="8,8,8,8" value="8,8,8,8 (32-bit CMYK)"/>
+          </pnx:List>
+          <pnx:List id="photometricinterpretation" label="{i18n:Photometric Interpretation}" emptyValue="" required="true">
+              <pnx:ListItem key="WhiteIsZero" value="WhiteIsZero"/>
+              <pnx:ListItem key="BlackIsZero" value="BlackIsZero"/>
+              <pnx:ListItem key="RGB" value="RGB"/>
+              <pnx:ListItem key="Palette color" value="Palette color"/>
+              <pnx:ListItem key="Transparency Mask" value="Transparency Mask"/>
+              <pnx:ListItem key="CMYK" value="CMYK"/>
+              <pnx:ListItem key="YcbCr" value="YcbCr"/>
+              <pnx:ListItem key="CIELab" value="CIELab"/>
+          </pnx:List>
+        </pnx:Fieldset>
+        <pnx:Input id="ppi" label="{i18n:PPI}" type="number"/>
+        <pnx:Input id="dpi" label="{i18n:DPI}" type="number"/>
+        <pnx:Fieldset id="format" label="{i18n:Format}" required="true" emptyValue="">
+          <pnx:Input id="name" label="{i18n:Name}" required="true"/>
+          <pnx:List id="mime" label="{i18n:Mime}" required="true" emptyValue="">
+              <pnx:ListItem key="image/jpeg" value="image/jpeg"/>
+              <pnx:ListItem key="image/tiff" value="image/tiff"/>
+              <pnx:ListItem key="image/gif" value="image/gif"/>
+              <pnx:ListItem key="image/png" value="image/png"/>
+              <pnx:ListItem key="image/vnd.djvu" value="image/vnd.djvu"/>
+              <pnx:ListItem key="application/pdf" value="application/pdf"/>
+          </pnx:List>
+          <pnx:List id="compression" label="{i18n:Compression}" required="true" >
+              <pnx:ListItem key="Uncompressed" value="Uncompressed"/>
+              <pnx:ListItem key="CCITT 1D" value="CCITT 1D"/>
+              <pnx:ListItem key="CCITT Group 3" value="CCITT Group 3"/>
+              <pnx:ListItem key="CCITT Group 4" value="CCITT Group 4"/>
+              <pnx:ListItem key="LZW" value="LZW"/>
+              <pnx:ListItem key="JPG" value="JPG"/>
+              <pnx:ListItem key="PNG" value="PNG"/>
+              <pnx:ListItem key="DJVU" value="DJVU"/>
+          </pnx:List>
+        </pnx:Fieldset>
+        <pnx:Fieldset id="scanning" label="{i18n:Scanning}" emptyValue="">
+          <pnx:Input id="sourcetype" label="{i18n:Source Type}"/>
+          <pnx:Input id="scanningagency" label="{i18n:Scanning Agency}"/>
+          <pnx:Input id="devicesource" label="{i18n:Device source}"/>
+          <pnx:Fieldset id="scanningsystem" label="{i18n:Scanning System}" emptyValue="">
+            <pnx:Input id="manufacturer" label="{i18n:Scanner manufacturer}"/>
+            <pnx:Input id="model" label="{i18n:Scanner Model}"/>
+            <pnx:Input id="software" label="{i18n:Capture software}"/>
+          </pnx:Fieldset>
+        </pnx:Fieldset>
+        <pnx:Input id="datetimecreated" type="datetime" label="{i18n:DateTime Created}"/>
+        <pnx:Fieldset id="target" label="{i18n:Target}" emptyValue="" data="type=repeat;collapsable=false;repeatMin=0">
+          <pnx:List id="targetType" label="{i18n:Target Type}" required="true" emptyValue="">
+              <pnx:ListItem key="0" value="0 (external)"/>
+              <pnx:ListItem key="1" value="1 (internal)"/>
+          </pnx:List>
+          <pnx:Input id="targetID" required="true" label="{i18n:Target ID}"/>
+          <pnx:Input id="imageData" label="{i18n:Image Data}"/>
+          <pnx:Input id="performanceData" label="{i18n:Performance Data}"/>
+          <pnx:Input id="profiles" label="{i18n:Profiles}"/>
+        </pnx:Fieldset>
+
+        <!-- TODO questo fieldset genera un bug, causato probabilmente dai campi che si ripetono -->
+        <pnx:Fieldset id="altimg" label="{i18n:Alt IMG}" emptyValue="" data="type=repeat;collapsable=false;repeatMin=0">
+          <pnx:Input id="altimg_imggroupID" label="{i18n:IMG Group ID}" />
+          <pnx:Fieldset id="altimg_usage" label="{i18n:Usage}" data="type=repeat;collapsable=false;repeatMin=0">
+            <pnx:List id="altimg_usage_value" label="{i18n:Usage}" emptyValue="">
+                <pnx:ListItem key="1" value="1 (master)"/>
+                <pnx:ListItem key="2" value="2 (alta risoluzione)"/>
+                <pnx:ListItem key="3" value="3 (bassa risoluzione)"/>
+                <pnx:ListItem key="4" value="4 (preview)"/>
+                <pnx:ListItem key="a" value="a (no copyright)"/>
+                <pnx:ListItem key="b" value="b (ha copyright)"/>
+            </pnx:List>
+          </pnx:Fieldset>
+          <pnx:Hidden id="altimg_file" label="{i18n:File}" />
+          <pnx:Input id="altimg_md5" label="{i18n:MD5}" required="true" readOnly="true"/>
+          <pnx:Input id="altimg_filesize" label="{i18n:Filesize}" readOnly="true"/>
+          <pnx:Fieldset id="altimg_image_dimensions" required="true" label="{i18n:Image Dimensions}">
+            <pnx:Input id="altimg_imagelength" label="{i18n:Image Length}" type="number" required="true"/>
+            <pnx:Input id="altimg_imagewidth" label="{i18n:Image Width}" type="number" required="true"/>
+            <pnx:Input id="altimg_source_xdimension" label="{i18n:Source x Dimension}" type="number"/>
+            <pnx:Input id="altimg_source_ydimension" label="{i18n:Source y Dimension}" type="number"/>
+          </pnx:Fieldset>
+          <pnx:Fieldset id="altimg_image_metrics" label="{i18n:Image Metrics}">
+            <pnx:List id="altimg_samplingfrequencyunit" label="{i18n:Sampling Frequency Unit}" emptyValue="" required="true">
+                <pnx:ListItem key="1" value="1 (nessuna unit&#224; di misura definita)"/>
+                <pnx:ListItem key="2" value="2 (inch, pollice)"/>
+                <pnx:ListItem key="3" value="3 (centimetro)"/>
+            </pnx:List>
+            <pnx:List id="altimg_samplingfrequencyplane" label="{i18n:Sampling Frequency Plane}" emptyValue="" required="true">
+                <pnx:ListItem key="1" value="1 (camera/scanner focal plane)"/>
+                <pnx:ListItem key="2" value="2 (object plane)"/>
+                <pnx:ListItem key="3" value="3 (source object plane)"/>
+            </pnx:List>
+            <pnx:Input id="altimg_xsamplingfrequency" label="{i18n:X Sampling Frequency}"/>
+            <pnx:Input id="altimg_ysamplingfrequency" label="{i18n:Y Sampling Frequency}"/>
+            <pnx:List id="altimg_bitpersample" label="{i18n:Bit per Sample}" emptyValue="" required="true"> 
+                <pnx:ListItem key="1" value="1 (bitonale, bianco e nero)"/>
+                <pnx:ListItem key="4" value="4 (4-bit scala di grigi)"/>
+                <pnx:ListItem key="8" value="8 (8-bit scala di grigi o gamma di 256 colori)"/>
+                <pnx:ListItem key="8,8,8" value="8,8,8 (24-bit RGB)"/>
+                <pnx:ListItem key="16,16,16" value="16,16,16 (48-bit TIFF, HDR)"/>
+                <pnx:ListItem key="8,8,8,8" value="8,8,8,8 (32-bit CMYK)"/>
+            </pnx:List>
+            <pnx:List id="altimg_photometricinterpretation" label="{i18n:Photometric Interpretation}" emptyValue="" required="true">
+                <pnx:ListItem key="WhiteIsZero" value="WhiteIsZero"/>
+                <pnx:ListItem key="BlackIsZero" value="BlackIsZero"/>
+                <pnx:ListItem key="RGB" value="RGB"/>
+                <pnx:ListItem key="Palette color" value="Palette color"/>
+                <pnx:ListItem key="Transparency Mask" value="Transparency Mask"/>
+                <pnx:ListItem key="CMYK" value="CMYK"/>
+                <pnx:ListItem key="YcbCr" value="YcbCr"/>
+                <pnx:ListItem key="CIELab" value="CIELab"/>
+            </pnx:List>
+          </pnx:Fieldset>
+          <pnx:Input id="altimg_ppi" label="{i18n:PPI}" type="number"/>
+          <pnx:Input id="altimg_dpi" label="{i18n:DPI}" type="number"/>
+          <pnx:Fieldset id="altimg_format" label="{i18n:Format}" required="true" emptyValue="">
+            <pnx:Input id="altimg_name" label="{i18n:Name}" required="true"/>
+            <pnx:List id="altimg_mime" label="{i18n:Mime}" required="true" emptyValue="">
+                <pnx:ListItem key="image/jpeg" value="image/jpeg"/>
+                <pnx:ListItem key="image/tiff" value="image/tiff"/>
+                <pnx:ListItem key="image/gif" value="image/gif"/>
+                <pnx:ListItem key="image/png" value="image/png"/>
+                <pnx:ListItem key="image/vnd.djvu" value="image/vnd.djvu"/>
+                <pnx:ListItem key="application/pdf" value="application/pdf"/>
+            </pnx:List>
+            <pnx:List id="altimg_compression" label="{i18n:Compression}" required="true" >
+                <pnx:ListItem key="Uncompressed" value="Uncompressed"/>
+                <pnx:ListItem key="CCITT 1D" value="CCITT 1D"/>
+                <pnx:ListItem key="CCITT Group 3" value="CCITT Group 3"/>
+                <pnx:ListItem key="CCITT Group 4" value="CCITT Group 4"/>
+                <pnx:ListItem key="LZW" value="LZW"/>
+                <pnx:ListItem key="JPG" value="JPG"/>
+                <pnx:ListItem key="PNG" value="PNG"/>
+                <pnx:ListItem key="DJVU" value="DJVU"/>
+            </pnx:List>
+          </pnx:Fieldset>
+          <pnx:Fieldset id="altimg_scanning" label="{i18n:Scanning}" emptyValue="">
+            <pnx:Input id="altimg_sourcetype" label="{i18n:Source Type}"/>
+            <pnx:Input id="altimg_scanningagency" label="{i18n:Scanning Agency}"/>
+            <pnx:Input id="altimg_devicesource" label="{i18n:Device source}"/>
+            <pnx:Fieldset id="altimg_scanningsystem" label="{i18n:Scanning System}" emptyValue="">
+              <pnx:Input id="altimg_manufacturer" label="{i18n:Scanner manufacturer}"/>
+              <pnx:Input id="altimg_model" label="{i18n:Scanner Model}"/>
+              <pnx:Input id="altimg_software" label="{i18n:Capture software}"/>
+            </pnx:Fieldset>
+          </pnx:Fieldset>
+          <pnx:Input id="altimg_datetimecreated" type="datetime" label="{i18n:DateTime Created}"/>
+          <pnx:Input id="altimg_note" label="{i18n:Note}"/>
+        </pnx:Fieldset>
+        <pnx:Input id="note" label="{i18n:Note}"/>
+
+        <cms:FormButtonsPanel id="formButtons">
+          <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-primary js-pinaxcms-save"
+                          data="action=save" acl="*,edit" />
+        </cms:FormButtonsPanel>
+    </c:FormEdit>
+    </mvc:State>
+</mvc:Page>

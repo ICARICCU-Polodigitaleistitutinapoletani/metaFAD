@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:Config xmlns:pnx="http://www.pinax.org/dtd/1.0/">
+    <pnx:Param name="CHARSET" value="UTF-8"/>
+    <pnx:Param name="APP_NAME" value="Metafad"/>
+    <pnx:Param name="APP_VERSION" value="0.8"/>
+    <pnx:Param name="APP_AUTHOR">
+        <![CDATA[ICAR - ICCU]]>
+    </pnx:Param>
+
+    <pnx:Param name="SANITIZE_URL" value="false"/>
+
+    <pnx:Param name="SEF_URL" value="full"/>
+    <pnx:Param name="USER_LOG" value="false"/>
+    <pnx:Param name="DEFAULT_LANGUAGE" value="it"/>
+    <pnx:Param name="SESSION_PREFIX" value="metafad"/>
+	<pnx:Param name="SESSION_TIMEOUT" value="1000000000"/>
+    <pnx:Param name="CACHE_CODE" value="-1"/>
+    <pnx:Param name="PNX_HOST" value="{{env:METAFAD_URL}}"/>
+
+    <pnx:Param name="DB_TYPE" value="mysql" />
+    <pnx:Param name="DB_HOST" value="{{env:MYSQL_HOST}}" />
+    <pnx:Param name="DB_NAME" value="{{env:MYSQL_DB_NAME_BE}}" />
+    <pnx:Param name="DB_USER" value="{{env:MYSQL_USERNAME}}" />
+    <pnx:Param name="DB_PSW" value="{{env:MYSQL_PASSWORD}}" />
+    <pnx:Param name="DB_PREFIX" value="" />
+
+
+    <pnx:Param name="DB_TYPE#3" value="mysql" />
+    <pnx:Param name="DB_HOST#3" value="{{env:MYSQL_HOST}}" />
+    <pnx:Param name="DB_NAME#3" value="{{env:MYSQL_DB_NAME_ECOMMERCE}}" />
+    <pnx:Param name="DB_USER#3" value="{{env:MYSQL_USERNAME}}" />
+    <pnx:Param name="DB_PSW#3" value="{{env:MYSQL_PASSWORD}}" />
+    <pnx:Param name="DB_PREFIX#3" value="" />
+
+    <pnx:Param name="DB_TYPE#4" value="mysql" />
+    <pnx:Param name="DB_HOST#4" value="{{env:MYSQL_HOST}}" />
+    <pnx:Param name="DB_NAME#4" value="metafad_be_recover" />
+    <pnx:Param name="DB_USER#4" value="{{env:MYSQL_USERNAME}}" />
+    <pnx:Param name="DB_PSW#4" value="{{env:MYSQL_PASSWORD}}" />
+    <pnx:Param name="DB_PREFIX#4" value="" />
+
+    <pnx:Param name="SMTP_HOST" value="{{env:SMTP_HOST}}" />
+    <pnx:Param name="SMTP_USER" value="{{env:SMTP_USER}}" />
+    <pnx:Param name="SMTP_PSW" value="{{env:SMTP_PSW}}" />
+    <pnx:Param name="SMTP_SENDER" value="{{env:SMTP_SENDER}}" />
+    <pnx:Param name="SMTP_EMAIL" value="{{env:SMTP_EMAIL}}" />
+    <pnx:Param name="SMTP_PORT" value="{{env:SMTP_PORT}}" />
+
+    <pnx:Param name="BASE_REGISTRY_PATH" value="metafad"/>
+    <pnx:Param name="TEMPLATE_FOLDER" value="static/metafad/template/"/>
+
+    <pnx:Param name="ACL_ENABLED" value="true" />
+    <pnx:Param name="ACL_ROLES" value="true" />
+    <pnx:Param name="ACL_MODULES" value="true" />
+    <pnx:Param name="ACL_CLASS" value="metafad.usersAndPermissions.roles.Acl" />
+    <pnx:Param name="SITEMAP_ID" value="pinaxcms_ContentsEdit" />
+    <pnx:Param name="PERMISSION_CLASS" value="metafad.usersAndPermissions.roles.services.SiteMapPermissionService" />
+    <pnx:Param name="PERMISSION_PARAMS" value="permissions.xml" />
+
+    <pnx:Param name="DATASOURCE_MODE" value="xml"/>
+    <pnx:Param name="START_PAGE" value="Login"/>
+
+    <pnx:Param name="PINAX_ADD_JQUERY_JS" value="true"/>
+    <pnx:Param name="PINAX_JQUERY" value="jquery-2.1.4.min.js"/>
+    <pnx:Param name="PINAX_ADD_JQUERYUI_JS" value="true"/>
+    <pnx:Param name="PINAX_JQUERYUI_THEME" value="jquery-ui-bootstrap/jquery-ui-1.10.0.custom.css"/>
+    <pnx:Param name="PINAX_JQUERYUI" value="jquery-ui-1.10.4.custom.min.js"/>
+    <pnx:Param name="DEBUG" value="false" />
+
+    <pnx:Param name="pinax.form.cssClass" value="form-horizontal row-fluid stickyForm form-max-width"/>
+    <pnx:Param name="pinax.formElement.cssClassLabel" value="col-sm-3 control-label"/>
+    <pnx:Param name="pinax.formElement.admCssClass" value="form-control"/>
+    <pnx:Param name="pinax.formElement.cssClass" value="form-control"/>
+    <pnx:Param name="pinax.formElement.input.cssClass" value="form-control" />
+    <pnx:Param name="pinaxcms.content.history" value="true"/>
+    <pnx:Param name="pinax.dataAccess.validate" value="false"/>
+    <pnx:Param name="pinax.dataAccess.document.enableComment" value="true"/>
+
+    <pnx:Param name="FORM_ITEM_TEMPLATE"><![CDATA[
+    <div class="form-group">
+        ##FORM_LABEL##
+        <div class="col-sm-9">
+            ##FORM_ITEM##
+        </div>
+    </div>
+    ]]></pnx:Param>
+    <pnx:Param name="FORM_ITEM_RIGHT_LABEL_TEMPLATE"><![CDATA[
+    <div class="form-group">
+        ##FORM_LABEL##
+        <div class="col-sm-9">
+            ##FORM_ITEM##
+        </div>
+    </div>
+    ]]></pnx:Param>
+    <pnx:Param name="pinaxcms.form.buttonsPanel"><![CDATA[
+    <div class="formButtons" id="##ID##">
+        <div class="content">
+            ##CONTENT##
+        </div>
+    </div>
+    ]]></pnx:Param>
+
+    <pnx:Param name="pinax.datagrid.action.editCssClass" value="btn btn-info btn-flat fa fa-pencil"/>
+    <pnx:Param name="pinax.datagrid.action.showOnlyCssClass" value="btn btn-success btn-flat fa fa-search"/>
+    <pnx:Param name="pinax.datagrid.action.editDraftCssClass" value="btn btn-default btn-flat fa fa-wrench"/>
+    <pnx:Param name="pinax.datagrid.action.deleteCssClass" value="btn btn-danger btn-flat fa fa-trash"/>
+    <pnx:Param name="pinax.datagrid.action.normalizeCssClass" value="btn btn-success btn-flat fa fa-cog"/>
+    <pnx:Param name="pinax.datagrid.action.hideCssClass" value="btn btn-default btn-flat fa fa-eye-slash"/>
+    <pnx:Param name="pinax.datagrid.action.downloadCssClass" value="btn btn-default btn-flat fa fa-download"/>
+    <pnx:Param name="pinax.datagrid.action.showCssClass" value="btn btn-default btn-flat fa fa-eye"/>
+    <pnx:Param name="pinax.datagrid.action.startCssClass" value="btn btn-success btn-flat fa fa-play"/>
+    <pnx:Param name="pinax.datagrid.action.copyCssClass" value="btn btn-default btn-flat fa fa-copy"/>
+    <pnx:Param name="pinax.datagrid.action.copyWithoutValueCssClass" value="btn btn-default btn-flat fa fa-file"/>
+    <pnx:Param name="pinax.datagrid.action.detailCssClass" value="btn btn-default btn-flat fa fa-bars"/>
+    <pnx:Param name="pinax.datagrid.action.validateCssClass" value="btn btn-success btn-flat fa fa-magic"/>
+    <pnx:Param name="pinax.datagrid.action.ecommerceCssClass" value="btn btn-success btn-flat fa fa-eur"/>
+    <pnx:Param name="pinax.datagrid.checkbox.on" value="fa fa-check-square text-dark-gray"/>
+    <pnx:Param name="pinax.datagrid.checkbox.off" value="fa fa-square-o"/>
+    <pnx:Param name="pinaxcms.form.actionLink.cssClass" value="btn btn-info btn-flat"/>
+
+    <pnx:Param name="pinax.maps.google.apiKey" value="{{env:GOOGLE_API_KEY}}"/>
+
+    <pnx:Param name="avatar.default" value="{{TEMPLATE_FOLDER}}img/avatar.png"/>
+
+    <pnx:Param name="metafad.log.group" value="metafad"/>
+    <pnx:Param name="metafad.log.level" value="{{env:METAFAD_LOG_LEVEL}}"/>
+
+    <pnx:Param name="metafad.hasMultiLanguage" value="false"/>
+
+    <pnx:Param name="metafad.solr.base.url" value="{{env:SOLR_HOST}}"/>
+    <pnx:Param name="metafad.search.base.url" value="{{env:SEARCH_SERVICES_HOST}}"/>
+
+    <pnx:Param name="solr.core.be" value="{{env:SOLR_CORE_BE}}"/>
+    <pnx:Param name="solr.core.fe" value="{{env:SOLR_CORE_FE}}"/>
+    <pnx:Param name="solr.core.fe_iccd" value="{{env:SOLR_CORE_FE_ICCD}}"/>
+    <pnx:Param name="solr.core.fe_iccd_aut" value="{{env:SOLR_CORE_FE_ICCD_AUT}}"/>
+    <pnx:Param name="solr.core.fe_archive" value="{{env:SOLR_CORE_FE_ARCHIVE}}"/>
+    <pnx:Param name="solr.core.fe_archive_aut" value="{{env:SOLR_CORE_FE_ARCHIVE_AUT}}"/>
+    <pnx:Param name="solr.core.metaindice" value="{{env:SOLR_CORE_METAINDICE}}"/>
+    <pnx:Param name="solr.core.metaindice_aut" value="{{env:SOLR_CORE_METAINDICE_AUT}}"/>
+    <pnx:Param name="solr.core.dam" value="{{env:SOLR_CORE_DAM}}"/>
+
+    <pnx:Param name="metafad.solr.url" value="{{metafad.solr.base.url}}/solr/{{solr.core.be}}/"/>
+    <pnx:Param name="metafad.solr.url.fe" value="{{metafad.solr.base.url}}/solr/{{solr.core.fe}}/"/>
+    <pnx:Param name="metafad.sbnToMag.url" value="{{metafad.search.base.url}}/sbnmarc/mag?bid="/>
+    <pnx:Param name="metafad.solr.iccd.url" value="{{metafad.solr.base.url}}/solr/{{solr.core.fe_iccd}}/"/>
+    <pnx:Param name="metafad.solr.iccdaut.url" value="{{metafad.solr.base.url}}/solr/{{solr.core.fe_iccd_aut}}/"/>
+    <pnx:Param name="metafad.solr.archive.url" value="{{metafad.solr.base.url}}/solr/{{solr.core.fe_archive}}/"/>
+    <pnx:Param name="metafad.solr.archiveaut.url" value="{{metafad.solr.base.url}}/solr/{{solr.core.fe_archive_aut}}/"/>
+    <pnx:Param name="metafad.solr.metaindice.url" value="{{metafad.solr.base.url}}/solr/{{solr.core.metaindice}}/"/>
+    <pnx:Param name="metafad.solr.metaindiceaut.url" value="{{metafad.solr.base.url}}/solr/{{solr.core.metaindice_aut}}/"/>
+    <pnx:Param name="metafad.kardex.url" value="{{metafad.search.base.url}}/kardex/search?"/>
+    <pnx:Param name="metafad.opac.fields.url" value="{{metafad.search.base.url}}/opac/fields" />
+    <pnx:Param name="metafad.opac.archive.fields.url" value="{{metafad.search.base.url}}/archivio-ca/fields" />
+    <pnx:Param name="metafad.opac.iccd.fields.url" value="{{metafad.search.base.url}}/iccd/fields" />
+    <pnx:Param name="metafad.opac.metaindice.fields.url" value="{{metafad.search.base.url}}/metaindice/fields" />
+    <pnx:Param name="metafad.opac.metaindice-au.fields.url" value="{{metafad.search.base.url}}/metaindice-au/fields" />
+
+    <pnx:Param name="metafad.sbnmarc.url" value="{{metafad.search.base.url}}/sbnmarc/iccd?"/>
+    <pnx:Param name="metafad.mets.import.url" value="{{metafad.search.base.url}}/mets/mag" />
+    <pnx:Param name="metafad.metaindice.detail.url" value="{{metafad.search.base.url}}/metaindice/resource"/>
+    <pnx:Param name="metafad.service.updateSbnDigitale" value="{{metafad.search.base.url}}/opac/updateSbnDigitale"/>
+    <pnx:Param name="metafad.service.updateSbnToIccd" value="{{metafad.search.base.url}}/opac/updateSbnToIccd"/>
+    <pnx:Param name="metafad.service.updateSbnToIccdAut" value="{{metafad.search.base.url}}/opac-au/updateSbnToIccd"/>
+    <pnx:Param name="metafad.service.updateSbnEcommerce" value="{{metafad.search.base.url}}/opac/updateEcommerce"/>
+    <pnx:Param name="metafad.service.updateSbnVisibility" value="{{metafad.search.base.url}}/opac/updateVisibility"/>
+
+    <pnx:Param name="pinaxcms.mediaArchive.bridge" value="metafad.dam.Bridge"/>
+    <pnx:Param name="metafad.dam.instance" value="{{env:DAM_INSTANCE}}"/>
+    <pnx:Param name="metafad.dam_fe.url_env" value="{{env:DAM_FE_URL}}"/>
+    <pnx:Param name="metafad.dam_fe.url" value="{{metafad.dam_fe.url_env}}/#/tecadam"/>
+	<pnx:Param name="metafad.dam.url" value="{{env:METAFAD_URL}}/rest/dam/"/>
+	<pnx:Param name="metafad.dam.url.local" value="{{env:DAM_REST_URL}}"/>
+    <pnx:Param name="metafad.dam.cmsIntegration" value="false"/>
+    <pnx:Param name="metafad.dam.solr.url" value="{{metafad.solr.base.url}}/solr/{{solr.core.dam}}/"/>
+
+    <pnx:Param name="metafad.dam.upload.folder" value="{{env:DAM_UPLOAD_FOLDER}}"/>
+    <pnx:Param name="metafad.dam.storage.folder" value="{{env:DAM_STORAGE_FOLDER}}"/>
+    <pnx:Param name="metafad.dam.timeout" value="3600" />
+    <pnx:Param name="metafad.dam.maxResizeWidth" value="1200"/>
+    <pnx:Param name="metafad.dam.resizeStreamS" value="800"/>
+
+    <pnx:Param name="metafad.url" value="{{env:METAFAD_URL}}"/>
+    <pnx:Param name="metafad.FE.url" value="{{env:METAFAD_FE_URL}}"/>
+    <pnx:Param name="metafad.strumag.url" value="{{env:METAFAD_STRUMAG_URL}}"/>
+    <pnx:Param name="metafad.tecadam" value="{{metafad.dam_fe.url_env}}#/tecadam?setState=true"/>
+    <pnx:Param name="metafad.strumag" value="{{metafad.strumag.url}}" />
+
+    <pnx:Param name="metafad.iccd.hasList" value="false" />
+    <pnx:Param name="metafad.importer.uploadFolder" value="{{env:METAFAD_IMPORT_FOLDER}}"/>
+    <pnx:Param name="metafad.importer.storageFolder" value="{{env:METAFAD_STORAGE_FOLDER}}"/>
+    <pnx:Param name="metafad.importer.iccd.services.ImmftanFromDB.folder" value="{{env:METAFAD_IMPORT_FOLDER}}"/>
+    <pnx:Param name="metafad.MAG.folder" value="{{env:METAFAD_MAG_FOLDER}}"/>
+    <pnx:Param name="metafad.MAG.export.folder" value="{{env:METAFAD_MAG_EXPORT_FOLDER}}" />
+
+    <pnx:Param name="metafad.sbn.upload.web.folder" value="{{env:METAFAD_SBN_FOLDER}}"/>
+    <pnx:Param name="metafad.sbn.upload.solr.folder" value="{{env:METAFAD_SBN_FOLDER}}"/>
+    <pnx:Param name="metafad.sbn.uploadFolder.web" value="{{metafad.sbn.upload.web.folder}}/sbn"/>
+    <pnx:Param name="metafad.sbn.uploadFolder.solr" value="{{metafad.sbn.upload.solr.folder}}/sbn"/>
+    <pnx:Param name="metafad.sbn.outputFolder.web" value="{{metafad.sbn.upload.web.folder}}/output-sbn"/>
+    <pnx:Param name="metafad.sbn.outputFolder.solr" value="{{metafad.sbn.upload.solr.folder}}/output-sbn"/>
+    <pnx:Param name="metafad.sbnaut.uploadFolder.web" value="{{metafad.sbn.upload.web.folder}}/sbnaut"/>
+    <pnx:Param name="metafad.sbnaut.uploadFolder.solr" value="{{metafad.sbn.upload.solr.folder}}/sbnaut"/>
+    <pnx:Param name="metafad.sbnaut.outputFolder.web" value="{{metafad.sbn.upload.web.folder}}/output-sbnaut"/>
+    <pnx:Param name="metafad.sbnaut.outputFolder.solr" value="{{metafad.sbn.upload.solr.folder}}/output-sbnaut"/>
+    <pnx:Param name="metafad.sbn.import" value="{{metafad.search.base.url}}/jobs/import/start?filename=##filename##&amp;directory=##directory##" />
+    <pnx:Param name="metafad.sbn.import.status" value="{{metafad.search.base.url}}/jobs/import/status" />
+    <pnx:Param name="metafad.iccd.uniqueIccdId.useESC" value="true" />
+
+    <pnx:Param name="iiif.imagePath.internal" value="{{env:IIIF_INTERNAL_URL}}" />
+    <pnx:Param name="iiif.imagePath" value="{{env:IIIF_URL}}" />
+
+    <pnx:Param name="oaipmh.protocolVersion" value="2.0" />
+	<pnx:Param name="oaipmh.granularity" value="YYYY-MM-DDThh:mm:ssZ" />
+	<pnx:Param name="oaipmh.delimiter" value="{{env:METAFAD_OAIPMH_DELIMITER}}" />
+	<pnx:Param name="oaipmh.idPrefix" value="{{env:METAFAD_OAIPMH_ID_PREFIX}}" />
+	<pnx:Param name="oaipmh.maxRecords" value="{{env:METAFAD_OAIPMH_MAX_RECORDS}}" />
+	<pnx:Param name="oaipmh.maxIds" value="{{env:METAFAD_OAIPMH_MAX_IDS}}" />
+	<pnx:Param name="oaipmh.title" value="{{env:METAFAD_OAIPMH_TITLE}}" />
+	<pnx:Param name="oaipmh.adminEmail" value="{{env:METAFAD_OAIPMH_EMAIL}}" />
+	<pnx:Param name="oaipmh.earliestDatestamp" value="{{env:METAFAD_OAIPMH_EARLY_DATE}}" />
+	<pnx:Param name="oaipmh.repositoryIdentifier" value="{{env:METAFAD_OAIPMH_IDENTIFIER}}" />
+	<pnx:Param name="oaipmh.oaiPrefix" value="oai{{oaipmh.delimiter}}{{oaipmh.repositoryIdentifier}}{{oaipmh.delimiter}}{{oaipmh.idPrefix}}" />
+
+    <!-- i seguenti parametri avere valore true, false o demo -->
+    <pnx:Param name="metafad.installation.name" value="{{env:METAFAD_NAME}}"/>
+    <pnx:Param name="metafad.be.hideFieldMassive" value="false" />
+    <pnx:Param name="metafad.be.hasFE" value="true"/>
+    <pnx:Param name="metafad.be.hasSBN" value="{{env:METAFAD_FLAG_SBN}}"/>
+	<pnx:Param name="metafad.be.hasICCD" value="{{env:METAFAD_FLAG_ICCD}}"/>
+	<pnx:Param name="metafad.be.hasArchive" value="{{env:METAFAD_FLAG_ARCHIVE}}"/>
+	<pnx:Param name="metafad.be.hasInstitutes" value="{{env:METAFAD_HAS_INSTITUTES,true}}" />
+	<pnx:Param name="metafad.be.hasImport" value="{{env:METAFAD_HAS_IMPORT,true}}" />
+	<pnx:Param name="metafad.be.hasExport" value="true" /><!-- true ! false | demo -->
+	<pnx:Param name="metafad.be.hasMag" value="{{env:METAFAD_HAS_MAG,true}}" />
+	<pnx:Param name="metafad.be.hasMets" value="{{env:METAFAD_HAS_METS,true}}" />
+	<pnx:Param name="metafad.be.hasIccdGenerator" value="{{env:METAFAD_HAS_ICCDGENERATOR,true}}" />
+	<pnx:Param name="metafad.be.hasDictionaries" value="{{env:METAFAD_HAS_DICTIONARIES,true}}" />
+    <pnx:Param name="metafad.be.hasMovio" value="{{env:METAFAD_HAS_MOVIO,true}}" />
+    <pnx:Param name="metafad.be.hasEcommerce" value="{{env:METAFAD_HAS_ECOMMERCE,true}}" />
+	<pnx:Param name="metafad.fe.hasMetaindice" value="{{env:METAFAD_HAS_METAINDICE,true}}" />
+    <pnx:Param name="metafad.dam.hasDownload" value="{{env:METAFAD_HAS_DOWNLOAD,true}}" />
+	<pnx:Param name="metafad.fe.search.hasCustomServices" value="{{env:METAFAD_HAS_CUSTOMSERVICES,true}}" />
+	<pnx:Param name="metafad.dataGridSolr.autoComplete" value="20" />
+    <pnx:Param name="metafad.massiveDelete.activate" value="{{env:METAFAD_MASSIVE_DELETE_ACTIVATE,false}}" />
+    <pnx:Param name="metafad.getIccd.activate" value="{{env:METAFAD_GETICCD_ACTIVATE,false}}" />
+    <pnx:Param name="metafad.tmp.folder" value="{{env:METAFAD_TMP_FOLDER}}"/>
+    <pnx:Param name="metafad.pageTitle.truncate" value="false"/>
+    <pnx:Param name="metafad.accessPage" value="utenti-e-permessi-selezione-istituto" />
+
+    <!-- Link OAI-PMH SIAS e SIUSA -->
+    <pnx:Param name="OAI_SIAS" value="https://sias.archivi.beniculturali.it/sias-oai/sias-oai.pl"/>
+    <pnx:Param name="OAI_SIUSA" value="https://siusa.archivi.beniculturali.it/cgi-bin/siusa-oai/siusa-oai.pl"/>
+
+    <pnx:Param name="thesaurus.show.keyValue" value="false"/>
+	<!-- Lista dei campi del profilo di ricerca ICCD da salvare in solr FE -->
+	<pnx:Param name="metafad.iccd.solr.commonFields">
+	<![CDATA[
+    	[
+			"PVCS","PVCR","PVCC","PVCF","PVCL","LDCM","LDCN","LDCC","LDCS",
+			"OGTD","SGTI","SGTT","OGTN","NCTN","NCTR","NAC","MTC",
+			"ROZ","RVEL","AUTN","ATBD","FTAN","DTSI","DTSF", "DTZG",
+			"INVN","BIBA","TSK","RSTD","RSTS","RSTE","RSTN","RSTR"
+		]
+	]]>
+	</pnx:Param>
+
+	<pnx:Param name="metafad.iccd.solr.sortingFields">
+	<![CDATA[
+    	[
+			"AUTN","OGTD","SGTI","NCTN"
+		]
+	]]>
+	</pnx:Param>
+
+	<pnx:Param name="metafad.archive.solr.sortingFields">
+	<![CDATA[
+    	[
+			"produttore","conservatore","livello_descrizione"
+		]
+	]]>
+	</pnx:Param>
+
+    <pnx:Param name="metafad.archive.treeIcon">
+	  <![CDATA[
+    {
+	"archivi.models.UnitaArchivistica": "fa fa-folder",
+    "archivi.models.UnitaDocumentaria": "fa fa-file-text",
+    "archivi.models.ComplessoArchivistico": "fa fa-archive"
+	}
+    ]]>
+    </pnx:Param>
+
+    <pnx:Param name="metafad.archive.popup">
+    <![CDATA[
+    {
+        "archivi-antroponimi_popup": "archivi-antroponimi",
+        "archivi-toponimi_popup": "archivi-toponimi",
+        "archivi-enti_popup": "archivi-enti",
+        "archivi-import_popup": "metafad.importer",
+        "archivi-export_popup": "archive_export_ead3",
+        "archivi-sias-siusa_popup": "archivi-complessoarchivistico"
+    }
+	]]>
+	</pnx:Param>
+
+    <pnx:Param name="metafad.selectAll" value="false" />
+
+    <pnx:Param name="metafad.getIccd.availableModels">
+	  <![CDATA[
+        [
+            "AUT200","AUT300","AUT400",
+            "BIB200","BIB300","BIB400",
+            "SchedaD200","SchedaD300",
+            "SchedaF300","SchedaF400",
+            "SchedaMI200","SchedaMI300",
+            "SchedaOA200","SchedaOA300",
+            "SchedaS200","SchedaS300"
+        ]
+    ]]>
+    </pnx:Param>
+
+    <pnx:Param name="peb.entity.properties" value="/rest/ontologymanager/entity-properties/" />
+    <pnx:Param name="pathToAdmin" value="/opt/app/metafad/application/" />
+
+    <pnx:Param name="metafad.archive.treeIcon">
+        <![CDATA[
+        {
+          "archivi.models.UnitaArchivistica": "mr-2 icon-menu text-xs",
+        "archivi.models.UnitaDocumentaria": "mr-2 icon-menu text-xs",
+        "archivi.models.ComplessoArchivistico": "mr-2 icon-box text-xs"
+        }
+        ]]>
+    </pnx:Param>
+    
+</pnx:Config>

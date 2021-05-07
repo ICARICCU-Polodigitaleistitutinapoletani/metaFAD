@@ -1,0 +1,483 @@
+{
+    "id": "ProgettoDigitalizzazione",
+    "tabs": [
+      {
+        "id": "tabIdentificazione",
+        "label": "Identificazione",
+        "fields": [
+          {
+            "id": "codici",
+            "type": "Fieldset",
+            "attributes": {
+              "label": "Codici"
+            },
+            "children": [
+              {
+                "id": "acronimoSistema",
+                "type": "Input",
+                "label": "Acronimo di sistema",
+                "required": "true",
+                "attributes": {
+                  "readOnly": "true"
+                },
+                "model": {
+                  "type": "string",
+                  "index": "true"
+                },
+                "solr": {
+                  "field": "acronimoSistema_s"
+                }
+              },
+              {
+                "id": "identificativo",
+                "attributes": {
+                  "readOnly": "true"
+                },
+                "type": "Input",
+                "label": "Identificativo per il Progetto",
+                "gridField": true,
+                "solr": {
+                  "field": "identificativo_s"
+                }
+              },
+              {
+                "id": "codiceIdentificativoSistema",
+                "attributes": {
+                  "readOnly": "true"
+                },
+                "type": "Input",
+                "label": "Codice identificativo di sistema"
+              },
+              {
+                "id": "externalID",
+                "type": "Hidden",
+                "label": "ID importazione",
+                "attributes": {
+                  "readOnly": "true"
+                },
+                "model": {
+                  "type": "string",
+                  "index": "true"
+                },
+                "solr": {
+                  "field": "externalID_s"
+                }
+              }
+            ]
+          },
+          {
+            "id": "denominazione",
+            "type": "Input",
+            "label": "Denominazione del progetto",
+            "solr": {
+              "field": "denominazione_s"
+            }
+          },
+          {
+            "id": "acronimoProgetto",
+            "type": "Input",
+            "label": "Acronimo del progetto"
+          },
+          {
+            "id": "entePrincipaleCoinvolto",
+            "type": "Fieldset",
+            "label": "Ente principale coinvolto",
+            "children": [
+              {
+                "id": "entePrincipaleDenominazione",
+                "type": "ModalPage",
+                "label": "Denominazione ente",
+                "pageId": "archivi-Enti_popup",
+                "controller": "archivi_controllers_popup_ajax_FindTerm",
+                "model": "archivi.models.Enti",
+                "solr": {
+                  "field": "entePrincipale_s"
+                }
+              },
+              {
+                "id": "entePrincipaleQualificazione",
+                "type": "Input",
+                "label": "Qualificazione della partecipazione al progetto"
+              }
+            ]
+          },
+          {
+            "id": "enteCoinvolto",
+            "type": "Repeater",
+            "label": "Ente coinvolto",
+            "children": [
+              {
+                "id": "entitaDenominazione",
+                "type": "ModalPage",
+                "label": "Denominazione ente",
+                "pageId": "archivi-Enti_popup",
+                "controller": "archivi_controllers_popup_ajax_FindTerm",
+                "model": "archivi.models.Enti",
+                "solr": {
+                  "field": "enti_ss",
+                  "searchExpr": "@enteCoinvolto->entitaDenominazione->text[]"
+                }
+              },
+              {
+                "id": "qualificazione",
+                "type": "OpenDictionary",
+                "dictionaryId": "VA_ARCHIVE_PROGETTO_ENTE_COINVOLTO",
+                "label": "Qualificazione della partecipazione al progetto"
+              }
+            ]
+          },
+          {
+            "id": "tipologia",
+            "type": "Repeater",
+            "label": "Tipologia e finalità",
+            "children": [
+              {
+                "id": "tipologiaProgetto",
+                "type": "OpenDictionary",
+                "dictionaryId": "VA_ARCHIVE_TIPOLOGIA_PROGETTO",
+                "label": "Tipologia e finalità del progetto"
+              }
+            ]
+          },
+          {
+            "id": "storiaProgetto",
+            "type": "Repeater",
+            "onlyOne": true,
+            "attributes": {
+              "cssClass": "js-archive-cronologia-root"
+            },
+            "label": "Storia del progetto",
+            "children": [
+              {
+                "id": "noteStoriche",
+                "type": "RichText",
+                "label": "Note storiche su origine e realizzazione del progetto"
+              },
+              {
+                "id": "estremoCronologicoTestuale",
+                "type": "Input",
+                "label": "Estremo cronologico testuale",
+                "attributes": {
+                  "readOnly": "true",
+                  "cssClass": "js-archive-cronologia-concatText form-control"
+                }
+              },
+              {
+                "id": "estremoRemoto",
+                "attributes": {
+                  "cssClass": "js-archive-cronologia-remotoRoot js-archive-cronologia-estremo"
+                },
+                "type": "FieldSet",
+                "label": "Estremo cronologico remoto",
+                "children": [
+                  {
+                    "id": "estremoRemoto_data",
+                    "attributes": {
+                      "cssClass": "js-archive-cronologia-dateInput form-control"
+                    },
+                    "type": "Input",
+                    "label": "Data"
+                  },
+                  {
+                    "id": "estremoRemoto_secolo",
+                    "type": "ClosedDictionary",
+                    "label": "Secolo",
+                    "onChangeTarget": "*`-->estremoRemoto_specifica",
+                    "dictionaryId": "VC_ARCHIVE_SECOLO",
+                    "attributes": {
+                      "cssClass": "js-archive-cronologia-century form-control"
+                    }
+                  },
+                  {
+                    "id": "estremoRemoto_specifica",
+                    "type": "ClosedDictionary",
+                    "label": "Specifica",
+                    "dictionaryId": "VC_ARCHIVE_SPEC_SECOLO"
+                  },
+                  {
+                    "id": "estremoRemoto_validita",
+                    "type": "ClosedDictionary",
+                    "label": "Validità",
+                    "dictionaryId": "VC_ARCHIVE_VALIDITA_DATA",
+                    "attributes": {
+                      "cssClass": "js-archive-cronologia-valid-data form-control"
+                    }
+                  },
+                  {
+                    "id": "estremoRemoto_codificaData",
+                    "type": "Input",
+                    "attributes": {
+                      "label": "Codifica della data",
+                      "readOnly": "true",
+                      "cssClass": "js-archive-cronologia-codificaText form-control"
+                    }
+                  },
+                  {
+                    "id": "estremoRemoto_noteData",
+                    "type": "RichText",
+                    "label": "Note alla data"
+                  }
+                ]
+              },
+              {
+                "id": "estremoRecente",
+                "attributes": {
+                  "cssClass": "js-archive-cronologia-recenteRoot js-archive-cronologia-estremo"
+                },
+                "type": "FieldSet",
+                "label": "Estremo cronologico recente",
+                "children": [
+                  {
+                    "id": "estremoRecente_data",
+                    "attributes": {
+                      "cssClass": "js-archive-cronologia-dateInput form-control"
+                    },
+                    "type": "Input",
+                    "label": "Data"
+                  },
+                  {
+                    "id": "estremoRecente_secolo",
+                    "type": "ClosedDictionary",
+                    "label": "Secolo",
+                    "onChangeTarget": "*`-->estremoRecente_specifica",
+                    "dictionaryId": "VC_ARCHIVE_SECOLO",
+                    "attributes": {
+                      "cssClass": "js-archive-cronologia-century form-control"
+                    }
+                  },
+                  {
+                    "id": "estremoRecente_specifica",
+                    "type": "ClosedDictionary",
+                    "label": "Specifica",
+                    "dictionaryId": "VC_ARCHIVE_SPEC_SECOLO"
+                  },
+                  {
+                    "id": "estremoRecente_validita",
+                    "type": "ClosedDictionary",
+                    "label": "Validità",
+                    "dictionaryId": "VC_ARCHIVE_VALIDITA_DATA",
+                    "attributes": {
+                      "cssClass": "js-archive-cronologia-valid-data form-control"
+                    }
+                  },
+                  {
+                    "id": "estremoRecente_codificaData",
+                    "type": "Input",
+                    "attributes": {
+                      "label": "Codifica della data",
+                      "readOnly": "true",
+                      "cssClass": "js-archive-cronologia-codificaText form-control"
+                    }
+                  },
+                  {
+                    "id": "estremoRecente_noteData",
+                    "type": "RichText",
+                    "label": "Note alla data"
+                  },
+                  {
+                    "id": "qualificaData",
+                    "type": "ClosedDictionary",
+                    "label": "Qualifica della data",
+                    "dictionaryId": "VC_ARCHIVE_QUALIFICA_DATA",
+                    "attributes": {
+                      "cssClass": "js-archive-cronologia-qualifica-data form-control"
+                    }
+                  },
+                  {
+                    "id": "notaDatazione",
+                    "type": "RichText",
+                    "label": "Nota alla datazione"
+                  },
+                  {
+                    "id": "statoAvanzamento",
+                    "type": "RichText",
+                    "label": "Informazioni sommarie sullo stato di avanzamento"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tabIdentificazione",
+        "label": "tabDescrizione",
+        "fields": [
+          {
+            "id": "descrizioneSintetica",
+            "type": "Fieldset",
+            "label": "Descrizione sintetica del progetto culturale e delle risorse digitalizzate",
+            "children": [
+              {
+                "id": "obiettivi",
+                "type": "RichText",
+                "label": "Obiettivi"
+              },
+              {
+                "id": "criteriSelezione",
+                "type": "RichText",
+                "label": "Criteri di selezione e descrizione del materiale"
+              },
+              {
+                "id": "criteriRiproduzione",
+                "type": "RichText",
+                "label": "Criteri di riproduzione"
+              },
+              {
+                "id": "coperturaSpaziale",
+                "type": "RichText",
+                "label": "Copertura spaziale della documentazione"
+              },
+              {
+                "id": "coperturaTemporale",
+                "type": "RichText",
+                "label": "Copertura temporale della documentazione"
+              }
+            ]
+          },
+          {
+            "id": "descrizioneTecnica",
+            "type": "Fieldset",
+            "label": "Descrizione della realizzazione tecnica",
+            "children": [
+              {
+                "id": "architetturaSistema",
+                "type": "RichText",
+                "label": "Architettura del sistema digitale di gestione dati e immagini"
+              },
+              {
+                "id": "dimensioniArchivio",
+                "type": "RichText",
+                "label": "Dimensioni dell'archivio digitale"
+              },
+              {
+                "id": "formatoImg",
+                "type": "RichText",
+                "label": "Formato delle immagini on-line"
+              },
+              {
+                "id": "formatiPerRiproduzione",
+                "type": "RichText",
+                "label": "Formati disponibili per la riproduzione"
+              },
+              {
+                "id": "risoluzioni",
+                "type": "RichText",
+                "label": "Risoluzioni adottate"
+              },
+              {
+                "id": "gestioniColore",
+                "type": "RichText",
+                "label": "Gestioni del colore"
+              },
+              {
+                "id": "altriSoftware",
+                "type": "RichText",
+                "label": "Altri software o piattaforme tecnologica utilizzate per la gestione/pubblicazione dei materiali"
+              },
+              {
+                "id": "strumentazioneRipresa",
+                "type": "RichText",
+                "label": "Strumentazione di ripresa"
+              },
+              {
+                "id": "standardUtilizzati",
+                "type": "RichText",
+                "label": "Standard utilizzati"
+              }
+            ]
+          },
+          {
+            "id": "entiRel",
+            "type": "Repeater",
+            "label": "Enti collegati",
+            "children": [
+              {
+                "id": "enteRel",
+                "type": "ModalPage",
+                "label": "Ente",
+                "pageId": "archivi-Enti_popup",
+                "controller": "archivi_controllers_popup_ajax_FindTerm",
+                "model": "archivi.models.Enti",
+                "solr": {
+                  "field": "enti_collegati_ss",
+                  "searchExpr": "@entiRel->enteRel->text[]"
+                }
+              }
+            ]
+          },
+          {
+            "id": "complessi",
+            "type": "Repeater",
+            "label": "Complessi archivistici collegati",
+            "children": [
+              {
+                "id": "linkComplessi",
+                "type": "Link",
+                "label": "Complesso archivistico",
+                "linkTo": "ComplessoArchivistico"
+              }
+            ]
+          },
+          {
+            "id": "riferimentiBibliografici",
+            "type": "Repeater",
+            "label": "Riferimenti bibliografici",
+            "children": [
+              {
+                "id": "linkRiferimentiBibliografici",
+                "type": "Link",
+                "label": "Riferimenti bibliografici",
+                "linkTo": "SchedaBibliografica"
+              }
+            ]
+          },
+          {
+            "id": "conservatore",
+            "type": "Repeater",
+            "label": "Soggetto conservatore",
+            "children": [
+              {
+                "id": "soggettoConservatore",
+                "type": "Link",
+                "label": "Soggetto conservatore",
+                "linkTo": "ProduttoreConservatore"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tabMediaCollegati",
+        "label": "Media Collegati ed Ecommerce",
+        "fields": [
+          {
+            "id": "visibility",
+            "type": "ClosedList",
+            "label": "Visibilità FE",
+            "noEmptyValue": true,
+            "valueIds": [
+              "rdv",
+              "rd",
+              "r",
+              "0"
+            ],
+            "values": [
+              "Completa (RDV)",
+              "Visibile in ricerca e dettaglio, no viewer (RD)",
+              "Visibile in ricerca, no dettaglio e viewer (R)",
+              "Non visibile"
+            ],
+            "solr": {
+              "field": "visibility_s"
+            }
+          },
+          {
+            "id": "mediaCollegati",
+            "type": "Media",
+            "label": "Media Collegati"
+          }
+        ]
+      }
+    ]
+  }

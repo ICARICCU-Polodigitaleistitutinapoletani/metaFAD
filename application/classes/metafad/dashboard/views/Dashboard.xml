@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:d="metafad.dashboard.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php"
+          controllerName="metafad.dashboard.controllers.Index">
+    <pnx:Import src="_common.xml"/>
+
+    <!-- widgets utente -->
+    <d:Widgets id="widgets" skin="Widgets.html"/>
+
+    <!-- Ultime richieste -->
+    <pnx:DataProvider enabled="{config:metafad.be.hasEcommerce}" id="ls" recordClassName="metafad.ecommerce.requests.models.Model" query="getCurrentUserRequests"/>
+    <pnx:RecordSetList enabled="{config:metafad.be.hasEcommerce}" id="lrRsl" dataProvider="{ls}" skin="LastRequest.html"/>
+
+    <!-- Attività Assegnate -->
+    <cms:FormEdit id="editForm" newCode="true" controllerName="metafad.workflow.instanceActivities.controllers.*">
+
+        <pnx:Hidden id="dashboard" value="true"/>
+        <pnx:Hidden id="processId"/>
+        <pnx:Hidden id="__model" value="metafad.workflow.processes.models.Model"/>
+        <pnx:Hidden id="instanceActivityId" value=""/>
+        <pnx:Hidden id="newNoteValue" value=""/>
+        <pnx:Hidden id="updatePercentageValue" value=""/>
+
+    </cms:FormEdit>
+    <!-- TODO-FIX nomi -->
+    <pnx:DataProvider id="aa" recordClassName="metafad.workflow.instanceActivities.models.Model"
+                      query="getFromCurrentUserAndProcessStatus" />
+    <pnx:RecordSetList dataProvider="{aa}" skin="AssignedActivities.html"/>
+
+    <!-- ultime attività -->
+    <pnx:DataProvider id="dp" recordClassName="metafad.common.models.logs.Model" query="reportFromCurrentUserId"/>
+    <pnx:RecordSetList dataProvider="{dp}" skin="Activities.html"/>
+
+</mvc:Page>

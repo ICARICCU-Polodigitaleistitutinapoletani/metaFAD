@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:cmp="metafad.tei.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <com:ModalConfirm label="Aspetta" message="Sicuro di voler proseguire?"/>
+    <com:ModalAlert label="Aspetta" message="Operazione non corretta"/>
+
+    <mvc:State id="stateEdit" name="edit,editDraft" label="{i18n:Scheda}" draw="false" cssClass="editState">
+        <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active"
+                                addQueryString="true" visible="false"/>
+
+        <pnx:JSscript folder="metafad/tei/js" enabled="true"/>
+
+        <cms:FormEdit id="editForm" newCode="true" controllerName="metafad.tei.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="metafad.tei.models.UnitaTestuale"/>
+            <pnx:Hidden id="pageId" value="{php:__Request::get('pageId')}"/>
+            <pnx:Hidden id="sectionType" value="{php:__Request::get('sectionType')}"/>
+            <pnx:Input id="external_id" label="{i18n:ID}" size="90" disabled="true" visible="false"/>
+
+            <pnx:Hidden id="isTemplate"/>
+            <pnx:Input id="templateTitle" label="{i18n:Titolo template}"/>
+            <pnx:Link cssClass="tree openTree fa fa-list" enabled="true"/>
+
+<pnx:JSTabGroup id="Manoscritto" showNav="true" cssClass="nav nav-tabs js-tab-section">
+
+  <pnx:Panel cssClass="col-md-4 gerarchia no-padding" text="Gerarchia: " enabled="true">
+      <cmp:Tree id="treeview" startId="0" title="" controllerName="metafad.tei.controllers.Gerarchia"/>
+  </pnx:Panel>
+
+  <pnx:JSTab id="tabDescrizioneInterna" label="Descrizione interna" dropdown="true">
+    <pnx:Panel cssClass="col-md-8 active text-tab">
+      <pnx:Input id="carte" label="Carte" />
+      <pnx:Input id="ordinamento" label="Ordinamento" required="true"/>
+      <pnx:Checkbox id="testoAutografo" label="Testo autografo"/>
+      <pnx:Input id="note" label="Note" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+      <pnx:Checkbox id="carteggio" label="Carteggio"/>
+      <pnx:Fieldset id="field-carteggio" label="Carteggio">
+        <pnx:Input id="carte-carteggio" label="Carte"/>
+        <pnx:List id="tipologia" label="Tipologia" emptyValue=" - ">
+          <pnx:ListItem value="allegato"/>
+          <pnx:ListItem value="articolo di periodico"/>
+          <pnx:ListItem value="biglietto"/>
+          <pnx:ListItem value="biglietto da visita"/>
+          <pnx:ListItem value="busta"/>
+          <pnx:ListItem value="cartolina illustrata"/>
+          <pnx:ListItem value="cartolina postale"/>
+          <pnx:ListItem value="cartoncino illustrato"/>
+          <pnx:ListItem value="estratto"/>
+          <pnx:ListItem value="fotografia"/>
+          <pnx:ListItem value="lettera"/>
+          <pnx:ListItem value="lettera con allegato"/>
+          <pnx:ListItem value="telegramma"/>
+        </pnx:List>
+        <pnx:Checkbox id="Busta" label="Testo autografo"/>
+        <pnx:Checkbox id="Dattiloscritto" label="Testo autografo"/>
+        <pnx:List id="tipoTesto" label="Tipo testo" emptyValue=" - ">
+          <pnx:ListItem value="originale"/>
+          <pnx:ListItem value="copia"/>
+          <pnx:ListItem value="minuta"/>
+        </pnx:List>
+        <pnx:Checkbox id="cartaIntestata" label="Carta intestata"/>
+        <pnx:Checkbox id="firmaAutografa" label="Firma autografa"/>
+        <pnx:Checkbox id="annotazioni" label="Annotazioni"/>
+        <pnx:Input id="note" label="Note" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+
+        <pnx:Fieldset label="Datazione">
+          <pnx:Input id="data" label="Data"/>
+          <pnx:List id="formatoData" label="Formato data" emptyValue=" - ">
+            <pnx:ListItem value="aaaa"/>
+            <pnx:ListItem value="aaaa-aaaa"/>
+            <pnx:ListItem value="aaaa-mm-gg"/>
+            <pnx:ListItem value="aaaa-mm"/>
+          </pnx:List>
+          <pnx:Input id="note" label="Note" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+        </pnx:Fieldset>
+
+        <pnx:Fieldset label="Argomento">
+          <pnx:Input id="argomento" label="Argomento" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+        </pnx:Fieldset>
+
+        <pnx:Fieldset label="Argomento">
+          <pnx:Input id="argomento" label="Argomento" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+        </pnx:Fieldset>
+
+        <pnx:Fieldset label="Osservazioni">
+          <pnx:Input id="osservazioni" label="Osservazioni" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+        </pnx:Fieldset>
+
+        <pnx:Fieldset label="Responsabilità">
+          <pnx:List id="formatoData" label="Formato data" emptyValue=" - ">
+            <pnx:ListItem value="autore citato"/>
+            <pnx:ListItem value="autore incerto"/>
+            <pnx:ListItem value="certificatore"/>
+            <pnx:ListItem value="copista"/>
+            <pnx:ListItem value="destinatario"/>
+            <pnx:ListItem value="mittente"/>
+            <pnx:ListItem value="nome citato"/>
+          </pnx:List>
+        </pnx:Fieldset>
+      </pnx:Fieldset>
+      <pnx:Fieldset label="Titolo">
+        <pnx:Input id="titolo" label="Titolo" required="true" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+        <pnx:List id="tipologia" label="Tipologia" emptyValue=" - ">
+          <pnx:ListItem value="presente"/>
+          <pnx:ListItem value="aggiunto"/>
+          <pnx:ListItem value="elaborato"/>
+          <pnx:ListItem value="identificato"/>
+        </pnx:List>
+        <pnx:Input id="carta-titolo" label="Carta" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+        <pnx:Input id="note-titolo" label="Note" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+        <pnx:Fieldset id="nomeNelTitoloRep" label="Nome nel titolo" data="type=repeat;noEmptyMessage=true">
+          <pnx:Input id="nomeNelTitolo" label="Nome nel titolo"/>
+        </pnx:Fieldset>
+      </pnx:Fieldset>
+      <pnx:Fieldset label="Incipit/Explicit">
+        <pnx:Fieldset id="incipit" label="Incipit" data="type=repeat;noEmptyMessage=true">
+          <pnx:List id="tipologia-incipit" label="Tipologia" emptyValue=" - ">
+            <pnx:ListItem value="argomento"/>
+            <pnx:ListItem value="commento"/>
+            <pnx:ListItem value="glossa"/>
+            <pnx:ListItem value="indice"/>
+            <pnx:ListItem value="introduzione"/>
+            <pnx:ListItem value="lettera di dedica"/>
+            <pnx:ListItem value="postfazione"/>
+            <pnx:ListItem value="primo testo"/>
+            <pnx:ListItem value="proemio"/>
+            <pnx:ListItem value="prologo"/>
+            <pnx:ListItem value="sommario"/>
+            <pnx:ListItem value="testo"/>
+            <pnx:ListItem value="ultimo testo"/>
+          </pnx:List>
+          <pnx:Checkbox id="acefalo" label="Acefalo"/>
+          <pnx:Input id="carte-incipit" label="Carte"/>
+          <pnx:Input id="descrizione-incipit" label="Descrizione" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+          <pnx:Input id="note-incipit" label="Note" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+        </pnx:Fieldset>
+        <pnx:Fieldset id="explicit" label="Explicit" data="type=repeat;noEmptyMessage=true">
+          <pnx:List id="tipologia-explicit" label="Tipologia" emptyValue=" - ">
+            <pnx:ListItem value="argomento"/>
+            <pnx:ListItem value="commento"/>
+            <pnx:ListItem value="glossa"/>
+            <pnx:ListItem value="indice"/>
+            <pnx:ListItem value="introduzione"/>
+            <pnx:ListItem value="lettera di dedica"/>
+            <pnx:ListItem value="postfazione"/>
+            <pnx:ListItem value="primo testo"/>
+            <pnx:ListItem value="proemio"/>
+            <pnx:ListItem value="prologo"/>
+            <pnx:ListItem value="sommario"/>
+            <pnx:ListItem value="testo"/>
+            <pnx:ListItem value="ultimo testo"/>
+          </pnx:List>
+          <pnx:Checkbox id="mutilo" label="Mutilo"/>
+          <pnx:Input id="carte-explicit" label="Carte"/>
+          <pnx:Input id="descrizione-explicit" label="Descrizione" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+          <pnx:Input id="note-explicit" label="Note" type="multiline" rows="1" wrap="on" htmlEditor="true"/>
+        </pnx:Fieldset>
+      </pnx:Fieldset>
+      <pnx:Fieldset label="Osservazioni">
+        <pnx:Input id="osservazioni" label="Osservazioni" rows="1" wrap="on" htmlEditor="true"/>
+        <pnx:Fieldset label="Nomi">
+          <pnx:Fieldset id="antroponimi" label="Antroponimi" data="type=repeat;noEmptyMessage=true">
+            <pnx:Input id="intestazione" label="intestazione" data="type=modalPage;pageId=archivi-Antroponimi_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Antroponimi"/>
+          </pnx:Fieldset>
+          <pnx:Fieldset id="enti" label="Enti" data="type=repeat;noEmptyMessage=true">
+            <pnx:Input id="intestazione" label="intestazione" data="type=modalPage;pageId=archivi-Enti_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Enti"/>
+          </pnx:Fieldset>
+          <pnx:Fieldset id="toponimi" label="Toponimi" data="type=repeat;noEmptyMessage=true">
+            <pnx:Input id="intestazione" label="intestazione" data="type=modalPage;pageId=archivi-Toponimi_popup;controller=archivi_controllers_popup_ajax_FindTerm;model=archivi.models.Toponimi"/>
+          </pnx:Fieldset>
+        </pnx:Fieldset>
+      </pnx:Fieldset>
+      <pnx:Input id="parent" label="Livello superiore" data="type=selectfrom;proxy=metafad.tei.models.proxy.ModuleProxy;model=metafad.tei.models.Manoscritto;return_object=true"/>
+    </pnx:Panel>
+  </pnx:JSTab>
+
+  <pnx:JSTab id="linkeMedia_tab" label="{i18n:Media}" dropdown="true">
+    <pnx:Panel cssClass="col-md-8 active text-tab">
+      <pnx:Input id="linkedStruMag" label="Metadato strutturale collegato" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.strumag.models.proxy.StruMagProxy;return_object=true" />
+      <pnx:Fieldset cssClass="linkedMediaRepeater" id="linkedMedia" label="Media collegati a scheda" data="type=repeat;collapsable=false;repeatMin=0" required="true">
+        <pnx:Input data="type=mediapicker;preview=true" id="media" required="false" />
+      </pnx:Fieldset>
+    </pnx:Panel>
+  </pnx:JSTab>
+</pnx:JSTabGroup>
+
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save-novalidation" data="action=save" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveClose" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="tei-manoscritto" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel"/>
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+        <pnx:JSscript><![CDATA[
+          $( document ).ready( function(){
+              $('#field-carteggio').hide();
+
+              $('#carteggio').on('ifChanged change', function() {
+                  if ($(this).prop('checked')) {
+                      $('#field-carteggio').show();
+                  } else {
+                      $('#field-carteggio').hide();
+                  }
+              });
+          });
+      ]]></pnx:JSscript>
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.tei.controllers.*"/>
+    </mvc:State>
+
+    <pnx:JSscript><![CDATA[
+    $( document ).ready( function(){
+        $('.openTree').removeAttr('href');
+        $('.tree').click(function(){
+            if($('.tree').hasClass('openTree')){
+                $('.tree').removeClass('openTree');
+                $('.tree').addClass('closeTree');
+                $('.gerarchia').hide();
+                $('.text-tab').addClass('col-md-12')
+                $('.text-tab').removeClass('col-md-8');
+            } else {
+                $('.tree').addClass('openTree');
+                $('.tree').removeClass('closeTree');
+                $('.gerarchia').show();
+                $('.text-tab').removeClass('col-md-12')
+                $('.text-tab').addClass('col-md-8');
+            }
+        });
+    });
+]]></pnx:JSscript>
+</mvc:Page>

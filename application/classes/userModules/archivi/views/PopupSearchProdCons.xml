@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:cmp="archivi.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    xmlns:boards="metafad.gestioneDati.boards.views.components.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Popup.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State id="stateIndex" name="index" url="archivi-ProduttoreConservatore">
+        <cmp:DataGridSolr id="dataGrid" enableSorting="true" filterByInstitute="false" recordClassName="archivi.models.ProduttoreConservatore"
+                        cssClass="table table-bordered table-striped"
+                        controllerName="archivi.controllers.*" fullTextSearch="true"
+                        JQueryUI="true" 
+                        autocompleteController="archivi.controllers.ajax.AutoComplete">
+            <pnx:DataGridColumn columnName="identificativo_s" headerText="{i18n:Identificativo per l'Entità}"/>
+            <pnx:DataGridColumn columnName="denominazione_s" cssClass="js-denominazione" headerText="{i18n:Denominazione}"/>
+            <pnx:DataGridColumn columnName="cronologia_s" headerText="{i18n:Estremo cronologico testuale}"/>
+            <pnx:DataGridColumn columnName="id" sortable="false" searchable="false" cssClass="actions"
+                                    renderCell="archivi.views.renderer.CellSelect"/>
+        </cmp:DataGridSolr>
+
+        <pnx:JSscript folder="userModules/archivi/js/peb" editableRegion="tail"/>
+    </mvc:State>
+</mvc:Page>

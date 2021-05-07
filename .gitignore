@@ -1,0 +1,16 @@
+.DS_Store
+.idea
+*.sass-cache
+.vscode
+cache/*
+!cache/.gitkeep
+public/cache/*
+!public/cache/.gitkeep
+public/export/
+!public/export/.gitkeep
+public/appMagStru
+data/logs/*
+!data/logs/.gitkeep
+vendor/*
+node_modules/
+.phpunit.result.cache
