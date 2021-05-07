@@ -6,5 +6,5 @@ parameters:
 		- vendor/icariccu/peb/src
 		- public
 	scanDirectories:
-		- vendor/icariccu/pinax/src
+		- vendor/icariccu/pinax-2/src
 		- vendor/chrisboulton
