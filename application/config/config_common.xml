@@ -247,6 +247,7 @@
     <pnx:Param name="metafad.tmp.folder" value="{{env:METAFAD_TMP_FOLDER}}"/>
     <pnx:Param name="metafad.pageTitle.truncate" value="false"/>
     <pnx:Param name="metafad.accessPage" value="utenti-e-permessi-selezione-istituto" />
+    <pnx:Param name="metafad.modules.acronym" value="METAFAD" />
 
     <!-- Link OAI-PMH SIAS e SIUSA -->
     <pnx:Param name="OAI_SIAS" value="https://sias.archivi.beniculturali.it/sias-oai/sias-oai.pl"/>
@@ -332,5 +333,5 @@
         }
         ]]>
     </pnx:Param>
-    
+
 </pnx:Config>
